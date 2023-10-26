@@ -1,6 +1,8 @@
 package com.example.deliveryecommercebackend.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.annotation.Resource;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,10 +35,11 @@ public class User {
     private String email;
     private String phone;
     private String purpose;
-    @OneToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
 
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    @JsonBackReference
+    private Role role;
 
 
 }

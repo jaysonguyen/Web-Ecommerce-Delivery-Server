@@ -1,11 +1,14 @@
 package com.example.deliveryecommercebackend.model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,6 +29,7 @@ public class Role {
     @Column(name = "des")
     private String des;
 
-    @OneToOne(mappedBy = "role") // Use "role" instead of "user"
-    private User user;
+    @OneToMany(mappedBy = "role")
+    @JsonManagedReference
+    private List<User> users;
 }
