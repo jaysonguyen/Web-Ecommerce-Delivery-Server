@@ -18,10 +18,9 @@ import java.util.List;
 
 @Table(name = "role")
 public class Role {
-
     @Id
-    @Column(name = "id")
-    private int role_id;
+    @Column(name = "role_id")
+    private int roleId;
 
     @Column(name = "name")
     private String name;

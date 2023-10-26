@@ -1,14 +1,12 @@
 package com.example.deliveryecommercebackend.controller;
 
 
-import com.example.deliveryecommercebackend.model.User;
+import com.example.deliveryecommercebackend.DTO.UserDTO;
+import com.example.deliveryecommercebackend.services.AuthenticationServices;
 import com.example.deliveryecommercebackend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin("*")
 @RestController
@@ -18,22 +16,37 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
     @GetMapping
     @ResponseBody
-    public List<User>getAllUser() {
-        List<User> userList = userService.getAllUsers();
-        return userList;
+    public ResponseEntity<?>getAllUser() {
+        try {
+            var listUser = userService.getAllUsers();
+            if (listUser.isEmpty()) {
+                return ResponseEntity.ok().body("Empty list user.");
+            } else {
+                return ResponseEntity.ok(listUser);
+            }
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from server");
+        }
+
     }
 
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody User user) {
-        boolean checkAdd = userService.createUser(user);
-        if(!checkAdd) {
-            return ResponseEntity.ofNullable("Insert failed");
+    public ResponseEntity<?> createUser(@RequestBody UserDTO user) {
+        try {
+            boolean checkAdd = userService.createUser(user);
+            if(!checkAdd) {
+                return ResponseEntity.badRequest().body("Insert data failed");
+            }
+            return ResponseEntity.ok("Insert success");
+        } catch (Exception ex) {
+            System.out.println("Error from server, Error:" + ex);
+            return ResponseEntity.badRequest().body("Error from user");
         }
-        return ResponseEntity.ok("Insert success");
-
-
     }
 
 
