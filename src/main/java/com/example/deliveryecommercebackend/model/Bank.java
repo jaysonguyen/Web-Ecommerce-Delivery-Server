@@ -17,7 +17,7 @@ import java.sql.Date;
 @Table(name="bank")
 public class Bank {
     @Id
-    @Column(name = "code", nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String code;
 
     @Column(name = "name")
@@ -25,4 +25,16 @@ public class Bank {
 
     @Column(name = "state")
     private Integer state;
+
+//    public Bank(String code, String name, Integer state) {
+//        this.code = code;
+//        this.name = name;
+//        this.state = state;
+//    }
+
+//    public Bank(Bank bank) {
+//        this.code = bank.getCode();
+//        this.name = bank.getName();
+//        this.state = bank.getState();
+//    }
 }
