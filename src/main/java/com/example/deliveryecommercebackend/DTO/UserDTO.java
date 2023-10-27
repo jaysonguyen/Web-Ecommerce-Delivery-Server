@@ -32,6 +32,6 @@ public class UserDTO {
     private String email;
     private String phone;
     private String purpose;
-    private String role;
+    private int role;
 
 }

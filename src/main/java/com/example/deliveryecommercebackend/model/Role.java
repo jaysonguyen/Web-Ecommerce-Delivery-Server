@@ -1,12 +1,11 @@
 package com.example.deliveryecommercebackend.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -14,6 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 
 @Table(name = "role")
@@ -28,7 +28,9 @@ public class Role {
     @Column(name = "des")
     private String des;
 
-    @OneToMany(mappedBy = "role")
-    @JsonManagedReference
-    private List<User> users;
+//    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//
+//    private List<User> user;
+
 }

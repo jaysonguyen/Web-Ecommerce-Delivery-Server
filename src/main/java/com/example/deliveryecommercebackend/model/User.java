@@ -2,15 +2,10 @@ package com.example.deliveryecommercebackend.model;
 
 
 import com.example.deliveryecommercebackend.DTO.UserDTO;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.annotation.Resource;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.id.GUIDGenerator;
 
 import java.sql.Date;
@@ -20,6 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(name="user")
 public class User {
@@ -40,13 +36,11 @@ public class User {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
-    @JsonIdentityReference(alwaysAsId = true)
-    @JsonBackReference
+
+    @ToString.Exclude
     private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Store> store;
-
-
 }
