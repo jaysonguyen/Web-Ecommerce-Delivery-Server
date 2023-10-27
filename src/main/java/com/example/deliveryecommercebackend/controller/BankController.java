@@ -1,5 +1,6 @@
 package com.example.deliveryecommercebackend.controller;
 
+import com.example.deliveryecommercebackend.DTO.BankDTO;
 import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
 import com.example.deliveryecommercebackend.model.Bank;
 import com.example.deliveryecommercebackend.repository.BankRepository;
@@ -29,7 +30,7 @@ public class BankController {
     }
 
     @PutMapping("{code}")
-    public ResponseEntity<Bank> updateBank(@PathVariable String code,@RequestBody Bank bankDetails) {
+    public ResponseEntity<Bank> updateBank(@PathVariable String code,@RequestBody BankDTO bankDetails) {
         return bankService.updateBank(code, bankDetails);
     }
 

@@ -2,12 +2,16 @@ package com.example.deliveryecommercebackend;
 
 import com.example.deliveryecommercebackend.model.Action;
 import com.example.deliveryecommercebackend.model.Bank;
+import com.example.deliveryecommercebackend.model.Role;
+import com.example.deliveryecommercebackend.model.User;
 import com.example.deliveryecommercebackend.repository.ActionRepository;
 import com.example.deliveryecommercebackend.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Component;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 
@@ -19,45 +23,49 @@ public class DeliveryEcommerceBackendApplication implements CommandLineRunner {
 
     @Autowired
     private BankRepository bankRepository;
+    @Autowired
     private ActionRepository actionRepository;
 
     @Override
     public void run(String... args) throws Exception {
         Bank newBank = new Bank();
-        newBank.setCode("bank1");
+        newBank.setBank_id("bank1");
         newBank.setName("EXIMBANK");
-        newBank.setState(0);
+        newBank.setState(false);
         bankRepository.save(newBank);
 
         Bank newBank1 = new Bank();
-        newBank1.setCode("bank2");
+        newBank1.setBank_id("bank2");
         newBank1.setName("TPBANK");
-        newBank1.setState(0);
+        newBank1.setState(false);
         bankRepository.save(newBank1);
 
 
         Bank newBank2 = new Bank();
-        newBank2.setCode("bank3");
+        newBank2.setBank_id("bank3");
         newBank2.setName("TECHCOMBANK");
-        newBank2.setState(0);
+        newBank2.setState(false);
         bankRepository.save(newBank2);
 
         Action action = new Action();
         action.setAction_id(0);
         action.setName("waiting");
         action.setDes("waiting for accepting");
+        action.setType("admin");
         actionRepository.save(action);
 
         Action action1 = new Action();
-        action1.setAction_id(0);
+        action1.setAction_id(1);
         action1.setName("accept");
         action1.setDes("accepted");
+        action1.setType("admin");
         actionRepository.save(action1);
 
         Action action2 = new Action();
-        action2.setAction_id(0);
+        action2.setAction_id(2);
         action2.setName("decline");
         action2.setDes("decline");
+        action2.setType("admin");
         actionRepository.save(action2);
 
     }

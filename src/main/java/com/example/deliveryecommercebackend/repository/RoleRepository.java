@@ -1,9 +1,9 @@
 package com.example.deliveryecommercebackend.repository;
 
-import com.example.deliveryecommercebackend.model.Action;
+import com.example.deliveryecommercebackend.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ActionRepository extends JpaRepository<Action, Integer> {
+public interface RoleRepository extends JpaRepository<Role, String> {
     //crud method
 
 }

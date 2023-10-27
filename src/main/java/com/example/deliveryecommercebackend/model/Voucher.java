@@ -1,10 +1,7 @@
 package com.example.deliveryecommercebackend.model;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,11 +17,12 @@ import java.sql.Date;
 @Table(name="voucher")
 public class Voucher {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "voucher_id")
-    private int voucher_id;
+    private String voucher_id;
 
-    @Column(name = "name_voucher")
-    private String name_voucher;
+    @Column(name = "name")
+    private String name;
 
     //percent
     @Column(name = "cost")
@@ -41,6 +39,9 @@ public class Voucher {
 
     @Column(name = "used")
     private int used;
+
+    @Column(name = "is_deleted")
+    private boolean is_deleted;
 
     @Column(name = "status")
     private String status;

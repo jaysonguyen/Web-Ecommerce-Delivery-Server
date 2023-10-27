@@ -1,9 +1,10 @@
 package com.example.deliveryecommercebackend.repository;
 
-import com.example.deliveryecommercebackend.model.Action;
+import com.example.deliveryecommercebackend.model.Voucher;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ActionRepository extends JpaRepository<Action, Integer> {
+
+public interface VoucherRepository extends JpaRepository<Voucher, String> {
     //crud method
 
 }

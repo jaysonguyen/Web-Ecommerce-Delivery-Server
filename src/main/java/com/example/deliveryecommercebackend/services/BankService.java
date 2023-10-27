@@ -1,5 +1,6 @@
 package com.example.deliveryecommercebackend.services;
 
+import com.example.deliveryecommercebackend.DTO.BankDTO;
 import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
 import com.example.deliveryecommercebackend.model.Bank;
 import com.example.deliveryecommercebackend.model.User;
@@ -34,12 +35,12 @@ public class BankService {
                 .orElseThrow(() -> new ResourceNotfoundException("Bank not exist with code:" + code));
         return ResponseEntity.ok(bank);
     }
-    public ResponseEntity<Bank> updateBank( String code, Bank bankDetails) {
+    public ResponseEntity<Bank> updateBank(String code, BankDTO bankDetails) {
         Bank updateBank = bankRepository.findById(code)
                 .orElseThrow(() -> new ResourceNotfoundException("Bank not exist with id: " + code));
 
         updateBank.setName(bankDetails.getName());
-        updateBank.setState(bankDetails.getState());
+//        updateBank.setState(bankDetails.get());
 
         bankRepository.save(updateBank);
 
@@ -56,7 +57,7 @@ public class BankService {
 
         bankRepository.delete(bank);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
 }

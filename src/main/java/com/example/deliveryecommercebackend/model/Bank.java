@@ -18,13 +18,13 @@ import java.sql.Date;
 public class Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String code;
+    private String bank_id;
 
     @Column(name = "name")
     private String name;
 
     @Column(name = "state")
-    private Integer state;
+    private boolean state;
 
 //    public Bank(String code, String name, Integer state) {
 //        this.code = code;

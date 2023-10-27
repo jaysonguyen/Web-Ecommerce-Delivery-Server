@@ -38,8 +38,8 @@ public class Store {
 
     @ManyToOne
     @JoinColumn(name="user_id")
-    @JsonBackReference
     @JsonIdentityReference(alwaysAsId = true)
+    @JsonBackReference
     private User user;
 
 }
