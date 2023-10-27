@@ -2,6 +2,7 @@ package com.example.deliveryecommercebackend.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +39,7 @@ public class Store {
     @ManyToOne
     @JoinColumn(name="user_id")
     @JsonBackReference
+    @JsonIdentityReference(alwaysAsId = true)
     private User user;
 
 }

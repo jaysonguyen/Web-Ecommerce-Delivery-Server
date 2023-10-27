@@ -3,6 +3,7 @@ package com.example.deliveryecommercebackend.model;
 
 import com.example.deliveryecommercebackend.DTO.UserDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.annotation.Resource;
 import jakarta.persistence.*;
@@ -39,6 +40,7 @@ public class User {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
+    @JsonIdentityReference(alwaysAsId = true)
     @JsonBackReference
     private Role role;
 
