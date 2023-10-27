@@ -4,10 +4,7 @@ package com.example.deliveryecommercebackend.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.swing.text.DateFormatter;
 import java.time.LocalDate;
@@ -17,6 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Entity
 
 @Table(name="store")
@@ -38,7 +36,6 @@ public class Store {
 
     @ManyToOne
     @JoinColumn(name="user_id")
-    @JsonIdentityReference(alwaysAsId = true)
     @JsonBackReference
     private User user;
 

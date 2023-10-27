@@ -5,7 +5,9 @@ import com.example.deliveryecommercebackend.DTO.UserDTO;
 import com.example.deliveryecommercebackend.services.AuthenticationServices;
 import com.example.deliveryecommercebackend.services.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
+import jakarta.persistence.PostUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +32,7 @@ public class UserController {
             if (listUser.isEmpty()) {
                 return ResponseEntity.ok().body("Empty list user.");
             } else {
-                return ResponseEntity.ok(listUser);
+                return ResponseEntity.ok().body(listUser);
             }
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server");
@@ -41,16 +43,42 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody UserDTO user) {
         try {
-            boolean checkAdd = userService.createUser(user);
-            if(!checkAdd) {
-                return ResponseEntity.badRequest().body("Insert data failed");
+            HttpStatus checkAdd = userService.createUser(user);
+            if(checkAdd == HttpStatus.OK) {
+                return ResponseEntity.ok("Insert success");
+            } else {
+                return ResponseEntity.status(checkAdd).body("Insert user failed");
             }
-            return ResponseEntity.ok("Insert success");
         } catch (Exception ex) {
             System.out.println("Error from server, Error:" + ex);
             return ResponseEntity.badRequest().body("Error from user");
         }
     }
 
+    @PutMapping
+    public ResponseEntity<?> updateUserFromAdmin(@RequestBody UserDTO user) {
+        try {
+            HttpStatus check = userService.updateUserAdmin(user);
+            if(check != HttpStatus.OK)
+                return ResponseEntity.status(check).body("Update data failed");
+            return ResponseEntity.status(check).body("Update data successfully");
+        } catch (Exception ex) {
+            System.out.printf("Error from controller" + ex);
+            return ResponseEntity.badRequest().body("Error fom server" + ex);
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser(String account) {
+        try {
+            HttpStatus check = userService.deleteUser(account);
+            if (check == HttpStatus.OK) {
+                return ResponseEntity.status(check).body("Delete user success");
+            }
+        } catch (Exception ex) {
+            System.out.printf("Error from server" + ex);
+        }
+        return ResponseEntity.badRequest().body("Delete user failed");
+    }
 
 }
