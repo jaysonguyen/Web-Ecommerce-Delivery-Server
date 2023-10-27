@@ -1,8 +1,10 @@
 package com.example.deliveryecommercebackend.services;
 
+import com.example.deliveryecommercebackend.DTO.UserDTO;
 import com.example.deliveryecommercebackend.model.User;
 import com.example.deliveryecommercebackend.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +20,13 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     public List<User> getAllUsers() {
         try {
+            List<User> users = userRepository.findAll();
             return userRepository.findAll();
         } catch(Exception ex) {
             System.out.printf("Get user failed - Error: " + ex);
@@ -27,18 +34,18 @@ public class UserService {
         }
     }
 
-    public boolean createUser(User user) {
+    public boolean createUser(UserDTO user) {
         User newUser = new User();
         newUser.setCreated(Date.valueOf(LocalDate.now()));
         newUser.setUpdated(Date.valueOf(LocalDate.now()));
         newUser.setAccount(user.getAccount());
         newUser.setEmail(user.getEmail());
-        newUser.setPassword(user.getPassword());
+        newUser.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
         newUser.setPhone(user.getPhone());
         newUser.setRole(user.getRole());
         newUser.setDes(user.getDes());
         newUser.setFullName(user.getFullName());
-        newUser.setRole_id(user.getRole_id());
+        newUser.setUser_id(user.getId());
         newUser.setPurpose(user.getPurpose());
 
         try {
