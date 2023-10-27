@@ -2,6 +2,7 @@ package com.example.deliveryecommercebackend.controller;
 
 
 import com.example.deliveryecommercebackend.DTO.VoucherDTO;
+import com.example.deliveryecommercebackend.model.Voucher;
 import com.example.deliveryecommercebackend.services.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,17 @@ public class VoucherController {
         }
     }
 
+//    @GetMapping("{voucher_id}")
+//    @ResponseBody
+//    public ResponseEntity<Voucher> getVoucherById(@PathVariable String voucher_id) {
+//        try {
+//            var listVoucher = voucherService.getVoucherById(voucher_id);
+//            return ResponseEntity.ok().body(listVoucher);
+//        } catch (Exception ex) {
+//            return ResponseEntity.badRequest().body(new Voucher());
+//        }
+//    }
+
     @PostMapping
     public ResponseEntity<?> createVoucher(@RequestBody VoucherDTO voucher) {
         try {
@@ -55,6 +67,19 @@ public class VoucherController {
                 return ResponseEntity.status(200).body("Update data successful");
             }
             return ResponseEntity.badRequest().body("Update success");
+        } catch (Exception ex) {
+            System.out.println("Error from server, Error:" + ex);
+            return ResponseEntity.badRequest().body("Error from voucher");
+        }
+    }
+    @DeleteMapping("{voucher_id}")
+    public ResponseEntity<?> deleteVoucher(@PathVariable String voucher_id) {
+        try {
+            HttpStatus checkAdd = voucherService.deleteVoucher(voucher_id);
+            if(checkAdd == HttpStatus.OK) {
+                return ResponseEntity.status(200).body("Delete data successful");
+            }
+            return ResponseEntity.badRequest().body("Delete success");
         } catch (Exception ex) {
             System.out.println("Error from server, Error:" + ex);
             return ResponseEntity.badRequest().body("Error from voucher");

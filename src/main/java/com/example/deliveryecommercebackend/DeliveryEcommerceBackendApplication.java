@@ -13,6 +13,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
 @SpringBootApplication
 
 public class DeliveryEcommerceBackendApplication implements CommandLineRunner {
@@ -47,26 +50,35 @@ public class DeliveryEcommerceBackendApplication implements CommandLineRunner {
         newBank2.setState(false);
         bankRepository.save(newBank2);
 
-        Action action = new Action();
-        action.setAction_id(0);
-        action.setName("waiting");
-        action.setDes("waiting for accepting");
-        action.setType("admin");
-        actionRepository.save(action);
-
-        Action action1 = new Action();
-        action1.setAction_id(1);
-        action1.setName("accept");
-        action1.setDes("accepted");
-        action1.setType("admin");
-        actionRepository.save(action1);
-
-        Action action2 = new Action();
-        action2.setAction_id(2);
-        action2.setName("decline");
-        action2.setDes("decline");
-        action2.setType("admin");
-        actionRepository.save(action2);
+//        Action action = new Action();
+//        action.setAction_id(0);
+//        action.setName("waiting");
+//        action.setDes("waiting for accepting");
+//        action.setType("admin");
+//        action.set_deleted(false);
+//        action.setCreated(Date.valueOf(LocalDate.now()));
+//
+//        actionRepository.save(action);
+//
+//        Action action1 = new Action();
+//        action1.setAction_id(1);
+//        action1.setName("accept");
+//        action1.setDes("accepted");
+//        action1.setType("admin");
+//        action1.set_deleted(false);
+//        action1.setCreated(Date.valueOf(LocalDate.now()));
+//
+//        actionRepository.save(action1);
+//
+//        Action action2 = new Action();
+//        action2.setAction_id(2);
+//        action2.setName("decline");
+//        action2.setDes("decline");
+//        action2.setType("admin");
+//        action2.set_deleted(false);
+//        action2.setCreated(Date.valueOf(LocalDate.now()));
+//
+//        actionRepository.save(action2);
 
     }
 }

@@ -30,10 +30,20 @@ public class VoucherService {
             List<Voucher> vouchers = voucherRepository.findAll();
             return vouchers;
         } catch(Exception ex) {
-            System.out.printf("Get user failed - Error: " + ex);
+            System.out.printf("Get voucher failed - Error: " + ex);
             return Collections.emptyList();
         }
     }
+
+//    public Voucher getVoucherById(String id) {
+//        try {
+//            Voucher voucher = voucherRepository.findVoucherById(id);
+//            return voucher;
+//        } catch(Exception ex) {
+//            System.out.printf("Get voucher failed - Error: " + ex);
+//            return new Voucher();
+//        }
+//    }
 
     public HttpStatus createVoucher(VoucherDTO voucher) {
         Voucher newVoucher = new Voucher();
