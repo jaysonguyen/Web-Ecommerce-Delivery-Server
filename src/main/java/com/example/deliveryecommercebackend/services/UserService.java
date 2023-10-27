@@ -27,7 +27,7 @@ public class UserService {
     public List<User> getAllUsers() {
         try {
             List<User> users = userRepository.findAll();
-            return userRepository.findAll();
+            return users;
         } catch(Exception ex) {
             System.out.printf("Get user failed - Error: " + ex);
             return Collections.emptyList();
@@ -42,10 +42,8 @@ public class UserService {
         newUser.setEmail(user.getEmail());
         newUser.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
         newUser.setPhone(user.getPhone());
-        newUser.setRole(user.getRole());
         newUser.setDes(user.getDes());
         newUser.setFullName(user.getFullName());
-        newUser.setUser_id(user.getId());
         newUser.setPurpose(user.getPurpose());
 
         try {
