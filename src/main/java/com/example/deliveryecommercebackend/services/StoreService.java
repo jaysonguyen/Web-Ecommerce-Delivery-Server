@@ -5,7 +5,9 @@ import com.example.deliveryecommercebackend.DTO.StoreDTO;
 import com.example.deliveryecommercebackend.DTO.UserDTO;
 import com.example.deliveryecommercebackend.model.Store;
 import com.example.deliveryecommercebackend.repository.StoreRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class StoreService {
 
     @Autowired
@@ -23,9 +26,9 @@ public class StoreService {
         this.storeRepo = storeRepo;
     }
 
-    public List<Store> getStoreList() {
+    public List<Store> getStoreList(String userId) {
         try {
-            var storeList = storeRepo.findAll();
+            var storeList = storeRepo.findStoreByUserId(userId);
             return storeList;
         } catch (Exception ex) {
             System.out.printf("Error from services");
@@ -56,6 +59,26 @@ public class StoreService {
         }
         return false;
 
+    }
+
+    public HttpStatus updateStore(StoreDTO storeDTO) {
+        var store = storeRepo.findById(storeDTO.getStoreId()).get();
+        if(store == null) {
+            return HttpStatus.NOT_FOUND;
+        }
+        store.setName(storeDTO.getName());
+        store.setState(storeDTO.getState());
+        store.setDes(storeDTO.getDes());
+        store.set_default(storeDTO.isDefault());
+        try {
+            var checkSaveStore = storeRepo.save(store);
+            if(checkSaveStore == null)
+                return HttpStatus.BAD_REQUEST;
+            return HttpStatus.OK;
+        } catch (Exception ex) {
+            System.out.printf("Error from service" + ex);
+            return HttpStatus.BAD_REQUEST;
+        }
     }
 
 }
