@@ -4,10 +4,8 @@ import com.example.deliveryecommercebackend.DTO.VoucherDTO;
 import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
 import com.example.deliveryecommercebackend.model.Voucher;
 import com.example.deliveryecommercebackend.repository.VoucherRepository;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;

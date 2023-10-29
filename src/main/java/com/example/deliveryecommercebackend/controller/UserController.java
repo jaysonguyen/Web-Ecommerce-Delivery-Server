@@ -6,6 +6,7 @@ import com.example.deliveryecommercebackend.services.AuthenticationServices;
 import com.example.deliveryecommercebackend.services.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.PostUpdate;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.View;
 
-@CrossOrigin("*")
+//@CrossOrigin(origins = "*", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -24,6 +25,7 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
     @GetMapping
     @ResponseBody
     public ResponseEntity<?>getAllUser() {
@@ -33,6 +35,20 @@ public class UserController {
                 return ResponseEntity.ok().body("Empty list user.");
             } else {
                 return ResponseEntity.ok().body(listUser);
+            }
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from server");
+        }
+
+    }
+    @GetMapping("{user_id}")
+    public ResponseEntity<?>getUserById(@PathVariable String user_id) {
+        try {
+            var user = userService.getUserById(user_id);
+            if (user.getId() == null) {
+                return ResponseEntity.ok().body("User not found.");
+            } else {
+                return ResponseEntity.ok().body(user);
             }
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server");
