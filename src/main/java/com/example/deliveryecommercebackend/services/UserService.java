@@ -38,7 +38,6 @@ public class UserService {
 
     public List<getUserListDTO> getAllUsers() {
         try {
-//            List<User> users = userRepository.findNoneDeleteUser();
             var staffList = userRepository.findNoneDeleteUser();
             List<getUserListDTO> res = new ArrayList<getUserListDTO>();
             for(User user : staffList){
@@ -164,6 +163,29 @@ public class UserService {
                 res.add(temp);
             }
 
+
+            return ResponseEntity.ok().body(res);
+
+        } catch (Exception ex) {
+            System.out.println("Error from services" + ex);
+            return ResponseEntity.badRequest().body("Error: " + ex);
+        }
+    }
+    public ResponseEntity<?> getCustomer() {
+        try {
+            var roleStaff = roleRepository.findRoleByName("customer");
+
+            if(roleStaff == null) {
+                return ResponseEntity.badRequest().body("Not found role");
+            }
+
+            var staffList = userRepository.findUsersByRole(roleStaff);
+            List<getUserListDTO> res = new ArrayList<getUserListDTO>();
+            for(User user : staffList){
+                getUserListDTO temp = new getUserListDTO();
+                temp.setData(user);
+                res.add(temp);
+            }
 
             return ResponseEntity.ok().body(res);
 

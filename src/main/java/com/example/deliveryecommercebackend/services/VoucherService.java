@@ -1,7 +1,10 @@
 package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.VoucherDTO;
+import com.example.deliveryecommercebackend.DTO.VoucherDisplayDTO;
+import com.example.deliveryecommercebackend.DTO.getUserListDTO;
 import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
+import com.example.deliveryecommercebackend.model.User;
 import com.example.deliveryecommercebackend.model.Voucher;
 import com.example.deliveryecommercebackend.repository.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,10 +27,18 @@ public class VoucherService {
         this.voucherRepository = voucherRepository;
     }
 
-    public List<Voucher> getAllVouchers() {
+    public List<VoucherDisplayDTO> getAllVouchers() {
         try {
-            List<Voucher> vouchers = voucherRepository.findAll();
-            return vouchers;
+            List<Voucher> vouchers = voucherRepository.findNoneDeleteVoucher();
+
+            List<VoucherDisplayDTO> res = new ArrayList<VoucherDisplayDTO>();
+            for(Voucher voucher : vouchers){
+                VoucherDisplayDTO temp = new VoucherDisplayDTO();
+                temp.setData(voucher);
+                res.add(temp);
+            }
+
+            return res;
         } catch(Exception ex) {
             System.out.printf("Get voucher failed - Error: " + ex);
             return Collections.emptyList();
@@ -52,6 +64,7 @@ public class VoucherService {
         newVoucher.setQuantity(voucher.getQuantity());
         newVoucher.setPeriod(voucher.getPeriod());
         newVoucher.setUsed(voucher.getUsed());
+        newVoucher.set_deleted(false);
         newVoucher.setCreated(Date.valueOf(LocalDate.now()));
 
         try {
