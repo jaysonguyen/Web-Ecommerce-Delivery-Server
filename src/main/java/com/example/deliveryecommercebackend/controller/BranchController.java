@@ -35,10 +35,12 @@ public class BranchController {
             checkCreate = branchServices.createBranch(branch);
             if(checkCreate == HttpStatus.OK)
                 return ResponseEntity.ok().body("Insert data success");
+            return ResponseEntity.badRequest().body("Insert branch success");
         } catch (Exception ex) {
             System.out.println("Error from controller");
+            return ResponseEntity.badRequest().body("Insert branch failed" + ex);
         }
-        return ResponseEntity.status(checkCreate).body("Insert branch failed");
+
     }
 
     @PutMapping
