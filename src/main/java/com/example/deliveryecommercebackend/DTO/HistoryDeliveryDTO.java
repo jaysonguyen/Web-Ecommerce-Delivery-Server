@@ -1,12 +1,11 @@
-package com.example.deliveryecommercebackend.model;
+package com.example.deliveryecommercebackend.DTO;
 
-
-import jakarta.persistence.Id;
+import com.example.deliveryecommercebackend.model.Branch;
+import com.example.deliveryecommercebackend.model.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
@@ -14,10 +13,10 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class HistoryDelivery {
+public class HistoryDeliveryDTO {
 
-    private Order order;
-    private Branch branch;
+    private String order_id;
+    private String branch_id;
     private String nameShipper;
     private LocalDateTime data_time;
     private String input_by;

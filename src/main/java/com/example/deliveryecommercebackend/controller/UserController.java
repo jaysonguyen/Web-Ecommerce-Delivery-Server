@@ -6,6 +6,7 @@ import com.example.deliveryecommercebackend.services.AuthenticationServices;
 import com.example.deliveryecommercebackend.services.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.PostUpdate;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.View;
 
-@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -24,6 +24,7 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
     @GetMapping
     @ResponseBody
     public ResponseEntity<?>getAllUser() {
@@ -33,6 +34,35 @@ public class UserController {
                 return ResponseEntity.ok().body("Empty list user.");
             } else {
                 return ResponseEntity.ok().body(listUser);
+            }
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from server");
+        }
+
+    }
+
+    @GetMapping("/store/{userId}")
+    @ResponseBody
+    public ResponseEntity<?> getStoreList(@PathVariable String userId) {
+        try {
+            var storeList = userService.getStoreByUser(userId);
+            if(storeList != null) {
+                return ResponseEntity.ok(storeList);
+            }
+        } catch (Exception ex) {
+            System.out.printf("Error from server");
+        }
+        return ResponseEntity.badRequest().body("Get list store failed");
+    }
+
+    @GetMapping("{user_id}")
+    public ResponseEntity<?>getUserById(@PathVariable String user_id) {
+        try {
+            var user = userService.getUserById(user_id);
+            if (user.getId() == null) {
+                return ResponseEntity.ok().body("User not found.");
+            } else {
+                return ResponseEntity.ok().body(user);
             }
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server");
@@ -68,8 +98,8 @@ public class UserController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteUser(String account) {
+    @DeleteMapping("{account}")
+    public ResponseEntity<?> deleteUser(@PathVariable String account) {
         try {
             HttpStatus check = userService.deleteUser(account);
             if (check == HttpStatus.OK) {
@@ -79,6 +109,33 @@ public class UserController {
             System.out.printf("Error from server" + ex);
         }
         return ResponseEntity.badRequest().body("Delete user failed");
+    }
+
+
+    @GetMapping("/staff")
+    @ResponseBody
+    public ResponseEntity<?> getStaff() {
+        try {
+            var getListStaff = userService.getStaff();
+            return (getListStaff);
+
+        } catch (Exception ex) {
+            System.out.println("Error from controller");
+            return ResponseEntity.badRequest().body("Error from controller" + ex);
+        }
+    }
+
+    @GetMapping("/shipper")
+    @ResponseBody
+    public ResponseEntity<?> getShipper() {
+        try {
+            var getListStaff = userService.getShipper();
+            return (getListStaff);
+
+        } catch (Exception ex) {
+            System.out.println("Error from controller");
+            return ResponseEntity.badRequest().body("Error from controller" + ex);
+        }
     }
 
 }

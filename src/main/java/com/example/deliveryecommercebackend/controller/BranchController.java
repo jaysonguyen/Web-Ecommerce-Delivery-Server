@@ -29,14 +29,25 @@ public class BranchController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createBranchList(@RequestBody BranchDTO branch) {
+    public ResponseEntity<?> createBranch(@RequestBody BranchDTO branch) {
+        var checkCreate = HttpStatus.OK;
         try {
-            var checkCreate = branchServices.createBranch(branch);
+            checkCreate = branchServices.createBranch(branch);
             if(checkCreate == HttpStatus.OK)
                 return ResponseEntity.ok().body("Insert data success");
         } catch (Exception ex) {
             System.out.println("Error from controller");
         }
-        return ResponseEntity.badRequest().body("Insert branch failed");
+        return ResponseEntity.status(checkCreate).body("Insert branch failed");
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateBranch(@RequestBody BranchDTO branch) {
+        return branchServices.updateBranch(branch);
+    }
+
+    @DeleteMapping("{branchID}")
+    public ResponseEntity<?> deleteBranch(@PathVariable  String branchID) {
+        return branchServices.deleteBranch(branchID);
     }
 }
