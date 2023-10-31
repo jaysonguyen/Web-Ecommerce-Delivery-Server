@@ -130,7 +130,7 @@ public class UserService {
     }
 
     public HttpStatus deleteUser(String account) {
-        var user = userRepository.findUserByAccount(account);
+        User user = userRepository.findUserById(account);
         user.set_delete(true);
         try {
             var checkUpdate = userRepository.save(user);
