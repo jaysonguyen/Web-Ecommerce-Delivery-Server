@@ -29,7 +29,7 @@ public class StoreService {
 
     public List<Store> getStoreList(String userId) {
         try {
-            var storeList = storeRepo.findStoreByUserId(userId);
+            var storeList = storeRepo.findStoreByUser(userId);
             return storeList;
         } catch (Exception ex) {
             System.out.printf("Error from services");
@@ -61,6 +61,8 @@ public class StoreService {
         return false;
 
     }
+
+
 
     public HttpStatus updateStore(StoreDTO storeDTO) {
         var store = storeRepo.findById(storeDTO.getStoreId()).get();

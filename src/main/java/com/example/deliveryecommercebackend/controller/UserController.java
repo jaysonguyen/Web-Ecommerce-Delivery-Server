@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.View;
 
-//@CrossOrigin(origins = "*", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -99,8 +98,8 @@ public class UserController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteUser(String account) {
+    @DeleteMapping("{account}")
+    public ResponseEntity<?> deleteUser(@PathVariable String account) {
         try {
             HttpStatus check = userService.deleteUser(account);
             if (check == HttpStatus.OK) {
@@ -110,6 +109,33 @@ public class UserController {
             System.out.printf("Error from server" + ex);
         }
         return ResponseEntity.badRequest().body("Delete user failed");
+    }
+
+
+    @GetMapping("/staff")
+    @ResponseBody
+    public ResponseEntity<?> getStaff() {
+        try {
+            var getListStaff = userService.getStaff();
+            return (getListStaff);
+
+        } catch (Exception ex) {
+            System.out.println("Error from controller");
+            return ResponseEntity.badRequest().body("Error from controller" + ex);
+        }
+    }
+
+    @GetMapping("/shipper")
+    @ResponseBody
+    public ResponseEntity<?> getShipper() {
+        try {
+            var getListStaff = userService.getShipper();
+            return (getListStaff);
+
+        } catch (Exception ex) {
+            System.out.println("Error from controller");
+            return ResponseEntity.badRequest().body("Error from controller" + ex);
+        }
     }
 
 }

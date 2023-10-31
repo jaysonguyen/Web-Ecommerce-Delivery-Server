@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -151,5 +152,57 @@ public class UserService {
         }
 
     }
+
+
+//    STAFF
+    public ResponseEntity<?> getStaff() {
+        try {
+            var roleStaff = roleRepository.findRoleByName("staff");
+
+            if(roleStaff == null) {
+                return ResponseEntity.badRequest().body("Not found role");
+            }
+
+            var staffList = userRepository.findUsersByRole(roleStaff);
+            List<getUserListDTO> res = new ArrayList<getUserListDTO>();
+            for(User user : staffList){
+                getUserListDTO temp = new getUserListDTO();
+                temp.setData(user);
+                res.add(temp);
+            }
+
+
+            return ResponseEntity.ok().body(res);
+
+        } catch (Exception ex) {
+            System.out.println("Error from services" + ex);
+            return ResponseEntity.badRequest().body("Error: " + ex);
+        }
+    }
+    public ResponseEntity<?> getShipper() {
+        try {
+            var roleStaff = roleRepository.findRoleByName("shipper");
+
+            if(roleStaff == null) {
+                return ResponseEntity.badRequest().body("Not found role");
+            }
+
+            var staffList = userRepository.findUsersByRole(roleStaff);
+            List<getUserListDTO> res = new ArrayList<getUserListDTO>();
+            for(User user : staffList){
+                getUserListDTO temp = new getUserListDTO();
+                temp.setData(user);
+                res.add(temp);
+            }
+
+
+            return ResponseEntity.ok().body(res);
+
+        } catch (Exception ex) {
+            System.out.println("Error from services" + ex);
+            return ResponseEntity.badRequest().body("Error: " + ex);
+        }
+    }
+
 
 }
