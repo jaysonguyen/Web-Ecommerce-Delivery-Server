@@ -41,6 +41,21 @@ public class UserController {
         }
 
     }
+
+    @GetMapping("/store/{userId}")
+    @ResponseBody
+    public ResponseEntity<?> getStoreList(@PathVariable String userId) {
+        try {
+            var storeList = userService.getStoreByUser(userId);
+            if(storeList != null) {
+                return ResponseEntity.ok(storeList);
+            }
+        } catch (Exception ex) {
+            System.out.printf("Error from server");
+        }
+        return ResponseEntity.badRequest().body("Get list store failed");
+    }
+
     @GetMapping("{user_id}")
     public ResponseEntity<?>getUserById(@PathVariable String user_id) {
         try {

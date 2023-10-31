@@ -3,8 +3,10 @@ package com.example.deliveryecommercebackend.services;
 import com.example.deliveryecommercebackend.DTO.UserDTO;
 import com.example.deliveryecommercebackend.DTO.getUserListDTO;
 import com.example.deliveryecommercebackend.model.Role;
+import com.example.deliveryecommercebackend.model.Store;
 import com.example.deliveryecommercebackend.model.User;
 import com.example.deliveryecommercebackend.repository.RoleRepository;
+import com.example.deliveryecommercebackend.repository.StoreRepository;
 import com.example.deliveryecommercebackend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.mindrot.jbcrypt.BCrypt;
@@ -25,6 +27,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    @Autowired
+    private StoreRepository storeRepository;
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
@@ -63,6 +67,18 @@ public class UserService {
             System.out.printf("Get user failed - Error: " + ex);
             return new UserDTO();
         }
+    }
+
+
+    public List<Store> getStoreByUser(String userId) {
+        try {
+            var storeList = storeRepository.findStoreByUser(userId);
+            return storeList;
+        } catch (Exception ex) {
+            System.out.printf("Error from services: " + ex.getMessage());
+        }
+
+        return Collections.emptyList();
     }
 
     public HttpStatus createUser(UserDTO user) {
@@ -134,6 +150,5 @@ public class UserService {
         }
 
     }
-
 
 }
