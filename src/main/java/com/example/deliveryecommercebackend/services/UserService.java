@@ -47,6 +47,8 @@ public class UserService {
                 temp.setId(user.getUser_id());
                 temp.setAccount(user.getAccount());
                 temp.setUpdated(user.getUpdated());
+                temp.setPhoneNumber(user.getPhone());
+                temp.setDes(user.getDes());
                 temp.setEmail(user.getEmail());
                 temp.setFullName(user.getFullName());
                 temp.setRoleName(user.getRole().getName());
