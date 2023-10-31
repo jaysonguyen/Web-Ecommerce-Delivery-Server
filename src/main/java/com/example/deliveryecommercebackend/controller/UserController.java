@@ -99,10 +99,10 @@ public class UserController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteUser(String account) {
+    @PutMapping("{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable String id) {
         try {
-            HttpStatus check = userService.deleteUser(account);
+            HttpStatus check = userService.deleteUser(id);
             if (check == HttpStatus.OK) {
                 return ResponseEntity.status(check).body("Delete user success");
             }
