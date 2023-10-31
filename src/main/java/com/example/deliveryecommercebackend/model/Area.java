@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -18,8 +17,8 @@ import java.sql.Date;
 @AllArgsConstructor
 @Entity
 
-@Table(name="city")
-public class City {
+@Table(name="area")
+public class Area {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -27,8 +26,6 @@ public class City {
     private String code;
     @Column(name = "name")
     private String name;
-    @Column(name = "type")
-    private String type;
     @Column(updatable = false)
     @CreatedDate
     private Date created;

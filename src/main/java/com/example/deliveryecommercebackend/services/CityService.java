@@ -1,6 +1,11 @@
 package com.example.deliveryecommercebackend.services;
 
+import com.example.deliveryecommercebackend.DTO.CityDTO;
+import com.example.deliveryecommercebackend.DTO.CityDTO;
 import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
+import com.example.deliveryecommercebackend.model.City;
+import com.example.deliveryecommercebackend.model.City;
+import com.example.deliveryecommercebackend.model.City;
 import com.example.deliveryecommercebackend.model.City;
 import com.example.deliveryecommercebackend.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,41 +27,76 @@ public class CityService {
 
     public List<City> getAllCitys() {
         try {
-            return cityRepository.findAll();
+            return cityRepository.findNoneDeleteCity();
         } catch(Exception ex) {
             System.out.printf("Get city failed - Error: " + ex);
             return Collections.emptyList();
         }
     }
 
-    public ResponseEntity<City> getCityById(String code){
-        City city = cityRepository.findById(code)
-                .orElseThrow(() -> new ResourceNotfoundException("City not exist with code:" + code));
-        return ResponseEntity.ok(city);
+    public CityDTO getCityById(String id){
+        try {
+            City city = cityRepository.findNoneDeleteCityById(id);
+            return new CityDTO(city);
+        } catch(Exception ex) {
+            System.out.printf("Get city failed - Error: " + ex);
+            return new CityDTO();
+        }
     }
-    public ResponseEntity<City> updateCity( String code, City cityDetails) {
-        City updateCity = cityRepository.findById(code)
-                .orElseThrow(() -> new ResourceNotfoundException("City not exist with id: " + code));
+    public HttpStatus updateCity( CityDTO city) {
+        var checkExistsCity = cityRepository.findById(city.getId()).get();
 
-        updateCity.setCode(cityDetails.getCode());
-        updateCity.setName(cityDetails.getName());
-        updateCity.setDes(cityDetails.getDes());
+        if(checkExistsCity == null) {
+            return HttpStatus.CONFLICT;
+        }
+        try {
+            checkExistsCity.setName(city.getName());
+            checkExistsCity.setDes(city.getDes());
+            checkExistsCity.setUpdated(Date.valueOf(LocalDate.now()));
 
-        cityRepository.save(updateCity);
-
-        return ResponseEntity.ok(updateCity);
+            var checkSave = cityRepository.save(checkExistsCity);
+            if(checkSave != null)
+                return HttpStatus.OK;
+            return HttpStatus.CONFLICT;
+        } catch (Exception ex) {
+            System.out.println("Error from services");
+            return HttpStatus.BAD_REQUEST;
+        }
     }
-    public City createCity(City cityDetails) {
-        return cityRepository.save(cityDetails);
+    public HttpStatus createCity(CityDTO city) {
+        City newCity = new City();
+
+        newCity.setCode(city.getCode());
+        newCity.setName(city.getName());
+        newCity.setDes(city.getDes());
+        newCity.set_delete(false);
+        newCity.setUpdated(Date.valueOf(LocalDate.now()));
+        newCity.setCreated(Date.valueOf(LocalDate.now()));
+
+
+        try {
+            City checkSave = cityRepository.save(newCity);
+            if(checkSave != null) {
+                return HttpStatus.OK;
+            }
+        } catch(Exception ex) {
+            System.out.printf("Create city failed - Error" + ex);
+        }
+        return HttpStatus.NOT_ACCEPTABLE;
     }
 
-    public ResponseEntity<HttpStatus> deleteCity(String code){
-
-        City city = cityRepository.findById(code)
-                .orElseThrow(() -> new ResourceNotfoundException("City not exist with code: " + code));
-
-        cityRepository.delete(city);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public HttpStatus deleteCity(String id){
+        City city = cityRepository.findNoneDeleteCityById(id);
+        city.set_delete(true);
+        try {
+            var checkUpdate = cityRepository.save(city);
+            if(checkUpdate == null) {
+                return HttpStatus.CONFLICT;
+            }
+            return HttpStatus.OK;
+        } catch (Exception ex) {
+            System.out.printf("Error from service", ex);
+            return HttpStatus.BAD_REQUEST;
+        }
     }
 }
