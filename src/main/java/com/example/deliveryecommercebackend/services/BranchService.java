@@ -2,6 +2,7 @@ package com.example.deliveryecommercebackend.services;
 
 
 import com.example.deliveryecommercebackend.DTO.BranchDTO;
+import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
 import com.example.deliveryecommercebackend.model.Branch;
 import com.example.deliveryecommercebackend.repository.BranchRepository;
 import lombok.AllArgsConstructor;
@@ -23,15 +24,17 @@ public class BranchService {
 
     public HttpStatus createBranch(BranchDTO branchDTO) {
 
-        var checkBranch = branchRepo.findById(branchDTO.getBranch_id()).get();
+        var checkBranch = branchRepo.findBranchByName(branchDTO.getName());
 
-        if(checkBranch != null)
+        if(checkBranch == null) {
             return HttpStatus.BAD_REQUEST;
+        }
 
         Branch branch = new Branch();
         branch.setName(branchDTO.getName());
         branch.setAddress(branchDTO.getAddress());
         branch.setDes(branchDTO.getDes());
+
         var checkCreate = branchRepo.save(branch);
 
         if(checkCreate != null) {

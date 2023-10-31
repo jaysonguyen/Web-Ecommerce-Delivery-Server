@@ -77,9 +77,9 @@ public class UserService {
     }
 
     public HttpStatus createUser(UserDTO user) {
-        Role role = roleRepository.findRoleByRoleId(user.getRole());
+        Role role = roleRepository.findById(user.getRole()).get();
         if(role == null) {
-            role = roleRepository.findRoleByRoleId(1);
+            role = roleRepository.findRoleByName("customer");
         }
         var checkValidAccount = userRepository.findUserByAccount(user.getAccount());
         var checkValidEmail = userRepository.findUsersByEmail(user.getEmail());
@@ -94,7 +94,7 @@ public class UserService {
         newUser.setUpdated(Date.valueOf(LocalDate.now()));
         newUser.setAccount(user.getAccount());
         newUser.setEmail(user.getEmail());
-        newUser.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
+        newUser.setPassword(BCrypt.hashpw(user.getAccount(), BCrypt.gensalt(12)));
         newUser.setPhone(user.getPhone());
         newUser.setDes(user.getDes());
         newUser.setFullName(user.getFullName());
