@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -46,8 +47,8 @@ public class StoreService {
             store.setName(storeDto.getName());
             store.setDes(storeDto.getDes());
             store.setPhone(storeDto.getPhone());
-            store.setState(store.getState());
-            store.setUser(store.getUser());
+            store.setState(storeDto.getState());
+            store.setUser(storeDto.getUser());
 
             Store storeInsert = storeRepo.save(store);
             if(storeInsert != null) {

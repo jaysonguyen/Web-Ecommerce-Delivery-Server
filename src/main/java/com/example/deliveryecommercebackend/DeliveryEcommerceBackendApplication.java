@@ -6,6 +6,7 @@ import com.example.deliveryecommercebackend.model.Role;
 import com.example.deliveryecommercebackend.model.User;
 import com.example.deliveryecommercebackend.repository.ActionRepository;
 import com.example.deliveryecommercebackend.repository.BankRepository;
+import com.example.deliveryecommercebackend.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -28,6 +29,8 @@ public class DeliveryEcommerceBackendApplication implements CommandLineRunner {
     private BankRepository bankRepository;
     @Autowired
     private ActionRepository actionRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -49,6 +52,31 @@ public class DeliveryEcommerceBackendApplication implements CommandLineRunner {
 //        newBank2.setName("TECHCOMBANK");
 //        newBank2.setState(false);
 //        bankRepository.save(newBank2);
+//
+//        Role roleAdmin = new Role();
+//        roleAdmin.setRoleId(1);
+//        roleAdmin.setDes("admin");
+//        roleAdmin.setName("admin");
+//        roleRepository.save(roleAdmin);
+//
+//        Role roleStaff = new Role();
+//        roleStaff.setRoleId(2);
+//        roleStaff.setDes("staff");
+//        roleStaff.setName("staff");
+//        roleRepository.save(roleStaff);
+//
+//
+//        Role roleCustomer = new Role();
+//        roleCustomer.setRoleId(3);
+//        roleCustomer.setDes("customer");
+//        roleCustomer.setName("customer");
+//        roleRepository.save(roleCustomer);
+//
+//        Role roleShipper = new Role();
+//        roleShipper.setRoleId(4);
+//        roleShipper.setDes("shipper");
+//        roleShipper.setName("shipper");
+//        roleRepository.save(roleShipper);
 //
 //        Action action = new Action();
 //        action.setAction_id(0);

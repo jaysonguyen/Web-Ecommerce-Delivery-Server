@@ -1,9 +1,12 @@
 package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.UserDTO;
+import com.example.deliveryecommercebackend.DTO.getUserListDTO;
 import com.example.deliveryecommercebackend.model.Role;
+import com.example.deliveryecommercebackend.model.Store;
 import com.example.deliveryecommercebackend.model.User;
 import com.example.deliveryecommercebackend.repository.RoleRepository;
+import com.example.deliveryecommercebackend.repository.StoreRepository;
 import com.example.deliveryecommercebackend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.mindrot.jbcrypt.BCrypt;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -24,20 +28,58 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    @Autowired
+    private StoreRepository storeRepository;
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
 
-    public List<User> getAllUsers() {
+    public List<getUserListDTO> getAllUsers() {
         try {
             List<User> users = userRepository.findNoneDeleteUser();
-            return users;
+
+            List<getUserListDTO> res = new ArrayList<getUserListDTO>();
+            for(User user : users){
+                getUserListDTO temp = new getUserListDTO();
+                temp.setId(user.getUser_id());
+                temp.setAccount(user.getAccount());
+                temp.setUpdated(user.getUpdated());
+                temp.setEmail(user.getEmail());
+                temp.setFullName(user.getFullName());
+                temp.setRoleName(user.getRole().getName());
+
+                res.add(temp);
+            }
+
+            return res;
         } catch(Exception ex) {
             System.out.printf("Get user failed - Error: " + ex);
             return Collections.emptyList();
         }
+    }
+
+    public UserDTO getUserById(String id) {
+        try {
+            User user = userRepository.findUserById(id);
+            return new UserDTO(user);
+        } catch(Exception ex) {
+            System.out.printf("Get user failed - Error: " + ex);
+            return new UserDTO();
+        }
+    }
+
+
+    public List<Store> getStoreByUser(String userId) {
+        try {
+            var storeList = storeRepository.findStoreByUser(userId);
+            return storeList;
+        } catch (Exception ex) {
+            System.out.printf("Error from services: " + ex.getMessage());
+        }
+
+        return Collections.emptyList();
     }
 
     public HttpStatus createUser(UserDTO user) {
@@ -71,7 +113,7 @@ public class UserService {
                 return HttpStatus.OK;
             }
         } catch(Exception ex) {
-            System.out.printf("Create uesr failed - Error" + ex);
+            System.out.printf("Create user failed - Error" + ex);
         }
         return HttpStatus.NOT_ACCEPTABLE;
     }

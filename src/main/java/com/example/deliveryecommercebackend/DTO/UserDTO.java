@@ -33,5 +33,32 @@ public class UserDTO {
     private String phone;
     private String purpose;
     private int role;
+    private String roleName;
+
+    public UserDTO(User user) {
+        this.id = user.getUser_id();
+        this.fullName = user.getFullName();
+        this.des = user.getDes();
+        this.created = user.getCreated();
+        this.updated = user.getUpdated();
+        this.account = user.getAccount();
+        this.password = user.getPassword();
+        this.email = user.getEmail();
+        this.phone = user.getPhone();
+        this.purpose = user.getPurpose();
+        this.role = user.getRole().getRoleId();
+        this.roleName = user.getRole().getName();
+    }
+
+    public void setData(User user){
+        id = user.getUser_id();
+        fullName = (user.getFullName());
+        des = (user.getDes());
+        created = (user.getCreated());
+        updated = (user.getUpdated());
+        isDelete = (user.is_delete());
+        email = (user.getEmail());
+        roleName = (user.getRole().getName());
+    }
 
 }
