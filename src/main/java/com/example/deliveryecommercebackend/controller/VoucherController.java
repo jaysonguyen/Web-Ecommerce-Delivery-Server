@@ -58,31 +58,18 @@ public class VoucherController {
             return ResponseEntity.badRequest().body("Error from voucher");
         }
     }
-    @PutMapping("{voucher_id}")
-    public ResponseEntity<?> updateVoucher(@PathVariable String voucher_id, @RequestBody VoucherDTO voucher) {
+
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateVoucher(@PathVariable String id) {
         try {
-            HttpStatus checkAdd = voucherService.updateVoucher(voucher_id, voucher);
-            if(checkAdd == HttpStatus.OK) {
-                return ResponseEntity.status(200).body("Update data successful");
+            HttpStatus check = voucherService.deleteVoucher(id);
+            if (check == HttpStatus.OK) {
+                return ResponseEntity.status(check).body("Delete voucher success");
             }
-            return ResponseEntity.badRequest().body("Update success");
         } catch (Exception ex) {
-            System.out.println("Error from server, Error:" + ex);
-            return ResponseEntity.badRequest().body("Error from voucher");
+            System.out.printf("Error from server" + ex);
         }
-    }
-    @DeleteMapping("{voucher_id}")
-    public ResponseEntity<?> deleteVoucher(@PathVariable String voucher_id) {
-        try {
-            HttpStatus checkAdd = voucherService.deleteVoucher(voucher_id);
-            if(checkAdd == HttpStatus.OK) {
-                return ResponseEntity.status(200).body("Delete data successful");
-            }
-            return ResponseEntity.badRequest().body("Delete success");
-        } catch (Exception ex) {
-            System.out.println("Error from server, Error:" + ex);
-            return ResponseEntity.badRequest().body("Error from voucher");
-        }
+        return ResponseEntity.badRequest().body("Delete user failed");
     }
 
 
