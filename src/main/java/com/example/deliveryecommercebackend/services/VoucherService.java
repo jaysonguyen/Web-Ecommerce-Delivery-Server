@@ -99,7 +99,7 @@ public class VoucherService {
 
     public HttpStatus deleteVoucher(String code) {
         Voucher newVoucher = voucherRepository.findById(code)
-                .orElseThrow(() -> new ResourceNotfoundException("Bank not exist with code: " + code));
+                .orElseThrow(() -> new ResourceNotfoundException("Voucher not exist with code: " + code));
 
         newVoucher.set_deleted(true);
 

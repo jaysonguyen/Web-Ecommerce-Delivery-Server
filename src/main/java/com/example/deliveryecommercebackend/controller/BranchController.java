@@ -26,7 +26,6 @@ public class BranchController {
             System.out.printf("Error from controller" + ex.getMessage());
             return ResponseEntity.status(400).body("Error from controller: " + ex.getMessage());
         }
-
     }
 
     @PostMapping
@@ -49,8 +48,16 @@ public class BranchController {
         return branchServices.updateBranch(branch);
     }
 
-    @DeleteMapping("{branchID}")
-    public ResponseEntity<?> deleteBranch(@PathVariable  String branchID) {
-        return branchServices.deleteBranch(branchID);
+    @PutMapping("{id}")
+    public ResponseEntity<?> deleteBranch(@PathVariable String id) {
+        try {
+            HttpStatus check = branchServices.deleteBranch(id);
+            if (check == HttpStatus.OK) {
+                return ResponseEntity.status(check).body("Delete branch success");
+            }
+        } catch (Exception ex) {
+            System.out.printf("Error from server" + ex);
+        }
+        return ResponseEntity.badRequest().body("Delete branch failed");
     }
 }

@@ -3,6 +3,7 @@ package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.BranchDTO;
 import com.example.deliveryecommercebackend.DTO.UserDTO;
+import com.example.deliveryecommercebackend.DTO.getUserListDTO;
 import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
 import com.example.deliveryecommercebackend.model.Branch;
 import com.example.deliveryecommercebackend.model.Role;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -46,9 +49,21 @@ public class BranchService {
         return HttpStatus.NOT_ACCEPTABLE;
     }
 
-    public List<Branch> getBranch() {
-        List<Branch> listBranch = branchRepo.findAll();
-        return listBranch;
+    public List<BranchDTO> getBranch() {
+        try {
+            var branchList = branchRepo.findNoneDeleteBranch();
+            List<BranchDTO> res = new ArrayList<BranchDTO>();
+            for(Branch branch : branchList){
+                BranchDTO temp = new BranchDTO();
+                temp.setData(branch);
+                res.add(temp);
+            }
+
+            return res;
+        } catch(Exception ex) {
+            System.out.printf("Get user failed - Error: " + ex);
+            return Collections.emptyList();
+        }
     }
 
     public ResponseEntity<?> updateBranch(BranchDTO branchDTO) {
@@ -71,21 +86,22 @@ public class BranchService {
 
     }
 
-    public ResponseEntity<?> deleteBranch(String branchID) {
+    public HttpStatus deleteBranch(String branchID) {
         var branch = branchRepo.findById(branchID).get();
         if(branch == null) {
-            return ResponseEntity.badRequest().body("Exists branch");
+            return HttpStatus.NOT_FOUND;
         }
+
         try {
             branch.set_delete(true);
             var checkDelete = branchRepo.save(branch);
-            if(checkDelete != null)
-                return ResponseEntity.ok().body("Delete branch success");
-
+            if(checkDelete == null)
+                return HttpStatus.CONFLICT;
+            return HttpStatus.OK;
         } catch (Exception ex) {
-            System.out.printf("Error fom services: " + ex);
+            System.out.printf("Error from service", ex);
+            return HttpStatus.BAD_REQUEST;
         }
-        return ResponseEntity.badRequest().body("Delete branch failed");
     }
 
 }
