@@ -74,6 +74,7 @@ public class UserController {
     public ResponseEntity<?> createUser(@RequestBody UserDTO user) {
         try {
             HttpStatus checkAdd = userService.createUser(user);
+            System.out.println(user.getRoleName());
             if(checkAdd == HttpStatus.OK) {
                 return ResponseEntity.ok("Insert success");
             } else {
@@ -98,8 +99,8 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("{account}")
-    public ResponseEntity<?> deleteUser(@PathVariable String account) {
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser(String account) {
         try {
             HttpStatus check = userService.deleteUser(account);
             if (check == HttpStatus.OK) {
