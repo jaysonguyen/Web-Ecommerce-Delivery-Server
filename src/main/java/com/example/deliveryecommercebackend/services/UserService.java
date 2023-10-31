@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,18 +38,12 @@ public class UserService {
 
     public List<getUserListDTO> getAllUsers() {
         try {
-            List<User> users = userRepository.findNoneDeleteUser();
-
+//            List<User> users = userRepository.findNoneDeleteUser();
+            var staffList = userRepository.findNoneDeleteUser();
             List<getUserListDTO> res = new ArrayList<getUserListDTO>();
-            for(User user : users){
+            for(User user : staffList){
                 getUserListDTO temp = new getUserListDTO();
-                temp.setId(user.getUser_id());
-                temp.setAccount(user.getAccount());
-                temp.setUpdated(user.getUpdated());
-                temp.setEmail(user.getEmail());
-                temp.setFullName(user.getFullName());
-                temp.setRoleName(user.getRole().getName());
-
+                temp.setData(user);
                 res.add(temp);
             }
 

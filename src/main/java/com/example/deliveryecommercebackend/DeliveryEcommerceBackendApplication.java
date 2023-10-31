@@ -1,9 +1,5 @@
 package com.example.deliveryecommercebackend;
 
-import com.example.deliveryecommercebackend.model.Action;
-import com.example.deliveryecommercebackend.model.Bank;
-import com.example.deliveryecommercebackend.model.Role;
-import com.example.deliveryecommercebackend.model.User;
 import com.example.deliveryecommercebackend.repository.ActionRepository;
 import com.example.deliveryecommercebackend.repository.BankRepository;
 import com.example.deliveryecommercebackend.repository.RoleRepository;
@@ -11,11 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.stereotype.Component;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import java.sql.Date;
-import java.time.LocalDate;
 
 @SpringBootApplication
 
@@ -60,14 +51,14 @@ public class DeliveryEcommerceBackendApplication implements CommandLineRunner {
 //        roleRepository.save(roleAdmin);
 //
 //        Role roleStaff = new Role();
-//        roleStaff.setRoleId(2);
+//        roleStaff.setRoleId(3);
 //        roleStaff.setDes("staff");
 //        roleStaff.setName("staff");
 //        roleRepository.save(roleStaff);
 //
 //
 //        Role roleCustomer = new Role();
-//        roleCustomer.setRoleId(3);
+//        roleCustomer.setRoleId(2);
 //        roleCustomer.setDes("customer");
 //        roleCustomer.setName("customer");
 //        roleRepository.save(roleCustomer);
