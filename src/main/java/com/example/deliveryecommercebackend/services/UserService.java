@@ -76,9 +76,9 @@ public class UserService {
     }
 
     public HttpStatus createUser(UserDTO user) {
-        Role role = roleRepository.findRoleByRoleId(user.getRole());
+        Role role = roleRepository.findById(user.getRole()).get();
         if(role == null) {
-            role = roleRepository.findRoleByRoleId(1);
+            role = roleRepository.findRoleByName(user.getFullName());
         }
         var checkValidAccount = userRepository.findUserByAccount(user.getAccount());
         var checkValidEmail = userRepository.findUsersByEmail(user.getEmail());
