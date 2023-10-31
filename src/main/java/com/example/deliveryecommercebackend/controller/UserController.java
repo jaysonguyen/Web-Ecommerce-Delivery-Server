@@ -139,4 +139,17 @@ public class UserController {
         }
     }
 
+    @GetMapping("/customer")
+    @ResponseBody
+    public ResponseEntity<?> getCustomer() {
+        try {
+            var getListStaff = userService.getCustomer();
+            return (getListStaff);
+
+        } catch (Exception ex) {
+            System.out.println("Error from controller");
+            return ResponseEntity.badRequest().body("Error from controller" + ex);
+        }
+    }
+
 }

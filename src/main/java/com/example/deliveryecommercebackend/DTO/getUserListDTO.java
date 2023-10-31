@@ -19,6 +19,8 @@ public class getUserListDTO {
     private String account;
     private String email;
     private String roleName;
+    private String phoneNumber;
+    private String des;
     private Date updated;
 
     public void setData(User user){
@@ -28,6 +30,8 @@ public class getUserListDTO {
         email = (user.getEmail());
         roleName = (user.getRole().getName());
         account = (user.getAccount());
+        phoneNumber = (user.getPhone());
+        des = (user.getDes());
     }
 
 }

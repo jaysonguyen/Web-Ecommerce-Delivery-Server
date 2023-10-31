@@ -38,7 +38,6 @@ public class UserService {
 
     public List<getUserListDTO> getAllUsers() {
         try {
-//            List<User> users = userRepository.findNoneDeleteUser();
             var staffList = userRepository.findNoneDeleteUser();
             List<getUserListDTO> res = new ArrayList<getUserListDTO>();
             for(User user : staffList){
@@ -79,7 +78,7 @@ public class UserService {
     public HttpStatus createUser(UserDTO user) {
         Role role = roleRepository.findById(user.getRole()).get();
         if(role == null) {
-            role = roleRepository.findRoleByName("customer");
+            role = roleRepository.findRoleByName(user.getFullName());
         }
         var checkValidAccount = userRepository.findUserByAccount(user.getAccount());
         var checkValidEmail = userRepository.findUsersByEmail(user.getEmail());
@@ -94,7 +93,7 @@ public class UserService {
         newUser.setUpdated(Date.valueOf(LocalDate.now()));
         newUser.setAccount(user.getAccount());
         newUser.setEmail(user.getEmail());
-        newUser.setPassword(BCrypt.hashpw(user.getAccount(), BCrypt.gensalt(12)));
+        newUser.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
         newUser.setPhone(user.getPhone());
         newUser.setDes(user.getDes());
         newUser.setFullName(user.getFullName());
@@ -164,6 +163,29 @@ public class UserService {
                 res.add(temp);
             }
 
+
+            return ResponseEntity.ok().body(res);
+
+        } catch (Exception ex) {
+            System.out.println("Error from services" + ex);
+            return ResponseEntity.badRequest().body("Error: " + ex);
+        }
+    }
+    public ResponseEntity<?> getCustomer() {
+        try {
+            var roleStaff = roleRepository.findRoleByName("customer");
+
+            if(roleStaff == null) {
+                return ResponseEntity.badRequest().body("Not found role");
+            }
+
+            var staffList = userRepository.findUsersByRole(roleStaff);
+            List<getUserListDTO> res = new ArrayList<getUserListDTO>();
+            for(User user : staffList){
+                getUserListDTO temp = new getUserListDTO();
+                temp.setData(user);
+                res.add(temp);
+            }
 
             return ResponseEntity.ok().body(res);
 
