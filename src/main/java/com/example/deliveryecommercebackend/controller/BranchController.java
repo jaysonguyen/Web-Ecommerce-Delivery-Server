@@ -20,25 +20,28 @@ public class BranchController {
     public ResponseEntity<?> getBranchList() {
         try {
             var listBranch = branchServices.getBranch();
+            System.out.println("ok");
             return ResponseEntity.ok().body(listBranch);
         } catch (Exception ex) {
-            System.out.printf("Error from controller", ex);
+            System.out.printf("Error from controller" + ex.getMessage());
+            return ResponseEntity.status(400).body("Error from controller: " + ex.getMessage());
         }
 
-        return ResponseEntity.status(404).body("Error from controller");
     }
 
     @PostMapping
     public ResponseEntity<?> createBranch(@RequestBody BranchDTO branch) {
         var checkCreate = HttpStatus.OK;
         try {
-            checkCreate = branchServices.createBranch(branch);
+            checkCreate = branchServices.insertBranch(branch);
             if(checkCreate == HttpStatus.OK)
                 return ResponseEntity.ok().body("Insert data success");
+
+            return ResponseEntity.status(checkCreate).body("Insert branch failed");
         } catch (Exception ex) {
             System.out.println("Error from controller");
+            return ResponseEntity.status(400).body("Server error");
         }
-        return ResponseEntity.status(checkCreate).body("Insert branch failed");
     }
 
     @PutMapping
