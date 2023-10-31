@@ -1,5 +1,6 @@
 package com.example.deliveryecommercebackend.DTO;
 
+import com.example.deliveryecommercebackend.model.ProductType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,10 @@ public class ProductTypeDTO {
     private String id;
     private String name;
     private String des;
-    private boolean type;
+
+    public ProductTypeDTO(ProductType productType) {
+        this.id = productType.getId();
+        this.name = productType.getName();
+        this.des = productType.getDes();
+    }
 }

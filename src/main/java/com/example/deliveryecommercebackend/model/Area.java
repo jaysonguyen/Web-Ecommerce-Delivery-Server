@@ -2,10 +2,7 @@ package com.example.deliveryecommercebackend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -35,5 +32,10 @@ public class Area {
     private String des;
     @JsonIgnore
     private boolean is_delete;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "city_id")
+    @ToString.Exclude
+    private City city;
 
 }

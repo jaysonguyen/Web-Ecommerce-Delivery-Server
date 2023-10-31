@@ -1,24 +1,24 @@
 package com.example.deliveryecommercebackend.controller;
 
-import com.example.deliveryecommercebackend.DTO.AreaDTO;
-import com.example.deliveryecommercebackend.services.AreaService;
+import com.example.deliveryecommercebackend.DTO.ProductTypeDTO;
+import com.example.deliveryecommercebackend.services.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/area")
-public class AreaController {
+@RequestMapping("/api/productType")
+public class ProductTypeController {
 
     @Autowired
-    private AreaService areaService;
+    private ProductTypeService productTypeService;
 
     @GetMapping
-    public ResponseEntity<?> getAreaList(){
+    public ResponseEntity<?> getProductTypeList(){
         try {
-            var listArea = areaService.getAllAreas();
-            return ResponseEntity.ok().body(listArea);
+            var listProductType = productTypeService.getAllProductTypes();
+            return ResponseEntity.ok().body(listProductType);
         } catch (Exception ex) {
             System.out.printf("Error from controller" + ex.getMessage());
             return ResponseEntity.status(400).body("Error from controller: " + ex.getMessage());
@@ -26,14 +26,14 @@ public class AreaController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getAreaById(@PathVariable String id){
-            AreaDTO check = areaService.getAreaById(id);
+    public ResponseEntity<?> getProductTypeById(@PathVariable String id){
+            ProductTypeDTO check = productTypeService.getProductTypeById(id);
         try {
-            AreaDTO area = areaService.getAreaById(id);
-            if (area.getId() == null) {
-                return ResponseEntity.ok().body("Area not found.");
+            ProductTypeDTO productType = productTypeService.getProductTypeById(id);
+            if (productType.getId() == null) {
+                return ResponseEntity.ok().body("ProductType not found.");
             } else {
-                return ResponseEntity.ok().body(area);
+                return ResponseEntity.ok().body(productType);
             }
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server");
@@ -41,9 +41,9 @@ public class AreaController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateArea(@RequestBody AreaDTO area) {
+    public ResponseEntity<?> updateProductType(@RequestBody ProductTypeDTO productType) {
         try {
-            HttpStatus check = areaService.updateArea(area);
+            HttpStatus check = productTypeService.updateProductType(productType);
             if(check != HttpStatus.OK)
                 return ResponseEntity.status(check).body("Update data failed");
             return ResponseEntity.status(check).body("Update data successfully");
@@ -54,14 +54,14 @@ public class AreaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createArea(@RequestBody AreaDTO area) {
+    public ResponseEntity<?> createProductType(@RequestBody ProductTypeDTO productType) {
         var checkCreate = HttpStatus.OK;
         try {
-            checkCreate = areaService.createArea(area);
+            checkCreate = productTypeService.createProductType(productType);
             if(checkCreate == HttpStatus.OK)
                 return ResponseEntity.ok().body("Insert data success");
 
-            return ResponseEntity.status(checkCreate).body("Insert area failed");
+            return ResponseEntity.status(checkCreate).body("Insert productType failed");
         } catch (Exception ex) {
             System.out.println("Error from controller");
             return ResponseEntity.status(400).body("Server error");
@@ -69,15 +69,15 @@ public class AreaController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> deleteArea(@PathVariable String id){
+    public ResponseEntity<?> deleteProductType(@PathVariable String id){
         try {
-            HttpStatus check = areaService.deleteArea(id);
+            HttpStatus check = productTypeService.deleteProductType(id);
             if (check == HttpStatus.OK) {
-                return ResponseEntity.status(check).body("Delete area success");
+                return ResponseEntity.status(check).body("Delete productType success");
             }
         } catch (Exception ex) {
             System.out.printf("Error from server" + ex);
         }
-        return ResponseEntity.badRequest().body("Delete area failed");
+        return ResponseEntity.badRequest().body("Delete productType failed");
     }
 }
