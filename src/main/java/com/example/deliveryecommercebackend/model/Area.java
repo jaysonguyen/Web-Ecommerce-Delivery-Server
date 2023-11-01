@@ -3,7 +3,6 @@ package com.example.deliveryecommercebackend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -15,8 +14,8 @@ import java.sql.Date;
 @AllArgsConstructor
 @Entity
 
-@Table(name="city")
-public class City {
+@Table(name="area")
+public class Area {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -24,8 +23,6 @@ public class City {
     private String code;
     @Column(name = "name")
     private String name;
-    @Column(name = "type")
-    private String type;
     @Column(updatable = false)
     @CreatedDate
     private Date created;
@@ -36,5 +33,9 @@ public class City {
     @JsonIgnore
     private boolean is_delete;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "city_id")
+    @ToString.Exclude
+    private City city;
 
 }

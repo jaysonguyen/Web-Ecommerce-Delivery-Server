@@ -1,30 +1,24 @@
 package com.example.deliveryecommercebackend.controller;
 
-import com.example.deliveryecommercebackend.DTO.CityDTO;
-import com.example.deliveryecommercebackend.model.City;
-import com.example.deliveryecommercebackend.model.City;
-import com.example.deliveryecommercebackend.services.CityService;
-import jakarta.transaction.Transactional;
+import com.example.deliveryecommercebackend.DTO.AreaDTO;
+import com.example.deliveryecommercebackend.services.AreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/city")
-public class CityController {
+@RequestMapping("/api/area")
+public class AreaController {
 
     @Autowired
-    private CityService cityService;
+    private AreaService areaService;
 
     @GetMapping
-    public ResponseEntity<?> getCityList(){
+    public ResponseEntity<?> getAreaList(){
         try {
-            var listCity = cityService.getAllCitys();
-            return ResponseEntity.ok().body(listCity);
+            var listArea = areaService.getAllAreas();
+            return ResponseEntity.ok().body(listArea);
         } catch (Exception ex) {
             System.out.printf("Error from controller" + ex.getMessage());
             return ResponseEntity.status(400).body("Error from controller: " + ex.getMessage());
@@ -32,14 +26,14 @@ public class CityController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getCityById(@PathVariable String id){
-            CityDTO check = cityService.getCityById(id);
+    public ResponseEntity<?> getAreaById(@PathVariable String id){
+            AreaDTO check = areaService.getAreaById(id);
         try {
-            CityDTO city = cityService.getCityById(id);
-            if (city.getId() == null) {
-                return ResponseEntity.ok().body("City not found.");
+            AreaDTO area = areaService.getAreaById(id);
+            if (area.getId() == null) {
+                return ResponseEntity.ok().body("Area not found.");
             } else {
-                return ResponseEntity.ok().body(city);
+                return ResponseEntity.ok().body(area);
             }
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server");
@@ -47,9 +41,9 @@ public class CityController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateCity(@RequestBody CityDTO city) {
+    public ResponseEntity<?> updateArea(@RequestBody AreaDTO area) {
         try {
-            HttpStatus check = cityService.updateCity(city);
+            HttpStatus check = areaService.updateArea(area);
             if(check != HttpStatus.OK)
                 return ResponseEntity.status(check).body("Update data failed");
             return ResponseEntity.status(check).body("Update data successfully");
@@ -60,14 +54,14 @@ public class CityController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createCity(@RequestBody CityDTO city) {
+    public ResponseEntity<?> createArea(@RequestBody AreaDTO area) {
         var checkCreate = HttpStatus.OK;
         try {
-            checkCreate = cityService.createCity(city);
+            checkCreate = areaService.createArea(area);
             if(checkCreate == HttpStatus.OK)
                 return ResponseEntity.ok().body("Insert data success");
 
-            return ResponseEntity.status(checkCreate).body("Insert city failed");
+            return ResponseEntity.status(checkCreate).body("Insert area failed");
         } catch (Exception ex) {
             System.out.println("Error from controller");
             return ResponseEntity.status(400).body("Server error");
@@ -75,15 +69,15 @@ public class CityController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> deleteCity(@PathVariable String id){
+    public ResponseEntity<?> deleteArea(@PathVariable String id){
         try {
-            HttpStatus check = cityService.deleteCity(id);
+            HttpStatus check = areaService.deleteArea(id);
             if (check == HttpStatus.OK) {
-                return ResponseEntity.status(check).body("Delete city success");
+                return ResponseEntity.status(check).body("Delete area success");
             }
         } catch (Exception ex) {
             System.out.printf("Error from server" + ex);
         }
-        return ResponseEntity.badRequest().body("Delete city failed");
+        return ResponseEntity.badRequest().body("Delete area failed");
     }
 }

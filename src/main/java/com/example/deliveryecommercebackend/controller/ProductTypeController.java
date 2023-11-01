@@ -1,30 +1,24 @@
 package com.example.deliveryecommercebackend.controller;
 
-import com.example.deliveryecommercebackend.DTO.CityDTO;
-import com.example.deliveryecommercebackend.model.City;
-import com.example.deliveryecommercebackend.model.City;
-import com.example.deliveryecommercebackend.services.CityService;
-import jakarta.transaction.Transactional;
+import com.example.deliveryecommercebackend.DTO.ProductTypeDTO;
+import com.example.deliveryecommercebackend.services.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/city")
-public class CityController {
+@RequestMapping("/api/productType")
+public class ProductTypeController {
 
     @Autowired
-    private CityService cityService;
+    private ProductTypeService productTypeService;
 
     @GetMapping
-    public ResponseEntity<?> getCityList(){
+    public ResponseEntity<?> getProductTypeList(){
         try {
-            var listCity = cityService.getAllCitys();
-            return ResponseEntity.ok().body(listCity);
+            var listProductType = productTypeService.getAllProductTypes();
+            return ResponseEntity.ok().body(listProductType);
         } catch (Exception ex) {
             System.out.printf("Error from controller" + ex.getMessage());
             return ResponseEntity.status(400).body("Error from controller: " + ex.getMessage());
@@ -32,14 +26,14 @@ public class CityController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getCityById(@PathVariable String id){
-            CityDTO check = cityService.getCityById(id);
+    public ResponseEntity<?> getProductTypeById(@PathVariable String id){
+            ProductTypeDTO check = productTypeService.getProductTypeById(id);
         try {
-            CityDTO city = cityService.getCityById(id);
-            if (city.getId() == null) {
-                return ResponseEntity.ok().body("City not found.");
+            ProductTypeDTO productType = productTypeService.getProductTypeById(id);
+            if (productType.getId() == null) {
+                return ResponseEntity.ok().body("ProductType not found.");
             } else {
-                return ResponseEntity.ok().body(city);
+                return ResponseEntity.ok().body(productType);
             }
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server");
@@ -47,9 +41,9 @@ public class CityController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateCity(@RequestBody CityDTO city) {
+    public ResponseEntity<?> updateProductType(@RequestBody ProductTypeDTO productType) {
         try {
-            HttpStatus check = cityService.updateCity(city);
+            HttpStatus check = productTypeService.updateProductType(productType);
             if(check != HttpStatus.OK)
                 return ResponseEntity.status(check).body("Update data failed");
             return ResponseEntity.status(check).body("Update data successfully");
@@ -60,14 +54,14 @@ public class CityController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createCity(@RequestBody CityDTO city) {
+    public ResponseEntity<?> createProductType(@RequestBody ProductTypeDTO productType) {
         var checkCreate = HttpStatus.OK;
         try {
-            checkCreate = cityService.createCity(city);
+            checkCreate = productTypeService.createProductType(productType);
             if(checkCreate == HttpStatus.OK)
                 return ResponseEntity.ok().body("Insert data success");
 
-            return ResponseEntity.status(checkCreate).body("Insert city failed");
+            return ResponseEntity.status(checkCreate).body("Insert productType failed");
         } catch (Exception ex) {
             System.out.println("Error from controller");
             return ResponseEntity.status(400).body("Server error");
@@ -75,15 +69,15 @@ public class CityController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> deleteCity(@PathVariable String id){
+    public ResponseEntity<?> deleteProductType(@PathVariable String id){
         try {
-            HttpStatus check = cityService.deleteCity(id);
+            HttpStatus check = productTypeService.deleteProductType(id);
             if (check == HttpStatus.OK) {
-                return ResponseEntity.status(check).body("Delete city success");
+                return ResponseEntity.status(check).body("Delete productType success");
             }
         } catch (Exception ex) {
             System.out.printf("Error from server" + ex);
         }
-        return ResponseEntity.badRequest().body("Delete city failed");
+        return ResponseEntity.badRequest().body("Delete productType failed");
     }
 }

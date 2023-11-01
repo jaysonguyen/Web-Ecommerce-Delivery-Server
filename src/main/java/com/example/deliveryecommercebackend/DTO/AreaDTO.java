@@ -1,6 +1,6 @@
 package com.example.deliveryecommercebackend.DTO;
 
-import com.example.deliveryecommercebackend.model.ProductType;
+import com.example.deliveryecommercebackend.model.Area;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,14 +10,16 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductTypeDTO {
+public class AreaDTO {
     private String id;
+    private String code;
     private String name;
     private String des;
 
-    public ProductTypeDTO(ProductType productType) {
-        this.id = productType.getId();
-        this.name = productType.getName();
-        this.des = productType.getDes();
+    public AreaDTO(Area area) {
+        this.id = area.getId();
+        this.code = area.getCode();
+        this.name = area.getName();
+        this.des = area.getDes();
     }
 }
