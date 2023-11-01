@@ -17,15 +17,10 @@ public class CityDTO {
     private String code;
     private String name;
     private String des;
-    private Date updated;
-    private String type;
 
     public CityDTO(City city) {
-        this.id = city.getId();
-        this.code = city.getCode();
-        this.name = city.getName();
-        this.des = city.getDes();
-        this.updated = city.getUpdated();
-        this.type = city.getType();
+            this.code = city.getCode();
+            this.name = city.getName();
+            this.des = city.getDes();
     }
 }

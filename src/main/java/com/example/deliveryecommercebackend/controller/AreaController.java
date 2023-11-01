@@ -14,10 +14,10 @@ public class AreaController {
     @Autowired
     private AreaService areaService;
 
-    @GetMapping
-    public ResponseEntity<?> getAreaList(){
+    @GetMapping("{cityId}")
+    public ResponseEntity<?> getAreaList(@PathVariable String cityId){
         try {
-            var listArea = areaService.getAllAreas();
+            var listArea = areaService.getAllAreas(cityId);
             return ResponseEntity.ok().body(listArea);
         } catch (Exception ex) {
             System.out.printf("Error from controller" + ex.getMessage());
@@ -25,20 +25,20 @@ public class AreaController {
         }
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<?> getAreaById(@PathVariable String id){
-            AreaDTO check = areaService.getAreaById(id);
-        try {
-            AreaDTO area = areaService.getAreaById(id);
-            if (area.getId() == null) {
-                return ResponseEntity.ok().body("Area not found.");
-            } else {
-                return ResponseEntity.ok().body(area);
-            }
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().body("Error from server");
-        }
-    }
+//    @GetMapping("{id}")
+//    public ResponseEntity<?> getAreaById(@PathVariable String id){
+//            AreaDTO check = areaService.getAreaById(id);
+//        try {
+//            AreaDTO area = areaService.getAreaById(id);
+//            if (area.getId() == null) {
+//                return ResponseEntity.ok().body("Area not found.");
+//            } else {
+//                return ResponseEntity.ok().body(area);
+//            }
+//        } catch (Exception ex) {
+//            return ResponseEntity.badRequest().body("Error from server");
+//        }
+//    }
 
     @PutMapping
     public ResponseEntity<?> updateArea(@RequestBody AreaDTO area) {
@@ -58,6 +58,7 @@ public class AreaController {
         var checkCreate = HttpStatus.OK;
         try {
             checkCreate = areaService.createArea(area);
+//            return areaService.createArea(area);
             if(checkCreate == HttpStatus.OK)
                 return ResponseEntity.ok().body("Insert data success");
 

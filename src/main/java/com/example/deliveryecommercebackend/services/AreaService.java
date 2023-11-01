@@ -1,14 +1,20 @@
 package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.AreaDTO;
+import com.example.deliveryecommercebackend.DTO.BranchDTO;
 import com.example.deliveryecommercebackend.model.Area;
+import com.example.deliveryecommercebackend.model.Branch;
+import com.example.deliveryecommercebackend.model.City;
 import com.example.deliveryecommercebackend.repository.AreaRepository;
+import com.example.deliveryecommercebackend.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,10 +24,25 @@ public class AreaService {
 
     @Autowired
     AreaRepository areaRepository;
+    @Autowired
+    CityRepository cityRepository;
 
-    public List<Area> getAllAreas() {
+    public List<AreaDTO> getAllAreas(String cityId) {
         try {
-            return areaRepository.findNoneDeleteArea();
+            //check city exists
+            City city = cityRepository.findNoneDeleteCityById(cityId);
+            if(city == null) {
+                return Collections.emptyList();
+            }
+
+            List<Area> areas = areaRepository.findNoneDeleteAreaByCity(city);
+            List<AreaDTO> res = new ArrayList<AreaDTO>();
+            for(Area area : areas){
+                AreaDTO temp = new AreaDTO(area);
+                res.add(temp);
+            }
+
+            return res;
         } catch(Exception ex) {
             System.out.printf("Get area failed - Error: " + ex);
             return Collections.emptyList();
@@ -58,15 +79,20 @@ public class AreaService {
         }
     }
     public HttpStatus createArea(AreaDTO area) {
+        //check exists city
+//        City city = cityRepository.findNoneDeleteCityById(area.getCity());
+        City city = cityRepository.findById(area.getCity()).get();
+        if(city == null)
+            return HttpStatus.NOT_FOUND;
         Area newArea = new Area();
 
         newArea.setCode(area.getCode());
         newArea.setName(area.getName());
         newArea.setDes(area.getDes());
+        newArea.setCity(city);
         newArea.set_delete(false);
         newArea.setUpdated(Date.valueOf(LocalDate.now()));
         newArea.setCreated(Date.valueOf(LocalDate.now()));
-
 
         try {
             Area checkSave = areaRepository.save(newArea);
