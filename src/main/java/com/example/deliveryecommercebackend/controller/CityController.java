@@ -63,7 +63,7 @@ public class CityController {
     public ResponseEntity<?> createCity(@RequestBody CityDTO city) {
         var checkCreate = HttpStatus.OK;
         try {
-            checkCreate = cityService.createCity(city);
+            checkCreate = cityService.insertCity(city);
             if(checkCreate == HttpStatus.OK)
                 return ResponseEntity.ok().body("Insert data success");
 

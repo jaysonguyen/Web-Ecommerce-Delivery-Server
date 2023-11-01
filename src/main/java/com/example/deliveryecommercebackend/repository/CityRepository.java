@@ -10,6 +10,6 @@ import java.util.List;
 public interface CityRepository extends JpaRepository<City, String> {
     @Query("SELECT u FROM City u WHERE u.is_delete = false")
     List<City> findNoneDeleteCity();
-    @Query("SELECT u FROM City u WHERE u.id = :id AND u.is_delete = false")
+    @Query("SELECT u FROM City u WHERE u.id = :id")
     City findNoneDeleteCityById(@Param("id") String id);
 }

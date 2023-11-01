@@ -15,11 +15,13 @@ public class AreaDTO {
     private String code;
     private String name;
     private String des;
+    private String city;
 
     public AreaDTO(Area area) {
         this.id = area.getId();
         this.code = area.getCode();
         this.name = area.getName();
         this.des = area.getDes();
+        this.city = area.getCity().getId();
     }
 }

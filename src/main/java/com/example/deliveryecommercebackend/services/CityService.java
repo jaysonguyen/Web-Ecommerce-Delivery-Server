@@ -2,8 +2,9 @@ package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.CityDTO;
 import com.example.deliveryecommercebackend.DTO.CityDTO;
+import com.example.deliveryecommercebackend.DTO.ProductTypeDTO;
 import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
-import com.example.deliveryecommercebackend.model.City;
+import com.example.deliveryecommercebackend.model.*;
 import com.example.deliveryecommercebackend.model.City;
 import com.example.deliveryecommercebackend.model.City;
 import com.example.deliveryecommercebackend.model.City;
@@ -44,7 +45,7 @@ public class CityService {
         }
     }
     public HttpStatus updateCity( CityDTO city) {
-        var checkExistsCity = cityRepository.findById(city.getId()).get();
+        City checkExistsCity = cityRepository.findById(city.getId()).get();
 
         if(checkExistsCity == null) {
             return HttpStatus.CONFLICT;
@@ -79,6 +80,28 @@ public class CityService {
             if(checkSave != null) {
                 return HttpStatus.OK;
             }
+            return HttpStatus.BAD_REQUEST;
+        } catch(Exception ex) {
+            System.out.printf("Create city failed - Error" + ex);
+            return HttpStatus.NOT_ACCEPTABLE;
+        }
+    }
+
+    public HttpStatus insertCity(CityDTO cityDTO) {
+        City newCity = new City();
+
+        newCity.setCode(cityDTO.getCode());
+        newCity.setName(cityDTO.getName());
+        newCity.setDes(cityDTO.getDes());
+        newCity.setUpdated(Date.valueOf(LocalDate.now()));
+        newCity.setCreated(Date.valueOf(LocalDate.now()));
+
+
+        try {
+            City checkSave = cityRepository.save(newCity);
+            if(checkSave != null) {
+                return HttpStatus.OK;
+            }
         } catch(Exception ex) {
             System.out.printf("Create city failed - Error" + ex);
         }
@@ -87,7 +110,9 @@ public class CityService {
 
     public HttpStatus deleteCity(String id){
         City city = cityRepository.findNoneDeleteCityById(id);
+
         city.set_delete(true);
+
         try {
             var checkUpdate = cityRepository.save(city);
             if(checkUpdate == null) {
