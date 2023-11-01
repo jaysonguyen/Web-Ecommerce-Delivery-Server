@@ -34,6 +34,8 @@ public class UserDTO {
     private String purpose;
     private int role;
     private String roleName;
+    private String major;
+    private String scale;
 
     public UserDTO(User user) {
         this.id = user.getUser_id();
@@ -48,6 +50,8 @@ public class UserDTO {
         this.purpose = user.getPurpose();
         this.role = user.getRole().getRoleId();
         this.roleName = user.getRole().getName();
+        this.major = user.getMajor();
+        this.scale = user.getScale();
     }
 
     public void setData(User user){
@@ -59,6 +63,8 @@ public class UserDTO {
         isDelete = (user.is_delete());
         email = (user.getEmail());
         roleName = (user.getRole().getName());
+        major = (user.getMajor());
+        scale = (user.getScale());
     }
 
 }

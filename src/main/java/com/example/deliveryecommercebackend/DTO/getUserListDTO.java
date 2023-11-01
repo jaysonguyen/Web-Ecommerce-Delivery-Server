@@ -22,6 +22,9 @@ public class getUserListDTO {
     private String phoneNumber;
     private String des;
     private Date updated;
+    private String major;
+    private String scale;
+
 
     public void setData(User user){
         id = user.getUser_id();
@@ -32,6 +35,8 @@ public class getUserListDTO {
         account = (user.getAccount());
         phoneNumber = (user.getPhone());
         des = (user.getDes());
+        major = user.getMajor();
+        scale = user.getScale();
     }
 
 }

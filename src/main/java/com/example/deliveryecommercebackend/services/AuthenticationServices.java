@@ -18,16 +18,16 @@ public class AuthenticationServices {
         this.userRepository = userRepository;
     }
 
-    public boolean loginUser(LoginDTO loginDTO) {
+    public User loginUser(LoginDTO loginDTO) {
         User user = userRepository.findUserByAccount(loginDTO.getAccount());
         if(user == null) {
-            return false;
+            return null;
         }
         var parsePass = BCrypt.checkpw(loginDTO.getPassword(), user.getPassword());
         if(parsePass == false) {
-            return false;
+            return null;
         }
-        return true;
+        return user;
     }
 
 }
