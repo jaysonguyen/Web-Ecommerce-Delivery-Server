@@ -15,17 +15,28 @@ import java.sql.Date;
 @NoArgsConstructor
 public class getUserListDTO {
     private String id;
+    private String fullName;
     private String account;
     private String email;
+    private String roleName;
     private String phoneNumber;
     private String des;
+    private Date updated;
+    private String major;
+    private String scale;
+
 
     public void setData(User user){
         id = user.getUser_id();
+        fullName = (user.getFullName());
+        updated = (user.getUpdated());
         email = (user.getEmail());
+        roleName = (user.getRole().getName());
         account = (user.getAccount());
         phoneNumber = (user.getPhone());
         des = (user.getDes());
+        major = user.getMajor();
+        scale = user.getScale();
     }
 
 }

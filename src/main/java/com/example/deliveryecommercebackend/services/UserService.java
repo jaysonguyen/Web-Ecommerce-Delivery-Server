@@ -98,6 +98,8 @@ public class UserService {
         newUser.setDes(user.getDes());
         newUser.setFullName(user.getFullName());
         newUser.setPurpose(user.getPurpose());
+        newUser.setMajor(user.getMajor());
+        newUser.setScale(user.getScale());
         newUser.setRole(role);
 
         try {
@@ -118,6 +120,8 @@ public class UserService {
         user.setPhone(userDto.getPhone());
         user.set_delete(userDto.isDelete());
         user.setDes(userDto.getDes());
+        user.setMajor(userDto.getMajor());
+        user.setScale(userDto.getScale());
 
         try {
             var checkSave = userRepository.save(user);
