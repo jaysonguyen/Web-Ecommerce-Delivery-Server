@@ -1,6 +1,7 @@
 package com.example.deliveryecommercebackend.controller;
 
 
+import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
 import com.example.deliveryecommercebackend.DTO.UserDTO;
 import com.example.deliveryecommercebackend.services.AuthenticationServices;
 import com.example.deliveryecommercebackend.services.UserService;
@@ -71,7 +72,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UserDTO user) {
+    public ResponseEntity<?> createUser(@RequestBody UserCreateDTO user) {
         try {
             HttpStatus checkAdd = userService.createUser(user);
             System.out.println(user.getRoleName());

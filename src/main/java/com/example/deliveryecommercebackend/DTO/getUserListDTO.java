@@ -14,7 +14,7 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class getUserListDTO {
-    private String id;
+    private String code;
     private String fullName;
     private String account;
     private String email;
@@ -27,7 +27,7 @@ public class getUserListDTO {
 
 
     public void setData(User user){
-        id = user.getUser_id();
+        code = user.getCode();
         fullName = (user.getFullName());
         updated = (user.getUpdated());
         email = (user.getEmail());

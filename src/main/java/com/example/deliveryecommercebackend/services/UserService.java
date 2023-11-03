@@ -1,5 +1,6 @@
 package com.example.deliveryecommercebackend.services;
 
+import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
 import com.example.deliveryecommercebackend.DTO.UserDTO;
 import com.example.deliveryecommercebackend.DTO.getUserListDTO;
 import com.example.deliveryecommercebackend.model.Role;
@@ -75,13 +76,14 @@ public class UserService {
         return Collections.emptyList();
     }
 
-    public HttpStatus createUser(UserDTO user) {
-        Role role = roleRepository.findById(user.getRole()).get();
+    public HttpStatus createUser(UserCreateDTO userDTO) {
+        Role role = roleRepository.findById(userDTO.getRole()).get();
         if(role == null) {
-            role = roleRepository.findRoleByName(user.getFullName());
+            role = roleRepository.findRoleByName(userDTO.getFullName());
         }
-        var checkValidAccount = userRepository.findUserByAccount(user.getAccount());
-        var checkValidEmail = userRepository.findUsersByEmail(user.getEmail());
+        var checkValidAccount = userRepository.findUserByAccount(userDTO.getAccount());
+        var checkValidEmail = userRepository.findUsersByEmail(userDTO.getEmail());
+        // existing user
         if(checkValidEmail != null) {
             return HttpStatus.FOUND;
         }
@@ -89,28 +91,19 @@ public class UserService {
             return HttpStatus.FOUND;
         }
         User newUser = new User();
-        newUser.setCreated(Date.valueOf(LocalDate.now()));
-        newUser.setUpdated(Date.valueOf(LocalDate.now()));
-        newUser.setAccount(user.getAccount());
-        newUser.setEmail(user.getEmail());
-        newUser.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
-        newUser.setPhone(user.getPhone());
-        newUser.setDes(user.getDes());
-        newUser.setFullName(user.getFullName());
-        newUser.setPurpose(user.getPurpose());
-        newUser.setMajor(user.getMajor());
-        newUser.setScale(user.getScale());
-        newUser.setRole(role);
+        newUser.setDataCreate(userDTO, role);
 
         try {
             User checkSave = userRepository.save(newUser);
             if(checkSave != null) {
                 return HttpStatus.OK;
+            } else {
+                return HttpStatus.BAD_REQUEST;
             }
         } catch(Exception ex) {
             System.out.printf("Create user failed - Error" + ex);
+            return HttpStatus.BAD_GATEWAY;
         }
-        return HttpStatus.NOT_ACCEPTABLE;
     }
 
     public HttpStatus updateUserAdmin(UserDTO userDto) {
