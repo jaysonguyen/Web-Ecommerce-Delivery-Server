@@ -75,15 +75,13 @@ public class UserController {
     public ResponseEntity<?> createUser(@RequestBody UserCreateDTO user) {
         try {
             HttpStatus checkAdd = userService.createUser(user);
-            System.out.println(user.getRoleName());
             if(checkAdd == HttpStatus.OK) {
                 return ResponseEntity.ok("Insert success");
             } else {
                 return ResponseEntity.status(checkAdd).body("Insert user failed");
             }
         } catch (Exception ex) {
-            System.out.println("Error from server, Error:" + ex);
-            return ResponseEntity.badRequest().body("Error from user");
+            return ResponseEntity.badRequest().body("Error from server: " + ex);
         }
     }
 
