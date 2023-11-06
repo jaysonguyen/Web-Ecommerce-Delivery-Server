@@ -10,6 +10,7 @@ import com.example.deliveryecommercebackend.repository.RoleRepository;
 import com.example.deliveryecommercebackend.repository.StoreRepository;
 import com.example.deliveryecommercebackend.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.ToString;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -78,11 +79,11 @@ public class UserService {
 
     public HttpStatus createUser(UserCreateDTO userDTO) {
         Role role = roleRepository.findById(userDTO.getRole()).get();
-        if(role == null) {
-            role = roleRepository.findRoleByName(userDTO.getFullName());
-        }
+        System.out.println(role.toString());
+
         var checkValidAccount = userRepository.findUserByAccount(userDTO.getAccount());
         var checkValidEmail = userRepository.findUsersByEmail(userDTO.getEmail());
+
         // existing user
         if(checkValidEmail != null) {
             return HttpStatus.FOUND;
@@ -207,7 +208,6 @@ public class UserService {
                 res.add(temp);
             }
 
-
             return ResponseEntity.ok().body(res);
 
         } catch (Exception ex) {
@@ -215,6 +215,33 @@ public class UserService {
             return ResponseEntity.badRequest().body("Error: " + ex);
         }
     }
+
+//    public ResponseEntity<?> getShipperByBranch(String branchId) {
+//        try {
+//            var roleStaff = roleRepository.findRoleByName("shipper");
+//
+//            if(roleStaff == null) {
+//                return ResponseEntity.badRequest().body("Not found role");
+//            }
+//
+////            var shipperList = userRepository.findUserByBranchId(branchId);
+////            var shipperBranchList = shipperList
+//
+//            List<getUserListDTO> res = new ArrayList<getUserListDTO>();
+//            for(User user : staffList){
+//                getUserListDTO temp = new getUserListDTO();
+//                temp.setData(user);
+//                res.add(temp);
+//            }
+//
+//            return ResponseEntity.ok().body(res);
+//
+//        }catch (Exception ex) {
+//            System.out.println("Error from services: " + ex);
+//            return ResponseEntity.badRequest().body("Error from services" + ex);
+//        }
+//    }
+
 
 
 }

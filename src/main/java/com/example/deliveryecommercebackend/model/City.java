@@ -36,5 +36,4 @@ public class City {
     @JsonIgnore
     private boolean is_delete;
 
-
 }

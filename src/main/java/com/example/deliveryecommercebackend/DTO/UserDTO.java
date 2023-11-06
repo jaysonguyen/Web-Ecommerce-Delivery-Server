@@ -23,6 +23,7 @@ import java.util.List;
 public class UserDTO {
     private String id;
     private String fullName;
+    private String code;
     private String des;
     private Date created;
     private Date updated;

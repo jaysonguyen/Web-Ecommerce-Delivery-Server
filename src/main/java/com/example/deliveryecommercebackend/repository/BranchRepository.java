@@ -2,6 +2,7 @@ package com.example.deliveryecommercebackend.repository;
 
 
 import com.example.deliveryecommercebackend.model.Branch;
+import com.example.deliveryecommercebackend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -13,4 +14,5 @@ public interface BranchRepository extends JpaRepository<Branch, String> {
 
     @Query("SELECT u FROM Branch u WHERE u.is_delete = false")
     List<Branch> findNoneDeleteBranch();
+
 }

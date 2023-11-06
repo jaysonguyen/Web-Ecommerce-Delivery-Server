@@ -1,6 +1,7 @@
 package com.example.deliveryecommercebackend.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,5 +25,10 @@ public class Branch {
     private String des;
     @JsonIgnore
     private boolean is_delete;
+
+    @OneToOne
+    @JoinColumn(name = "city_id")
+    @JsonBackReference
+    private City city;
 
 }
