@@ -16,4 +16,6 @@ public interface AreaRepository extends JpaRepository<Area, String> {
 
     @Query("SELECT u FROM Area u WHERE u.is_delete = false AND u.city = :city")
     List<Area> findNoneDeleteAreaByCity(@Param("city") City city);
+    @Query("SELECT u FROM Area u WHERE u.is_delete = false AND u.code = :code")
+    Area findByCode(@Param("code")String code);
 }

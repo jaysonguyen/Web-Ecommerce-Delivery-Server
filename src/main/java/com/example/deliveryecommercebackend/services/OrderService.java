@@ -61,9 +61,9 @@ public class OrderService {
         }
     }
 
-    public OrderDetailsDTO getOrderById(String orderId) {
+    public OrderDetailsDTO getOrderByCode(String orderCode) {
         //find order
-        Order order = orderRepo.findOrderById(orderId);
+        Order order = orderRepo.findOrderByCode(orderCode);
         System.out.println(order);
         if(order == null) {
             return null;
@@ -121,9 +121,9 @@ public class OrderService {
 
     }
 
-    public HttpStatus setOrderAction(String orderID, String actionCode) {
+    public HttpStatus setOrderAction(String orderCode, String actionCode) {
         //find order
-        Order order = orderRepo.findOrderById(orderID);
+        Order order = orderRepo.findOrderByCode(orderCode);
         order.setAction_code(actionCode);
 
         try {

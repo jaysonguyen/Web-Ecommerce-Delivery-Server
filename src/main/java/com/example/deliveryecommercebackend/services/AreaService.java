@@ -1,5 +1,6 @@
 package com.example.deliveryecommercebackend.services;
 
+import com.example.deliveryecommercebackend.DTO.AreaCreatedDTO;
 import com.example.deliveryecommercebackend.DTO.AreaDTO;
 import com.example.deliveryecommercebackend.DTO.BranchDTO;
 import com.example.deliveryecommercebackend.model.Area;
@@ -58,8 +59,8 @@ public class AreaService {
             return null;
         }
     }
-    public HttpStatus updateArea( Area area) {
-        var checkExistsArea = areaRepository.findById(area.getId()).get();
+    public HttpStatus updateArea( AreaCreatedDTO area) {
+        var checkExistsArea = areaRepository.findByCode(area.getCode());
 
         if(checkExistsArea == null) {
             return HttpStatus.CONFLICT;
@@ -78,10 +79,11 @@ public class AreaService {
             return HttpStatus.BAD_REQUEST;
         }
     }
-    public HttpStatus createArea(Area area) {
+    public HttpStatus createArea(AreaCreatedDTO area) {
         //check exists city
 //        City city = cityRepository.findNoneDeleteCityById(area.getCity());
-        City city = cityRepository.findById(area.getCity().getId()).get();
+        City city = cityRepository.findNoneDeleteCityByCode(area.getCity());
+        System.out.println(city);
         if(city == null)
             return HttpStatus.NOT_FOUND;
         Area newArea = new Area();

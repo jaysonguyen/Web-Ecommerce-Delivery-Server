@@ -56,11 +56,11 @@ public class OrderController {
     }
 
 
-    @GetMapping("/{orderId}")
+    @GetMapping("/{orderCode}")
     @ResponseBody
-    public ResponseEntity<?>getOrderById(@PathVariable String orderId) {
+    public ResponseEntity<?>getOrderByCode(@PathVariable String orderCode) {
         try {
-            var listOrder = orderService.getOrderById(orderId);
+            var listOrder = orderService.getOrderByCode(orderCode);
             if(listOrder == null) {
                 return ResponseEntity.badRequest().body("List null");
             }
@@ -115,10 +115,10 @@ public class OrderController {
         }
     }
 
-    @PutMapping("{orderId}/action/{actionCode}")
-    public ResponseEntity<?> setActionOrder(@PathVariable String orderId, @PathVariable String actionCode) {
+    @PutMapping("{orderCode}/action/{actionCode}")
+    public ResponseEntity<?> setActionOrder(@PathVariable String orderCode, @PathVariable String actionCode) {
         try {
-            HttpStatus check = orderService.setOrderAction(orderId, actionCode);
+            HttpStatus check = orderService.setOrderAction(orderCode, actionCode);
             if(check != HttpStatus.OK)
                 return ResponseEntity.status(check).body("Set action failed");
             return ResponseEntity.status(check).body("Set action successfully");

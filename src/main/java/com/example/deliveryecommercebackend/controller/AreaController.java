@@ -1,5 +1,6 @@
 package com.example.deliveryecommercebackend.controller;
 
+import com.example.deliveryecommercebackend.DTO.AreaCreatedDTO;
 import com.example.deliveryecommercebackend.DTO.AreaDTO;
 import com.example.deliveryecommercebackend.model.Area;
 import com.example.deliveryecommercebackend.services.AreaService;
@@ -42,7 +43,7 @@ public class AreaController {
 //    }
 
     @PutMapping
-    public ResponseEntity<?> updateArea(@RequestBody Area area) {
+    public ResponseEntity<?> updateArea(@RequestBody AreaCreatedDTO area) {
         try {
             HttpStatus check = areaService.updateArea(area);
             if(check != HttpStatus.OK)
@@ -55,7 +56,7 @@ public class AreaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createArea(@RequestBody Area area) {
+    public ResponseEntity<?> createArea(@RequestBody AreaCreatedDTO area) {
         var checkCreate = HttpStatus.OK;
         try {
             checkCreate = areaService.createArea(area);
