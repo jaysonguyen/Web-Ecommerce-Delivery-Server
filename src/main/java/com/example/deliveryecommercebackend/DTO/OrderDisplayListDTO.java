@@ -16,32 +16,31 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class OrderDisplayListDTO {
     private String order_id;
+    private String order_code;
 
-    private Action action;
-    private String receiver_name;
-    private String address;
+    private String action_name;
+    private String receiver;
 
     private String product_type_name;
     private String product;
 
-    private double cost;
-    private double total_cost;
     private boolean collect_money;
 
     private LocalDateTime created;
     private LocalDateTime updated;
     // sender
     private String user_name;
-
-    public OrderDisplayListDTO(Order order, Action action) {
+    public OrderDisplayListDTO(Order order, String actionName, String producTypeName) {
         this.order_id = order.getOrder_id();
+        this.order_code = order.getOrder_code();
         this.created = order.getCreated();
         this.updated = order.getUpdated();
-        this.address = order.getAddress();
+        this.product_type_name = producTypeName;
         this.collect_money = order.isCollect_money();
-        //json
-        this.product = order.getProduct();
-        this.action = action;
+        this.action_name = actionName;
         this.user_name = order.getUser().getFullName();
+
+        this.receiver = order.getReceiver();
+        this.product = order.getProduct();
     }
 }

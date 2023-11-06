@@ -16,6 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UserCreateDTO {
     private String id;
+    private String code;
     private String fullName;
     private String des;
     private Date created;
@@ -33,6 +34,7 @@ public class UserCreateDTO {
 
     public UserCreateDTO(User user) {
         this.id = user.getUser_id();
+        this.code = user.getCode();
         this.fullName = user.getFullName();
         this.des = user.getDes();
         this.created = Date.valueOf(LocalDate.now());
@@ -50,6 +52,7 @@ public class UserCreateDTO {
 
     public void setData(User user){
         id = user.getUser_id();
+        code = user.getCode();
         fullName = (user.getFullName());
         des = (user.getDes());
         created = Date.valueOf(LocalDate.now());

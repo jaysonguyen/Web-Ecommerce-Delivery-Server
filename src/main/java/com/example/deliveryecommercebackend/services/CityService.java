@@ -1,17 +1,10 @@
 package com.example.deliveryecommercebackend.services;
 
-import com.example.deliveryecommercebackend.DTO.CityDTO;
-import com.example.deliveryecommercebackend.DTO.CityDTO;
-import com.example.deliveryecommercebackend.DTO.ProductTypeDTO;
-import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
-import com.example.deliveryecommercebackend.model.*;
-import com.example.deliveryecommercebackend.model.City;
-import com.example.deliveryecommercebackend.model.City;
+import com.example.deliveryecommercebackend.DTO.order.CityDTO;
 import com.example.deliveryecommercebackend.model.City;
 import com.example.deliveryecommercebackend.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;

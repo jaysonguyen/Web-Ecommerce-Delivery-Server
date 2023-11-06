@@ -19,6 +19,8 @@ public interface UserRepository extends JpaRepository<User, String> {
 //    List<User> findUsersByRole(Role role);
     @Query("SELECT u FROM User u WHERE u.role = :role AND u.is_delete = false")
     List<User> findUsersByRole(@Param("role") Role role);
+    @Query("SELECT u FROM User u WHERE u.role = :role ANd u.code = :code AND u.is_delete = false")
+    List<User> findNoneDeleteShipperByCode(@Param("code") String userCode, @Param("role") Role role);
 
     @Query("SELECT u FROM User u WHERE u.is_delete = false")
     List<User> findNoneDeleteUser();

@@ -1,6 +1,7 @@
 package com.example.deliveryecommercebackend.controller;
 
 import com.example.deliveryecommercebackend.DTO.AreaDTO;
+import com.example.deliveryecommercebackend.model.Area;
 import com.example.deliveryecommercebackend.services.AreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class AreaController {
 //    }
 
     @PutMapping
-    public ResponseEntity<?> updateArea(@RequestBody AreaDTO area) {
+    public ResponseEntity<?> updateArea(@RequestBody Area area) {
         try {
             HttpStatus check = areaService.updateArea(area);
             if(check != HttpStatus.OK)
@@ -54,7 +55,7 @@ public class AreaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createArea(@RequestBody AreaDTO area) {
+    public ResponseEntity<?> createArea(@RequestBody Area area) {
         var checkCreate = HttpStatus.OK;
         try {
             checkCreate = areaService.createArea(area);

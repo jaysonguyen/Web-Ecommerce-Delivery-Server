@@ -41,6 +41,13 @@ public class User {
     private String major;
     private String scale;
 
+    //new
+    private double cod; //tien co the rut
+    private int point;
+
+    @JsonIgnore
+    private String role_id_hide;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
 
@@ -60,6 +67,7 @@ public class User {
         this.updated = (Date.valueOf(LocalDate.now()));
         this.account = (userDTO.getAccount());
         this.email = (userDTO.getEmail());
+        this.code = (userDTO.getCode());
         this.password = (BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt(12)));
         this.phone = (userDTO.getPhone());
         this.des = (userDTO.getDes());

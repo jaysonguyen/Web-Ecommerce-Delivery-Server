@@ -1,4 +1,4 @@
-package com.example.deliveryecommercebackend.DTO;
+package com.example.deliveryecommercebackend.DTO.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

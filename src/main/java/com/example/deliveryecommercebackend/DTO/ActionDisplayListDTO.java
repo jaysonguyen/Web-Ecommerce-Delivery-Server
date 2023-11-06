@@ -1,5 +1,6 @@
 package com.example.deliveryecommercebackend.DTO;
 
+import com.example.deliveryecommercebackend.model.Action;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,13 +10,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActionDTO {
+public class ActionDisplayListDTO {
 
     private String code;
     private String name;
-    private String des;
-    private String type;
 
-
-
+    public ActionDisplayListDTO(Action action) {
+        this.code = action.getCode();
+        this.name = action.getName();
+    }
 }

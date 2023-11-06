@@ -1,6 +1,6 @@
 package com.example.deliveryecommercebackend.services;
 
-import com.example.deliveryecommercebackend.DTO.ProductTypeDTO;
+import com.example.deliveryecommercebackend.DTO.order.ProductTypeDTO;
 import com.example.deliveryecommercebackend.model.ProductType;
 import com.example.deliveryecommercebackend.repository.ProductTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;

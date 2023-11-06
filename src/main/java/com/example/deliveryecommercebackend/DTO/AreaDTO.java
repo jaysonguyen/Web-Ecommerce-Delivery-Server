@@ -11,17 +11,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AreaDTO {
-    private String id;
     private String code;
-    private String name;
-    private String des;
-    private String city;
+    private String content;
 
     public AreaDTO(Area area) {
-        this.id = area.getId();
         this.code = area.getCode();
-        this.name = area.getName();
-        this.des = area.getDes();
-        this.city = area.getCity().getId();
+        this.content = area.getName();
     }
 }

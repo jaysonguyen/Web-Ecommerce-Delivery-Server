@@ -27,7 +27,7 @@ public class AreaService {
     @Autowired
     CityRepository cityRepository;
 
-    public List<AreaDTO> getAllAreas(String cityId) {
+    public List<Area> getAllAreas(String cityId) {
         try {
             //check city exists
             City city = cityRepository.findNoneDeleteCityById(cityId);
@@ -36,29 +36,29 @@ public class AreaService {
             }
 
             List<Area> areas = areaRepository.findNoneDeleteAreaByCity(city);
-            List<AreaDTO> res = new ArrayList<AreaDTO>();
-            for(Area area : areas){
-                AreaDTO temp = new AreaDTO(area);
-                res.add(temp);
-            }
+//            List<AreaDTO> res = new ArrayList<AreaDTO>();
+//            for(Area area : areas){
+//                AreaDTO temp = new AreaDTO(area);
+//                res.add(temp);
+//            }
 
-            return res;
+            return areas;
         } catch(Exception ex) {
             System.out.printf("Get area failed - Error: " + ex);
             return Collections.emptyList();
         }
     }
 
-    public AreaDTO getAreaById(String id){
+    public Area getAreaById(String id){
         try {
             Area area = areaRepository.findNoneDeleteAreaById(id);
-            return new AreaDTO(area);
+            return area;
         } catch(Exception ex) {
             System.out.printf("Get area failed - Error: " + ex);
-            return new AreaDTO();
+            return null;
         }
     }
-    public HttpStatus updateArea( AreaDTO area) {
+    public HttpStatus updateArea( Area area) {
         var checkExistsArea = areaRepository.findById(area.getId()).get();
 
         if(checkExistsArea == null) {
@@ -78,10 +78,10 @@ public class AreaService {
             return HttpStatus.BAD_REQUEST;
         }
     }
-    public HttpStatus createArea(AreaDTO area) {
+    public HttpStatus createArea(Area area) {
         //check exists city
 //        City city = cityRepository.findNoneDeleteCityById(area.getCity());
-        City city = cityRepository.findById(area.getCity()).get();
+        City city = cityRepository.findById(area.getCity().getId()).get();
         if(city == null)
             return HttpStatus.NOT_FOUND;
         Area newArea = new Area();

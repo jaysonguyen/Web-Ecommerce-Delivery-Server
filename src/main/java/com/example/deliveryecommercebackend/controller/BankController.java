@@ -1,9 +1,7 @@
 package com.example.deliveryecommercebackend.controller;
 
-import com.example.deliveryecommercebackend.DTO.BankDTO;
-import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
+import com.example.deliveryecommercebackend.DTO.order.BankDTO;
 import com.example.deliveryecommercebackend.model.Bank;
-import com.example.deliveryecommercebackend.repository.BankRepository;
 import com.example.deliveryecommercebackend.services.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,12 +1,20 @@
 package com.example.deliveryecommercebackend;
 
+import com.example.deliveryecommercebackend.model.Action;
+import com.example.deliveryecommercebackend.model.Bank;
+import com.example.deliveryecommercebackend.model.ProductType;
+import com.example.deliveryecommercebackend.model.Role;
 import com.example.deliveryecommercebackend.repository.ActionRepository;
 import com.example.deliveryecommercebackend.repository.BankRepository;
+import com.example.deliveryecommercebackend.repository.ProductTypeRepository;
 import com.example.deliveryecommercebackend.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.sql.Date;
+import java.time.LocalDate;
 
 @SpringBootApplication
 
@@ -22,6 +30,8 @@ public class DeliveryEcommerceBackendApplication implements CommandLineRunner {
     private ActionRepository actionRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private ProductTypeRepository productTypeRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -37,12 +47,12 @@ public class DeliveryEcommerceBackendApplication implements CommandLineRunner {
 //        newBank1.setState(false);
 //        bankRepository.save(newBank1);
 //
-//
 //        Bank newBank2 = new Bank();
 //        newBank2.setBank_id("bank3");
 //        newBank2.setName("TECHCOMBANK");
 //        newBank2.setState(false);
 //        bankRepository.save(newBank2);
+//
 //
 //        Role roleAdmin = new Role();
 //        roleAdmin.setRoleId(1);
@@ -69,8 +79,10 @@ public class DeliveryEcommerceBackendApplication implements CommandLineRunner {
 //        roleShipper.setName("shipper");
 //        roleRepository.save(roleShipper);
 //
+//
 //        Action action = new Action();
 //        action.setAction_id(0);
+//        action.setCode("0");
 //        action.setName("waiting");
 //        action.setDes("waiting for accepting");
 //        action.setType("admin");
@@ -81,6 +93,7 @@ public class DeliveryEcommerceBackendApplication implements CommandLineRunner {
 //
 //        Action action1 = new Action();
 //        action1.setAction_id(1);
+//        action1.setCode("1");
 //        action1.setName("accept");
 //        action1.setDes("accepted");
 //        action1.setType("admin");
@@ -91,6 +104,7 @@ public class DeliveryEcommerceBackendApplication implements CommandLineRunner {
 //
 //        Action action2 = new Action();
 //        action2.setAction_id(2);
+//        action2.setCode("2");
 //        action2.setName("decline");
 //        action2.setDes("decline");
 //        action2.setType("admin");
@@ -98,6 +112,14 @@ public class DeliveryEcommerceBackendApplication implements CommandLineRunner {
 //        action2.setCreated(Date.valueOf(LocalDate.now()));
 //
 //        actionRepository.save(action2);
+//
+//
+//        ProductType productType = new ProductType();
+//        productType.setCode("type1");
+//        productType.setName("type number one");
+//        productType.setDes("type1 description");
+//
+//        productTypeRepository.save(productType);
 
     }
 }
