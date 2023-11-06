@@ -1,6 +1,6 @@
 package com.example.deliveryecommercebackend.controller;
 
-import com.example.deliveryecommercebackend.DTO.ProductTypeDTO;
+import com.example.deliveryecommercebackend.DTO.order.ProductTypeDTO;
 import com.example.deliveryecommercebackend.services.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -12,4 +12,6 @@ public interface CityRepository extends JpaRepository<City, String> {
     List<City> findNoneDeleteCity();
     @Query("SELECT u FROM City u WHERE u.id = :id")
     City findNoneDeleteCityById(@Param("id") String id);
+    @Query("SELECT u FROM City u WHERE u.code = :code")
+    City findNoneDeleteCityByCode(@Param("code") String code);
 }

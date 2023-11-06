@@ -1,16 +1,13 @@
 package com.example.deliveryecommercebackend.services;
 
-import com.example.deliveryecommercebackend.DTO.BankDTO;
+import com.example.deliveryecommercebackend.DTO.order.BankDTO;
 import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
 import com.example.deliveryecommercebackend.model.Bank;
-import com.example.deliveryecommercebackend.model.User;
 import com.example.deliveryecommercebackend.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Collections;
 import java.util.List;

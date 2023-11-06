@@ -23,6 +23,8 @@ public class ProductType {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    @Column(name = "code", unique = true, nullable = false)
+    private String code;
     private String name;
     private String des;
     @CreatedDate

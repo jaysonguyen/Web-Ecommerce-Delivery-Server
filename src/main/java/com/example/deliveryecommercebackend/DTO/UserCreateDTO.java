@@ -1,27 +1,22 @@
 package com.example.deliveryecommercebackend.DTO;
 
-import com.example.deliveryecommercebackend.model.Role;
 import com.example.deliveryecommercebackend.model.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
-import java.util.List;
+import java.time.LocalDate;
 
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class UserCreateDTO {
     private String id;
+    private String code;
     private String fullName;
     private String des;
     private Date created;
@@ -37,12 +32,13 @@ public class UserDTO {
     private String major;
     private String scale;
 
-    public UserDTO(User user) {
+    public UserCreateDTO(User user) {
         this.id = user.getUser_id();
+        this.code = user.getCode();
         this.fullName = user.getFullName();
         this.des = user.getDes();
-        this.created = user.getCreated();
-        this.updated = user.getUpdated();
+        this.created = Date.valueOf(LocalDate.now());
+        this.updated = Date.valueOf(LocalDate.now());
         this.account = user.getAccount();
         this.password = user.getPassword();
         this.email = user.getEmail();
@@ -56,10 +52,11 @@ public class UserDTO {
 
     public void setData(User user){
         id = user.getUser_id();
+        code = user.getCode();
         fullName = (user.getFullName());
         des = (user.getDes());
-        created = (user.getCreated());
-        updated = (user.getUpdated());
+        created = Date.valueOf(LocalDate.now());
+        updated = Date.valueOf(LocalDate.now());
         isDelete = (user.is_delete());
         email = (user.getEmail());
         roleName = (user.getRole().getName());
