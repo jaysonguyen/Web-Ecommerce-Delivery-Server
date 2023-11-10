@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.PostUpdate;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -151,4 +152,14 @@ public class UserController {
         }
     }
 
+    @GetMapping("/shipper/branch/{branchCode}")
+    @ResponseBody
+    public ResponseEntity<?> getShipperByBranch(@PathVariable String branchCode) {
+        try {
+            var getListShipperByBranch = userService.getShipperByBranch(branchCode);
+            return getListShipperByBranch;
+        }catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from controller");
+        }
+    }
 }

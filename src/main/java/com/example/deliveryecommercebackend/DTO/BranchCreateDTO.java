@@ -17,12 +17,14 @@ public class BranchCreateDTO {
     private String address;
     private String des;
     private boolean is_delete;
+    private String code;
 
     public void setData(Branch branch){
         branch_id = branch.getBranch_id();
         name = (branch.getName());
         des = (branch.getDes());
         address = (branch.getAddress());
+        code = (branch.getCode());
         is_delete = (false);
     }
 }

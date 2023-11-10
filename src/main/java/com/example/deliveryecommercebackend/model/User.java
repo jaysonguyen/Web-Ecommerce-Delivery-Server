@@ -47,20 +47,21 @@ public class User {
     private double cod; //tien co the rut
     private int point;
 
-    @JsonIgnore
-    private String role_id_hide;
+//    @JsonIgnore
+//    private String role_id_hide;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
-
-    @ToString.Exclude
-    private Role role;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "branch_id")
     @ToString.Exclude
     private Branch branch;
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    @ToString.Exclude
+    private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
