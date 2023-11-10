@@ -25,6 +25,7 @@ public class Branch {
     private String des;
     @JsonIgnore
     private boolean is_delete;
+    private String code;
 
     @OneToOne
     @JoinColumn(name = "city_id")

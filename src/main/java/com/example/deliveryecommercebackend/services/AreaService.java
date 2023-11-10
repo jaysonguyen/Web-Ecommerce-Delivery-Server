@@ -21,7 +21,6 @@ import java.util.List;
 @Service
 public class AreaService {
 
-
     @Autowired
     AreaRepository areaRepository;
     @Autowired
@@ -31,6 +30,28 @@ public class AreaService {
         try {
             //check city exists
             City city = cityRepository.findNoneDeleteCityById(cityId);
+            if(city == null) {
+                return Collections.emptyList();
+            }
+
+            List<Area> areas = areaRepository.findNoneDeleteAreaByCity(city);
+//            List<AreaDTO> res = new ArrayList<AreaDTO>();
+//            for(Area area : areas){
+//                AreaDTO temp = new AreaDTO(area);
+//                res.add(temp);
+//            }
+
+            return areas;
+        } catch(Exception ex) {
+            System.out.printf("Get area failed - Error: " + ex);
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Area> getBranchAreas(String branchCode) {
+        try {
+            //check city exists
+            City city = cityRepository.findNoneDeleteCityById(branchCode);
             if(city == null) {
                 return Collections.emptyList();
             }

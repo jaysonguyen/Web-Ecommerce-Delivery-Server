@@ -6,6 +6,7 @@ import com.example.deliveryecommercebackend.DTO.getUserListDTO;
 import com.example.deliveryecommercebackend.model.Role;
 import com.example.deliveryecommercebackend.model.Store;
 import com.example.deliveryecommercebackend.model.User;
+import com.example.deliveryecommercebackend.repository.BranchRepository;
 import com.example.deliveryecommercebackend.repository.RoleRepository;
 import com.example.deliveryecommercebackend.repository.StoreRepository;
 import com.example.deliveryecommercebackend.repository.UserRepository;
@@ -33,8 +34,11 @@ public class UserService {
     @Autowired
     private StoreRepository storeRepository;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    private BranchRepository branchRepo;
+
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BranchRepository branchRepo) {
         this.userRepository = userRepository;
+        this.branchRepo = branchRepo;
         this.roleRepository = roleRepository;
     }
 
@@ -216,31 +220,33 @@ public class UserService {
         }
     }
 
-//    public ResponseEntity<?> getShipperByBranch(String branchId) {
-//        try {
-//            var roleStaff = roleRepository.findRoleByName("shipper");
-//
-//            if(roleStaff == null) {
-//                return ResponseEntity.badRequest().body("Not found role");
-//            }
-//
-////            var shipperList = userRepository.findUserByBranchId(branchId);
-////            var shipperBranchList = shipperList
-//
-//            List<getUserListDTO> res = new ArrayList<getUserListDTO>();
-//            for(User user : staffList){
-//                getUserListDTO temp = new getUserListDTO();
-//                temp.setData(user);
-//                res.add(temp);
-//            }
-//
-//            return ResponseEntity.ok().body(res);
-//
-//        }catch (Exception ex) {
-//            System.out.println("Error from services: " + ex);
-//            return ResponseEntity.badRequest().body("Error from services" + ex);
-//        }
-//    }
+    public ResponseEntity<?> getShipperByBranch(String branchCode) {
+        try {
+
+            var roleStaff = roleRepository.findRoleByName("shipper");
+
+            if(roleStaff == null) {
+                return ResponseEntity.badRequest().body("Not found role");
+            }
+
+            var branch = branchRepo.findBranchByCode(branchCode);
+           var shipperList = userRepository.findShipperByBranch(branch, roleStaff);
+            System.out.println(roleStaff.getName());
+
+            List<getUserListDTO> res = new ArrayList<>();
+            for(User user : shipperList){
+                getUserListDTO temp = new getUserListDTO();
+                temp.setData(user);
+                res.add(temp);
+            }
+
+            return ResponseEntity.ok().body(res);
+
+        }catch (Exception ex) {
+            System.out.println("Error from services: " + ex);
+            return ResponseEntity.badRequest().body("Error from services" + ex);
+        }
+    }
 
 
 
