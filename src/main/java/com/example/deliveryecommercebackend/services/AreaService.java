@@ -1,21 +1,16 @@
 package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.AreaCreatedDTO;
-import com.example.deliveryecommercebackend.DTO.AreaDTO;
-import com.example.deliveryecommercebackend.DTO.BranchDTO;
 import com.example.deliveryecommercebackend.model.Area;
-import com.example.deliveryecommercebackend.model.Branch;
 import com.example.deliveryecommercebackend.model.City;
 import com.example.deliveryecommercebackend.repository.AreaRepository;
 import com.example.deliveryecommercebackend.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
