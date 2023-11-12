@@ -3,6 +3,7 @@ package com.example.deliveryecommercebackend.model;
 
 import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
 import com.example.deliveryecommercebackend.DTO.UserDTO;
+import com.example.deliveryecommercebackend.model.ShippingAssignment;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.annotation.Resource;
 import jakarta.persistence.*;
@@ -70,6 +71,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Order> orders;
+
+    @OneToOne(mappedBy = "user")
+    private ShippingAssignment shippingAssignment;
 
     public void setDataCreate(UserCreateDTO userDTO, Role role){
         try {
