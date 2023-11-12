@@ -162,4 +162,15 @@ public class UserController {
             return ResponseEntity.badRequest().body("Error from controller");
         }
     }
+
+    @GetMapping("/shipper/assignment/{branchID}")
+    @ResponseBody
+    public ResponseEntity<?> getShippingAssignment(@PathVariable String branchID) {
+        try {
+            var getShippingInfo = userService.getAssignmentShipperInfo(branchID);
+            return getShippingInfo;
+        }catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from controller");
+        }
+    }
 }

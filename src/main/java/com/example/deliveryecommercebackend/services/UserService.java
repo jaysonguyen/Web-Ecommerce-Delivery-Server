@@ -1,15 +1,13 @@
 package com.example.deliveryecommercebackend.services;
 
+import com.example.deliveryecommercebackend.DTO.ShipperAssignmentDTO;
 import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
 import com.example.deliveryecommercebackend.DTO.UserDTO;
 import com.example.deliveryecommercebackend.DTO.getUserListDTO;
 import com.example.deliveryecommercebackend.model.Role;
 import com.example.deliveryecommercebackend.model.Store;
 import com.example.deliveryecommercebackend.model.User;
-import com.example.deliveryecommercebackend.repository.BranchRepository;
-import com.example.deliveryecommercebackend.repository.RoleRepository;
-import com.example.deliveryecommercebackend.repository.StoreRepository;
-import com.example.deliveryecommercebackend.repository.UserRepository;
+import com.example.deliveryecommercebackend.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.ToString;
 import org.mindrot.jbcrypt.BCrypt;
@@ -33,12 +31,16 @@ public class UserService {
     private RoleRepository roleRepository;
     @Autowired
     private StoreRepository storeRepository;
-
+    @Autowired
     private BranchRepository branchRepo;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BranchRepository branchRepo) {
+    @Autowired
+    private ShippingAssignmentRepository shipRepo;
+
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BranchRepository branchRepo, ShippingAssignmentRepository shipRepo) {
         this.userRepository = userRepository;
         this.branchRepo = branchRepo;
+        this.shipRepo = shipRepo;
         this.roleRepository = roleRepository;
     }
 
@@ -217,6 +219,20 @@ public class UserService {
         } catch (Exception ex) {
             System.out.println("Error from services" + ex);
             return ResponseEntity.badRequest().body("Error: " + ex);
+        }
+    }
+
+    public ResponseEntity<?> getAssignmentShipperInfo(String branchID) {
+        try {
+            var branch = branchRepo.findById(branchID).get();
+            System.out.println(branch);
+            var assignList = shipRepo.findShippingAssignmentByBranch(branch);
+            System.out.printf(assignList.toString());
+            return ResponseEntity.ok().body(assignList);
+        }
+        catch (Exception exception) {
+            System.out.println("Error: " + exception.getMessage());
+            return ResponseEntity.badRequest().body("Error from server");
         }
     }
 
