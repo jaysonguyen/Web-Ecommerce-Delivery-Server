@@ -1,6 +1,7 @@
 package com.example.deliveryecommercebackend.model;
 
 
+import com.example.deliveryecommercebackend.model.ShippingAssignment;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -8,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,5 +34,9 @@ public class Branch {
     @JoinColumn(name = "city_id")
     @JsonBackReference
     private City city;
+
+    @OneToMany(mappedBy = "branch")
+    @JsonBackReference
+    private List<ShippingAssignment> shippingAssignments;
 
 }

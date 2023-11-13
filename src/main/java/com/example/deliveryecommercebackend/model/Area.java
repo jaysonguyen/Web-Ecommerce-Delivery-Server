@@ -1,5 +1,7 @@
 package com.example.deliveryecommercebackend.model;
 
+import com.example.deliveryecommercebackend.model.ShippingAssignment;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,5 +39,10 @@ public class Area {
     @JoinColumn(name = "city_id")
     @ToString.Exclude
     private City city;
+
+
+    @OneToOne(mappedBy = "area")
+    @JsonBackReference
+    private ShippingAssignment shippingAssignment;
 
 }
