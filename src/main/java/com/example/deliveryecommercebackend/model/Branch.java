@@ -1,6 +1,6 @@
 package com.example.deliveryecommercebackend.model;
 
-
+import com.example.deliveryecommercebackend.DTO.BranchCreateDTO;
 import com.example.deliveryecommercebackend.model.ShippingAssignment;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.List;
 
 @Getter
@@ -38,5 +37,14 @@ public class Branch {
     @OneToMany(mappedBy = "branch")
     @JsonBackReference
     private List<ShippingAssignment> shippingAssignments;
+
+    public void setCreate(BranchCreateDTO branchDTO, City city){
+        branch_id = branchDTO.getBranch_id();
+        name = (branchDTO.getName());
+        des = (branchDTO.getDes());
+        address = (branchDTO.getAddress());
+        code = (branchDTO.getCode());
+        this.city = city;
+    }
 
 }

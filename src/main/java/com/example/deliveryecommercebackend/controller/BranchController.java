@@ -19,9 +19,8 @@ public class BranchController {
     @ResponseBody
     public ResponseEntity<?> getBranchList() {
         try {
-            var listBranch = branchServices.getBranch();
-            System.out.println("ok");
-            return ResponseEntity.ok().body(listBranch);
+            var check = branchServices.getBranchData();
+            return check;
         } catch (Exception ex) {
             System.out.printf("Error from controller" + ex.getMessage());
             return ResponseEntity.status(400).body("Error from controller: " + ex.getMessage());
@@ -30,13 +29,9 @@ public class BranchController {
 
     @PostMapping
     public ResponseEntity<?> createBranch(@RequestBody BranchCreateDTO branch) {
-        var checkCreate = HttpStatus.OK;
         try {
-            checkCreate = branchServices.insertBranch(branch);
-            if(checkCreate == HttpStatus.OK)
-                return ResponseEntity.ok().body("Insert data success");
-
-            return ResponseEntity.status(checkCreate).body("Insert branch failed");
+            var checkCreate = branchServices.insertBranch(branch);
+            return checkCreate;
         } catch (Exception ex) {
             System.out.println("Error from controller");
             return ResponseEntity.status(400).body("Server error");
@@ -51,10 +46,8 @@ public class BranchController {
     @PutMapping("{id}")
     public ResponseEntity<?> deleteBranch(@PathVariable String id) {
         try {
-            HttpStatus check = branchServices.deleteBranch(id);
-            if (check == HttpStatus.OK) {
-                return ResponseEntity.status(check).body("Delete branch success");
-            }
+            var check = branchServices.deleteBranch(id);
+            return check;
         } catch (Exception ex) {
             System.out.printf("Error from server" + ex);
         }

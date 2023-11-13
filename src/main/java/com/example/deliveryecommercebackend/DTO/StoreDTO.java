@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoreDTO {
-
     private String storeId;
     private String name;
     private LocalDateTime created;
@@ -27,5 +26,4 @@ public class StoreDTO {
     private boolean isDefault;
     private String phone;
     private User user;
-
 }

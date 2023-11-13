@@ -140,23 +140,6 @@ public class OrderService {
 
     }
 
-    public List<CityDTO> getCityList() {
-        try {
-            //check orders exists
-            List<City> cityList = cityRepo.findNoneDeleteCity();
-            List<CityDTO> cityDTOS = new ArrayList<>();
-            for(City city : cityList){
-                CityDTO temp = new CityDTO(city);
-                cityDTOS.add(temp);
-            }
-
-            return cityDTOS;
-        } catch(Exception ex) {
-            System.out.printf("Get order list failed - Error: " + ex);
-            return Collections.emptyList();
-        }
-    }
-
     public List<AreaDTO> getAreaList(String cityCode) {
         try {
             City city = cityRepo.findNoneDeleteCityByCode(cityCode);

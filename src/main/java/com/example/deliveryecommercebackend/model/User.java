@@ -51,8 +51,6 @@ public class User {
 //    @JsonIgnore
 //    private String role_id_hide;
 
-
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "branch_id")
     @ToString.Exclude
