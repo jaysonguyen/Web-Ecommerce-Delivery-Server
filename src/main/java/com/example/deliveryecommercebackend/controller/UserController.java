@@ -69,12 +69,8 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody UserCreateDTO user) {
         try {
-            HttpStatus checkAdd = userService.createUser(user);
-            if(checkAdd == HttpStatus.OK) {
-                return ResponseEntity.ok("Insert success");
-            } else {
-                return ResponseEntity.status(checkAdd).body("Insert user failed");
-            }
+            var checkAdd = userService.createUser(user);
+            return checkAdd;
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server: " + ex);
         }

@@ -3,14 +3,18 @@ package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.StoreDTO;
 import com.example.deliveryecommercebackend.model.Store;
+import com.example.deliveryecommercebackend.model.User;
 import com.example.deliveryecommercebackend.repository.StoreRepository;
 import com.example.deliveryecommercebackend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @Transactional
@@ -18,6 +22,7 @@ public class StoreService {
 
     @Autowired
     private StoreRepository storeRepo;
+    @Autowired
     private UserRepository userRepo;
 
     public StoreService(StoreRepository storeRepo, UserRepository userRepo) {
@@ -25,16 +30,21 @@ public class StoreService {
         this.userRepo = userRepo;
     }
 
-//    public List<Store> getStoreList(String userId) {
-//        try {
-//            var storeList = storeRepo.findStoreByUser(userId);
-//            return storeList;
-//        } catch (Exception ex) {
-//            System.out.printf("Error from services");
-//        }
-//
-//        return Collections.emptyList();
-//    }
+    public ResponseEntity<?> getStoreList(String userId) {
+        try {
+            User user = userRepo.findUserById(userId);
+            if(user.getUser_id() == null) {
+                return ResponseEntity.badRequest().body("User not found");
+            }
+
+            var storeList = storeRepo.findStoreByUser(user);
+            return ResponseEntity.ok().body(storeList);
+        } catch (Exception ex) {
+            System.out.printf("Error from services");
+            return ResponseEntity.status(500).body(Collections.emptyList());
+        }
+
+    }
 
     public boolean createStore(StoreDTO storeDto) {
         try {

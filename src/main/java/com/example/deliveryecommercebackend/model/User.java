@@ -79,8 +79,11 @@ public class User {
             this.des = userDTO.getDes();
             this.fullName = userDTO.getFullName();
             this.purpose = userDTO.getPurpose();
-            this.major = userDTO.getMajor();
-            this.scale = userDTO.getScale();
+            this.is_delete = false;
+            this.cod = 0;
+            this.point = 0;
+//            this.major = userDTO.getMajor();
+//            this.scale = userDTO.getScale();
             this.role = role;
         } catch (Exception ex) {
             // Log the exception for debugging

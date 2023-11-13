@@ -72,18 +72,23 @@ public class UserService {
     }
 
 
-    public List<Store> getStoreByUser(String userId) {
+    public ResponseEntity<?> getStoreByUser(String userId) {
         try {
-            var storeList = storeRepository.findStoreByUser(userId);
-            return storeList;
+            //find user
+            User user = userRepository.findUserById(userId);
+            if(user.getUser_id() == null) {
+                return ResponseEntity.badRequest().body("User not found");
+            }
+
+            var storeList = storeRepository.findStoreByUser(user);
+            return ResponseEntity.ok().body(storeList);
         } catch (Exception ex) {
             System.out.printf("Error from services: " + ex.getMessage());
+            return ResponseEntity.status(500).body("Error from server");
         }
-
-        return Collections.emptyList();
     }
 
-    public HttpStatus createUser(UserCreateDTO userDTO) {
+    public ResponseEntity<?> createUser(UserCreateDTO userDTO) {
         Role role = roleRepository.findById(userDTO.getRole()).get();
         System.out.println(role.toString());
 
@@ -92,24 +97,24 @@ public class UserService {
 
         // existing user
         if(checkValidEmail != null) {
-            return HttpStatus.FOUND;
+            return ResponseEntity.badRequest().body("Email is not valid");
         }
         if(checkValidAccount != null) {
-            return HttpStatus.FOUND;
+            return ResponseEntity.badRequest().body("Account is not valid");
         }
         User newUser = new User();
         newUser.setDataCreate(userDTO, role);
 
         try {
             User checkSave = userRepository.save(newUser);
-            if(checkSave != null) {
-                return HttpStatus.OK;
+            if(checkSave.getUser_id() != null) {
+                return ResponseEntity.ok().body("Insert account successfully");
             } else {
-                return HttpStatus.BAD_REQUEST;
+                return ResponseEntity.badRequest().body("Insert account failed");
             }
         } catch(Exception ex) {
             System.out.printf("Create user failed - Error" + ex);
-            return HttpStatus.BAD_GATEWAY;
+            return ResponseEntity.status(500).body("Server error: " + ex.getMessage());
         }
     }
 
