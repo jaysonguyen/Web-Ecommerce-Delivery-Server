@@ -2,9 +2,7 @@ package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.VoucherDTO;
 import com.example.deliveryecommercebackend.DTO.VoucherDisplayDTO;
-import com.example.deliveryecommercebackend.DTO.getUserListDTO;
 import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
-import com.example.deliveryecommercebackend.model.User;
 import com.example.deliveryecommercebackend.model.Voucher;
 import com.example.deliveryecommercebackend.repository.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +85,19 @@ public class VoucherService {
         newVoucher.setPeriod(voucher.getPeriod());
         newVoucher.setUsed(voucher.getUsed());
         newVoucher.setCreated(Date.valueOf(LocalDate.now()));
+
+        try {
+            voucherRepository.save(newVoucher);
+            return HttpStatus.OK;
+        } catch(Exception ex) {
+            System.out.printf("Create voucher failed - Error" + ex);
+            return HttpStatus.BAD_REQUEST;
+        }
+    }
+    public HttpStatus updateStatusVoucher(VoucherDTO voucherDTO) {
+        Voucher newVoucher = voucherRepository.findById(voucherDTO.getVoucherId())
+                .orElseThrow(() -> new ResourceNotfoundException("Voucher not exist with code: " + voucherDTO.getVoucherId()));
+        newVoucher.setStatus(voucherDTO.getStatus());
 
         try {
             voucherRepository.save(newVoucher);

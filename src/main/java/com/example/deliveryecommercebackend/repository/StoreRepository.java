@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface StoreRepository extends JpaRepository<Store, String> {
-    @Query("SELECT u FROM Store u WHERE u.user.user_id = :userId")
+    @Query("SELECT u FROM Store u WHERE u.user.user_id = :")
     List<Store> findStoreByUser(String userId);
 }

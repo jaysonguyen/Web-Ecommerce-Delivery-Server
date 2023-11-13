@@ -3,17 +3,11 @@ package com.example.deliveryecommercebackend.controller;
 
 import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
 import com.example.deliveryecommercebackend.DTO.UserDTO;
-import com.example.deliveryecommercebackend.services.AuthenticationServices;
 import com.example.deliveryecommercebackend.services.UserService;
-import com.fasterxml.jackson.annotation.JsonView;
-import jakarta.persistence.PostUpdate;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.swing.text.View;
 
 @RestController
 @RequestMapping("/api/user")
@@ -42,19 +36,19 @@ public class UserController {
 
     }
 
-    @GetMapping("/store/{userId}")
-    @ResponseBody
-    public ResponseEntity<?> getStoreList(@PathVariable String userId) {
-        try {
-            var storeList = userService.getStoreByUser(userId);
-            if(storeList != null) {
-                return ResponseEntity.ok(storeList);
-            }
-        } catch (Exception ex) {
-            System.out.printf("Error from server");
-        }
-        return ResponseEntity.badRequest().body("Get list store failed");
-    }
+//    @GetMapping("/store/{userId}")
+//    @ResponseBody
+//    public ResponseEntity<?> getStoreList(@PathVariable String userId) {
+//        try {
+//            var storeList = userService.getStoreByUser(userId);
+//            if(storeList != null) {
+//                return ResponseEntity.ok(storeList);
+//            }
+//        } catch (Exception ex) {
+//            System.out.printf("Error from server");
+//        }
+//        return ResponseEntity.badRequest().body("Get list store failed");
+//    }
 
     @GetMapping("{user_id}")
     public ResponseEntity<?>getUserById(@PathVariable String user_id) {

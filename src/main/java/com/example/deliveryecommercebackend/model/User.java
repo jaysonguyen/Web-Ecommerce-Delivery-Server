@@ -2,12 +2,9 @@ package com.example.deliveryecommercebackend.model;
 
 
 import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
-import com.example.deliveryecommercebackend.DTO.UserDTO;
-import com.fasterxml.jackson.annotation.*;
-import jakarta.annotation.Resource;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.id.GUIDGenerator;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Date;
@@ -47,8 +44,8 @@ public class User {
     private double cod; //tien co the rut
     private int point;
 
-    @JsonIgnore
-    private String role_id_hide;
+//    @JsonIgnore
+//    private String role_id_hide;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")

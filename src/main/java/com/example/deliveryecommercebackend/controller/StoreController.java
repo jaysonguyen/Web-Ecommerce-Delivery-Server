@@ -2,7 +2,6 @@ package com.example.deliveryecommercebackend.controller;
 
 
 import com.example.deliveryecommercebackend.DTO.StoreDTO;
-import com.example.deliveryecommercebackend.model.Store;
 import com.example.deliveryecommercebackend.services.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,19 +20,19 @@ public class StoreController {
         this.storeService = storeService;
     }
 
-    @GetMapping
-    @ResponseBody
-    public ResponseEntity<?> getStoreList(String userID) {
-        try {
-            var storeList = storeService.getStoreList(userID);
-            if(storeList != null) {
-                return ResponseEntity.ok(storeList);
-            }
-        } catch (Exception ex) {
-            System.out.printf("Error from server");
-        }
-        return ResponseEntity.badRequest().body("Get list store failed");
-    }
+//    @GetMapping
+//    @ResponseBody
+//    public ResponseEntity<?> getStoreList(String userID) {
+//        try {
+//            var storeList = storeService.getStoreList(userID);
+//            if(storeList != null) {
+//                return ResponseEntity.ok(storeList);
+//            }
+//        } catch (Exception ex) {
+//            System.out.printf("Error from server");
+//        }
+//        return ResponseEntity.badRequest().body("Get list store failed");
+//    }
 
     @PostMapping
     public ResponseEntity<?> createStore(@RequestBody StoreDTO storeDto) {
