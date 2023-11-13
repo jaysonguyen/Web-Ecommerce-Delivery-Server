@@ -56,7 +56,7 @@ public class OrderDetailsDTO {
 
         this.order_code = order.getOrder_code();
         this.order_id = order.getOrder_id();
-        this.user_name = order.getUser().getUser_id();
+        this.user_name = order.getUser().getFullName();
         this.action_code = order.getAction_code();
         this.ship_cost = order.getShip_cost();
         this.created = order.getCreated();

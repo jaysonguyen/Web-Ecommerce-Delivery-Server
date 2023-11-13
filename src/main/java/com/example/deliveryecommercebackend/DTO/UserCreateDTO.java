@@ -32,6 +32,9 @@ public class UserCreateDTO {
     private String major;
     private String scale;
 
+    private double cod;
+    private int point;
+
     public UserCreateDTO(User user) {
         this.id = user.getUser_id();
         this.code = user.getCode();
@@ -62,6 +65,9 @@ public class UserCreateDTO {
         roleName = (user.getRole().getName());
         major = (user.getMajor());
         scale = (user.getScale());
+
+        cod = 0;
+        point = 0;
     }
 
 }

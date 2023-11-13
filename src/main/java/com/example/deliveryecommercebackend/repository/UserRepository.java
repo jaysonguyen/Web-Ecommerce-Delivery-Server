@@ -16,7 +16,6 @@ public interface UserRepository extends JpaRepository<User, String> {
     User findUserByAccountAndPassword(String account, String password);
     User findUsersByEmail(String email);
 
-//    List<User> findUsersByRole(Role role);
     @Query("SELECT u FROM User u WHERE u.role = :role AND u.is_delete = false")
     List<User> findUsersByRole(@Param("role") Role role);
     @Query("SELECT u FROM User u WHERE u.role = :role ANd u.code = :code AND u.is_delete = false")
@@ -24,4 +23,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @Query("SELECT u FROM User u WHERE u.is_delete = false")
     List<User> findNoneDeleteUser();
+
+    @Query("SELECT u FROM User u WHERE u.branch = :branchId AND u.is_delete = false")
+    List<User> findUserByBranchId(@Param("branchId") String branchID);
 }
