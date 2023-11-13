@@ -2,19 +2,15 @@ package com.example.deliveryecommercebackend.services;
 
 
 import com.example.deliveryecommercebackend.DTO.StoreDTO;
-import com.example.deliveryecommercebackend.DTO.UserDTO;
 import com.example.deliveryecommercebackend.model.Store;
 import com.example.deliveryecommercebackend.repository.StoreRepository;
+import com.example.deliveryecommercebackend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -22,24 +18,27 @@ public class StoreService {
 
     @Autowired
     private StoreRepository storeRepo;
+    private UserRepository userRepo;
 
-    public StoreService(StoreRepository storeRepo) {
+    public StoreService(StoreRepository storeRepo, UserRepository userRepo) {
         this.storeRepo = storeRepo;
+        this.userRepo = userRepo;
     }
 
-    public List<Store> getStoreList(String userId) {
-        try {
-            var storeList = storeRepo.findStoreByUser(userId);
-            return storeList;
-        } catch (Exception ex) {
-            System.out.printf("Error from services");
-        }
-
-        return Collections.emptyList();
-    }
+//    public List<Store> getStoreList(String userId) {
+//        try {
+//            var storeList = storeRepo.findStoreByUser(userId);
+//            return storeList;
+//        } catch (Exception ex) {
+//            System.out.printf("Error from services");
+//        }
+//
+//        return Collections.emptyList();
+//    }
 
     public boolean createStore(StoreDTO storeDto) {
         try {
+            var user = userRepo.findUserById(storeDto.getUser());
             var store = new Store();
             store.setCreated(LocalDateTime.now());
             store.setUpdated(LocalDateTime.now());
@@ -48,7 +47,7 @@ public class StoreService {
             store.setDes(storeDto.getDes());
             store.setPhone(storeDto.getPhone());
             store.setState(storeDto.getState());
-            store.setUser(storeDto.getUser());
+            store.setUser(user);
 
             Store storeInsert = storeRepo.save(store);
             if(storeInsert != null) {

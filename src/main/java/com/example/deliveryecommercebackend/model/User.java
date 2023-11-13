@@ -2,13 +2,9 @@ package com.example.deliveryecommercebackend.model;
 
 
 import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
-import com.example.deliveryecommercebackend.DTO.UserDTO;
-import com.example.deliveryecommercebackend.model.ShippingAssignment;
-import com.fasterxml.jackson.annotation.*;
-import jakarta.annotation.Resource;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.id.GUIDGenerator;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Date;
@@ -52,15 +48,16 @@ public class User {
 //    private String role_id_hide;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "branch_id")
+    @JoinColumn(name = "role_id")
+
     @ToString.Exclude
-    private Branch branch;
+    private Role role;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "branch_id")
     @ToString.Exclude
-    private Role role;
+    private Branch branch;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
@@ -69,9 +66,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Order> orders;
-
-    @OneToOne(mappedBy = "user")
-    private ShippingAssignment shippingAssignment;
 
     public void setDataCreate(UserCreateDTO userDTO, Role role){
         try {

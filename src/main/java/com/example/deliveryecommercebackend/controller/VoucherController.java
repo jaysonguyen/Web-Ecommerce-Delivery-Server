@@ -2,7 +2,6 @@ package com.example.deliveryecommercebackend.controller;
 
 
 import com.example.deliveryecommercebackend.DTO.VoucherDTO;
-import com.example.deliveryecommercebackend.model.Voucher;
 import com.example.deliveryecommercebackend.services.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -71,6 +70,19 @@ public class VoucherController {
         }
         return ResponseEntity.badRequest().body("Delete user failed");
     }
+
+    public ResponseEntity<?> updateStatusVoucher(@RequestBody VoucherDTO voucher) {
+        try {
+            HttpStatus check = voucherService.updateStatusVoucher(voucher);
+            if (check == HttpStatus.OK) {
+                return ResponseEntity.status(check).body("Update status voucher success");
+            }
+        } catch (Exception ex) {
+            System.out.printf("Error from server" + ex);
+        }
+        return ResponseEntity.badRequest().body("Update status voucher fail");
+    }
+
 
 
 }
