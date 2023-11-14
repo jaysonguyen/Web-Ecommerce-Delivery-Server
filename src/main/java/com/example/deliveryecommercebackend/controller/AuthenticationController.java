@@ -24,10 +24,7 @@ public class AuthenticationController {
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginObject) {
         try {
             var checkLogin = authenticationServeces.loginUser(loginObject);
-            if(checkLogin == null) {
-                return ResponseEntity.status(404).body("Not found user");
-            }
-            return ResponseEntity.ok(checkLogin);
+            return checkLogin;
         }
         catch (Exception ex) {
             System.out.printf("Error from server" + ex);

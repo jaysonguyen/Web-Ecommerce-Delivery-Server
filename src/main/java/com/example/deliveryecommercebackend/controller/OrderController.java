@@ -3,6 +3,8 @@ package com.example.deliveryecommercebackend.controller;
 
 import com.example.deliveryecommercebackend.DTO.OrderCreateDTO;
 import com.example.deliveryecommercebackend.DTO.OrderDetailsDTO;
+import com.example.deliveryecommercebackend.repository.CityRepository;
+import com.example.deliveryecommercebackend.services.CityService;
 import com.example.deliveryecommercebackend.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,8 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private CityService cityService;
 
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
@@ -35,9 +39,9 @@ public class OrderController {
     }
     @GetMapping("/city")
     @ResponseBody
-    public ResponseEntity<?>getCityList() {
+    public ResponseEntity<?> getCityList() {
         try {
-            var cityList = orderService.getCityList();
+            var cityList = cityService.getCityListDropDown();
             return ResponseEntity.ok().body(cityList);
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server");

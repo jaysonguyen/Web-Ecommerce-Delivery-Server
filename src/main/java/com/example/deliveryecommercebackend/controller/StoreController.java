@@ -10,15 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 //@CrossOrigin("*")
 @RestController
-@RequestMapping("api/store")
+@RequestMapping("/api/store")
 public class StoreController {
 
     @Autowired
     private StoreService storeService;
-
-    public StoreController(StoreService storeService) {
-        this.storeService = storeService;
-    }
 
 //    @GetMapping
 //    @ResponseBody

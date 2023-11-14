@@ -1,17 +1,23 @@
 package com.example.deliveryecommercebackend.services;
 
+import com.example.deliveryecommercebackend.DTO.ShipperAssignmentDTO;
 import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
 import com.example.deliveryecommercebackend.DTO.UserDTO;
 import com.example.deliveryecommercebackend.DTO.getUserListDTO;
 import com.example.deliveryecommercebackend.model.Role;
+import com.example.deliveryecommercebackend.model.Store;
 import com.example.deliveryecommercebackend.model.User;
 import com.example.deliveryecommercebackend.repository.*;
 import jakarta.transaction.Transactional;
+import lombok.ToString;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -66,18 +72,23 @@ public class UserService {
     }
 
 
-//    public List<Store> getStoreByUser(String userId) {
-//        try {
-//            var storeList = storeRepository.findStoreByUser(userId);
-//            return storeList;
-//        } catch (Exception ex) {
-//            System.out.printf("Error from services: " + ex.getMessage());
-//        }
-//
-//        return Collections.emptyList();
-//    }
+    public ResponseEntity<?> getStoreByUser(String userId) {
+        try {
+            //find user
+            User user = userRepository.findUserById(userId);
+            if(user.getUser_id() == null) {
+                return ResponseEntity.badRequest().body("User not found");
+            }
 
-    public HttpStatus createUser(UserCreateDTO userDTO) {
+            var storeList = storeRepository.findStoreByUser(user);
+            return ResponseEntity.ok().body(storeList);
+        } catch (Exception ex) {
+            System.out.printf("Error from services: " + ex.getMessage());
+            return ResponseEntity.status(500).body("Error from server");
+        }
+    }
+
+    public ResponseEntity<?> createUser(UserCreateDTO userDTO) {
         Role role = roleRepository.findById(userDTO.getRole()).get();
         System.out.println(role.toString());
 
@@ -86,24 +97,24 @@ public class UserService {
 
         // existing user
         if(checkValidEmail != null) {
-            return HttpStatus.FOUND;
+            return ResponseEntity.badRequest().body("Email is not valid");
         }
         if(checkValidAccount != null) {
-            return HttpStatus.FOUND;
+            return ResponseEntity.badRequest().body("Account is not valid");
         }
         User newUser = new User();
         newUser.setDataCreate(userDTO, role);
 
         try {
             User checkSave = userRepository.save(newUser);
-            if(checkSave != null) {
-                return HttpStatus.OK;
+            if(checkSave.getUser_id() != null) {
+                return ResponseEntity.ok().body("Insert account successfully");
             } else {
-                return HttpStatus.BAD_REQUEST;
+                return ResponseEntity.badRequest().body("Insert account failed");
             }
         } catch(Exception ex) {
             System.out.printf("Create user failed - Error" + ex);
-            return HttpStatus.BAD_GATEWAY;
+            return ResponseEntity.status(500).body("Server error: " + ex.getMessage());
         }
     }
 

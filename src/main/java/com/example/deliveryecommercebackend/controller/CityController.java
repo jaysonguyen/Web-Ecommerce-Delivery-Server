@@ -27,14 +27,9 @@ public class CityController {
 
     @GetMapping("{id}")
     public ResponseEntity<?> getCityById(@PathVariable String id){
-            CityDTO check = cityService.getCityById(id);
         try {
-            CityDTO city = cityService.getCityById(id);
-            if (city.getId() == null) {
-                return ResponseEntity.ok().body("City not found.");
-            } else {
-                return ResponseEntity.ok().body(city);
-            }
+            var check = cityService.getCityById(id);
+            return check;
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server");
         }

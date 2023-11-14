@@ -5,10 +5,12 @@ import com.example.deliveryecommercebackend.model.City;
 import com.example.deliveryecommercebackend.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,19 +30,36 @@ public class CityService {
         }
     }
 
-    public CityDTO getCityById(String id){
+    public ResponseEntity<?> getCityListDropDown() {
+        try {
+            //check orders exists
+            List<City> cityList = cityRepository.findNoneDeleteCity();
+            List<CityDTO> cityDTOS = new ArrayList<>();
+            for(City city : cityList){
+                CityDTO temp = new CityDTO(city);
+                cityDTOS.add(temp);
+            }
+
+            return ResponseEntity.ok().body(cityDTOS);
+        } catch(Exception ex) {
+            System.out.printf("Get city list failed - Error: " + ex);
+            return ResponseEntity.badRequest().body(Collections.emptyList());
+        }
+    }
+
+    public ResponseEntity<?> getCityById(String id){
         try {
             City city = cityRepository.findNoneDeleteCityById(id);
-            return new CityDTO(city);
+            return ResponseEntity.ok().body(new CityDTO(city));
         } catch(Exception ex) {
             System.out.printf("Get city failed - Error: " + ex);
-            return new CityDTO();
+            return ResponseEntity.badRequest().body(new CityDTO());
         }
     }
     public HttpStatus updateCity( CityDTO city) {
         City checkExistsCity = cityRepository.findById(city.getId()).get();
 
-        if(checkExistsCity == null) {
+        if(checkExistsCity.getId() == null) {
             return HttpStatus.CONFLICT;
         }
         try {
@@ -49,7 +68,7 @@ public class CityService {
             checkExistsCity.setUpdated(Date.valueOf(LocalDate.now()));
 
             var checkSave = cityRepository.save(checkExistsCity);
-            if(checkSave != null)
+            if(checkSave.getId() != null)
                 return HttpStatus.OK;
             return HttpStatus.CONFLICT;
         } catch (Exception ex) {

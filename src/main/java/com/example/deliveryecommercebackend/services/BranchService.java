@@ -2,8 +2,11 @@ package com.example.deliveryecommercebackend.services;
 
 
 import com.example.deliveryecommercebackend.DTO.BranchCreateDTO;
+import com.example.deliveryecommercebackend.DTO.BranchDisplayDTO;
 import com.example.deliveryecommercebackend.model.Branch;
+import com.example.deliveryecommercebackend.model.City;
 import com.example.deliveryecommercebackend.repository.BranchRepository;
+import com.example.deliveryecommercebackend.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,46 +21,52 @@ public class BranchService {
 
     @Autowired
     private BranchRepository branchRepo;
+    @Autowired
+    private CityRepository cityRepo;
 
-    public HttpStatus insertBranch(BranchCreateDTO branchCreateDTO) {
+    public ResponseEntity<?> insertBranch(BranchCreateDTO branchCreateDTO) {
+        //find city
+        City city = cityRepo.findNoneDeleteCityByCode(branchCreateDTO.getCity_code());
+
+        if(city.getId() == null) {
+            return ResponseEntity.badRequest().body("City not found");
+        }
+
         Branch branch = new Branch();
-
-        branch.setName(branchCreateDTO.getName());
-        branch.setAddress(branchCreateDTO.getAddress());
-        branch.setDes(branchCreateDTO.getDes());
+        branch.setCreate(branchCreateDTO, city);
 
         try {
             Branch checkSave = branchRepo.save(branch);
-            if(checkSave != null) {
-                return HttpStatus.OK;
+            if(checkSave.getBranch_id() != null) {
+                return ResponseEntity.ok().body("Insert branch successfully");
             }
         } catch(Exception ex) {
             System.out.printf("Create branch failed - Error" + ex);
         }
-        return HttpStatus.NOT_ACCEPTABLE;
+        return ResponseEntity.badRequest().body("Something went wrong");
     }
 
-    public List<BranchCreateDTO> getBranch() {
+    public ResponseEntity<?> getBranchData() {
         try {
             var branchList = branchRepo.findNoneDeleteBranch();
-            List<BranchCreateDTO> res = new ArrayList<BranchCreateDTO>();
+            List<BranchDisplayDTO> res = new ArrayList<>();
             for(Branch branch : branchList){
-                BranchCreateDTO temp = new BranchCreateDTO();
+                BranchDisplayDTO temp = new BranchDisplayDTO();
                 temp.setData(branch);
                 res.add(temp);
             }
 
-            return res;
+            return ResponseEntity.ok().body(res);
         } catch(Exception ex) {
-            System.out.printf("Get user failed - Error: " + ex);
-            return Collections.emptyList();
+            System.out.printf("Get branch failed - Error: " + ex);
+            return ResponseEntity.badRequest().body(Collections.emptyList());
         }
     }
 
     public ResponseEntity<?> updateBranch(BranchCreateDTO branchCreateDTO) {
         var checkExistsBranch = branchRepo.findById(branchCreateDTO.getBranch_id()).get();
 
-        if(checkExistsBranch == null) {
+        if(checkExistsBranch.getBranch_id() == null) {
             return ResponseEntity.badRequest().body("Exists branch");
         }
         try {
@@ -65,8 +74,9 @@ public class BranchService {
             checkExistsBranch.setDes(branchCreateDTO.getDes());
 
             var checkSave = branchRepo.save(checkExistsBranch);
-            if(checkSave != null)
+            if(checkSave.getBranch_id() != null) {
                 return ResponseEntity.ok().body("Update branch success");
+            }
         } catch (Exception ex) {
             System.out.println("Error from services");
         }
@@ -74,21 +84,21 @@ public class BranchService {
 
     }
 
-    public HttpStatus deleteBranch(String branchID) {
+    public ResponseEntity<?> deleteBranch(String branchID) {
         var branch = branchRepo.findById(branchID).get();
-        if(branch == null) {
-            return HttpStatus.NOT_FOUND;
+        if(branch.getBranch_id() == null) {
+            return ResponseEntity.badRequest().body("Branch not found");
         }
 
         try {
             branch.set_delete(true);
             var checkDelete = branchRepo.save(branch);
-            if(checkDelete == null)
-                return HttpStatus.CONFLICT;
-            return HttpStatus.OK;
+            if(checkDelete.getBranch_id() == null) {
+                return ResponseEntity.badRequest().body("Cannot delete");
+            }
+            return  ResponseEntity.ok().body("Delete branch successfully");
         } catch (Exception ex) {
-            System.out.printf("Error from service", ex);
-            return HttpStatus.BAD_REQUEST;
+            return ResponseEntity.status(500).body("Server went wrong");
         }
     }
 

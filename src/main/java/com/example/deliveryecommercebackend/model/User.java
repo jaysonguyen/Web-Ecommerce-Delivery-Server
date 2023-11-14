@@ -2,12 +2,9 @@ package com.example.deliveryecommercebackend.model;
 
 
 import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
-import com.example.deliveryecommercebackend.DTO.UserDTO;
-import com.fasterxml.jackson.annotation.*;
-import jakarta.annotation.Resource;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.id.GUIDGenerator;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Date;
@@ -82,8 +79,11 @@ public class User {
             this.des = userDTO.getDes();
             this.fullName = userDTO.getFullName();
             this.purpose = userDTO.getPurpose();
-            this.major = userDTO.getMajor();
-            this.scale = userDTO.getScale();
+            this.is_delete = false;
+            this.cod = 0;
+            this.point = 0;
+//            this.major = userDTO.getMajor();
+//            this.scale = userDTO.getScale();
             this.role = role;
         } catch (Exception ex) {
             // Log the exception for debugging
