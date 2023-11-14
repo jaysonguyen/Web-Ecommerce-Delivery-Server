@@ -1,9 +1,6 @@
 package com.example.deliveryecommercebackend.services;
 
-import com.example.deliveryecommercebackend.DTO.ShipperAssignmentDTO;
-import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
-import com.example.deliveryecommercebackend.DTO.UserDTO;
-import com.example.deliveryecommercebackend.DTO.getUserListDTO;
+import com.example.deliveryecommercebackend.DTO.*;
 import com.example.deliveryecommercebackend.model.Role;
 import com.example.deliveryecommercebackend.model.Store;
 import com.example.deliveryecommercebackend.model.User;
@@ -81,7 +78,13 @@ public class UserService {
             }
 
             var storeList = storeRepository.findStoreByUser(user);
-            return ResponseEntity.ok().body(storeList);
+            List<StoreDisplayDTO> storeDisplayDTOS = new ArrayList<>();
+            for(var item : storeList){
+                StoreDisplayDTO temp = new StoreDisplayDTO(item);
+                storeDisplayDTOS.add(temp);
+            }
+
+            return ResponseEntity.ok().body(storeDisplayDTOS);
         } catch (Exception ex) {
             System.out.printf("Error from services: " + ex.getMessage());
             return ResponseEntity.status(500).body("Error from server");

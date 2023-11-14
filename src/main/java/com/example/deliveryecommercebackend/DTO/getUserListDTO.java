@@ -24,6 +24,8 @@ public class getUserListDTO {
     private Date updated;
     private String major;
     private String scale;
+    private double cod;
+    private int point;
 
 
     public void setData(User user){
@@ -37,6 +39,8 @@ public class getUserListDTO {
         des = (user.getDes());
         major = user.getMajor();
         scale = user.getScale();
+        cod = user.getCod();
+        point = user.getPoint();
     }
 
 }

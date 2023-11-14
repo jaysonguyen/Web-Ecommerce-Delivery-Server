@@ -16,8 +16,8 @@ public class BranchPayloadDTO {
     private String name;
 
     public BranchPayloadDTO(Branch branch) {
-        branch_id = branch.getBranch_id();
-        name = (branch.getName());
+            branch_id = branch.getBranch_id();
+            name = (branch.getName());
     }
 
     public void setData(Branch branch){

@@ -42,7 +42,7 @@ public class OrderController {
     public ResponseEntity<?> getCityList() {
         try {
             var cityList = cityService.getCityListDropDown();
-            return ResponseEntity.ok().body(cityList);
+            return cityList;
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server");
         }
@@ -107,12 +107,8 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody OrderCreateDTO order) {
         try {
-            HttpStatus checkAdd = orderService.createOrder(order);
-            if(checkAdd == HttpStatus.OK) {
-                return ResponseEntity.ok("Insert success");
-            } else {
-                return ResponseEntity.status(checkAdd).body("Insert order failed");
-            }
+            var checkAdd = orderService.createOrder(order);
+            return checkAdd;
         } catch (Exception ex) {
             System.out.println("Error from server, Error:" + ex);
             return ResponseEntity.badRequest().body("Error from order");

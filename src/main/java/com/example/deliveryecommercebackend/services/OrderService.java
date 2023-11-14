@@ -33,6 +33,9 @@ public class OrderService {
     @Autowired
     private AreaRepository areaRepo;
 
+    @Autowired
+    private UserService userService;
+
     public List<OrderDisplayListDTO> getAllOrderByAction(String actionCode) {
         try {
             // find action match
@@ -97,26 +100,25 @@ public class OrderService {
         }
     }
 
-    public HttpStatus createOrder(OrderCreateDTO orderDTO) {
-        //find user
-        User user = userRepo.findUserById(orderDTO.getUser_id());
-        if(user == null) {
-            return HttpStatus.BAD_REQUEST;
-        }
-
-        Order order = new Order();
-        order.setDataCreate(orderDTO, user);
-
+    public ResponseEntity<?> createOrder(OrderCreateDTO orderDTO) {
         try {
+            //find user
+            User user = userRepo.getUserById(orderDTO.getUser_id());
+            if(user == null) {
+                return ResponseEntity.badRequest().body("User not found");
+            }
+
+            Order order = new Order();
+            order.setDataCreate(orderDTO, user);
             var checkSave = orderRepo.save(order);
             if(checkSave != null) {
-                return HttpStatus.OK;
+                return ResponseEntity.ok().body("Created successfully");
             } else {
-                return HttpStatus.BAD_REQUEST;
+                return ResponseEntity.badRequest().body("Created failed");
             }
         } catch (Exception ex) {
             System.out.printf("Error from service: " + ex);
-            return HttpStatus.BAD_REQUEST;
+            return ResponseEntity.status(500).body("Server error: " + ex.getMessage());
         }
 
     }

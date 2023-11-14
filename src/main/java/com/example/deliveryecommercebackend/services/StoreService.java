@@ -46,35 +46,35 @@ public class StoreService {
 
     }
 
-    public boolean createStore(StoreDTO storeDto) {
+    public ResponseEntity<?> createStore(StoreDTO storeDto) {
         try {
-            var user = userRepo.findUserById(storeDto.getUser());
+            //check exists
+            Store checkStore = storeRepo.findByCode(storeDto.getStore_code());
+            if(checkStore != null) {
+                return ResponseEntity.badRequest().body("Store code is exists");
+            }
+
+
+            var user = userRepo.findUserById(storeDto.getUser_id());
             var store = new Store();
-            store.setCreated(LocalDateTime.now());
-            store.setUpdated(LocalDateTime.now());
-            store.setAddress(storeDto.getAddress());
-            store.setName(storeDto.getName());
-            store.setDes(storeDto.getDes());
-            store.setPhone(storeDto.getPhone());
-            store.setState(storeDto.getState());
-            store.setUser(user);
+            store.setCreateData(storeDto, user);
 
             Store storeInsert = storeRepo.save(store);
             if(storeInsert != null) {
-                return true;
+                return ResponseEntity.ok().body("Create store successfully");
+            } else {
+                return ResponseEntity.badRequest().body("Create store failed");
             }
 
         } catch (Exception ex) {
             System.out.printf("Error from services - Error: "  + ex);
+            return ResponseEntity.status(400).body("Error from server: " + ex.getMessage());
         }
-        return false;
 
     }
 
-
-
     public HttpStatus updateStore(StoreDTO storeDTO) {
-        var store = storeRepo.findById(storeDTO.getStoreId()).get();
+        var store = storeRepo.findById(storeDTO.getStore_id()).get();
         if(store == null) {
             return HttpStatus.NOT_FOUND;
         }
