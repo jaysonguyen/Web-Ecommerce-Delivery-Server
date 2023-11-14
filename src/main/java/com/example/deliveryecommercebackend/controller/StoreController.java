@@ -34,13 +34,10 @@ public class StoreController {
     public ResponseEntity<?> createStore(@RequestBody StoreDTO storeDto) {
         try {
             var checkInsertStore = storeService.createStore(storeDto);
-            if(checkInsertStore) {
-                ResponseEntity.ok("Insert success");
-            }
-            return ResponseEntity.badRequest().body("Insert store failed");
+            return checkInsertStore;
         } catch (Exception ex) {
             System.out.println("Error from server - Error " + ex);
-            return ResponseEntity.badRequest().body("Insert store failed" + ex);
+            return ResponseEntity.status(500).body("Error from controller: " + ex.getMessage());
         }
     }
 

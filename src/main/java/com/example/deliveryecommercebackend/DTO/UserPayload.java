@@ -16,13 +16,17 @@ import lombok.Setter;
 public class UserPayload {
 
     private String userID;
+    private String userCode;
     private String role;
     private BranchPayloadDTO branch;
 
     public UserPayload (User user) {
         this.userID = user.getUser_id();
+        this.userCode = user.getCode();
         this.role = user.getRole().getName();
-        this.branch = new BranchPayloadDTO(user.getBranch());
+        if(user.getBranch() != null) {
+            this.branch = new BranchPayloadDTO(user.getBranch());
+        }
     }
 
 }

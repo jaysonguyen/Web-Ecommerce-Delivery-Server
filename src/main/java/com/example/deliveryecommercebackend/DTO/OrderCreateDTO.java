@@ -21,7 +21,6 @@ public class OrderCreateDTO {
     private String product;
     private String product_type_code;
     private String receiver;
-    private String shipper_name;
     private String user_id;
 
     private LocalDateTime created;

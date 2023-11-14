@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class StoreDTO {
 
-    private String storeId;
+    private String store_id;
+    private String store_code;
     private String name;
     private LocalDateTime created;
     private LocalDateTime updated;
@@ -23,6 +24,6 @@ public class StoreDTO {
     private int state;
     private boolean isDefault;
     private String phone;
-    private String user;
+    private String user_id;
 
 }
