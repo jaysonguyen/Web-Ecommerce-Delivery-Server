@@ -17,7 +17,6 @@ import java.util.List;
 @Service
 public class AreaService {
 
-
     @Autowired
     AreaRepository areaRepository;
     @Autowired
@@ -44,6 +43,7 @@ public class AreaService {
             return Collections.emptyList();
         }
     }
+
 
     public Area getAreaById(String id){
         try {

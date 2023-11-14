@@ -27,6 +27,18 @@ public class AreaController {
         }
     }
 
+
+//    @GetMapping({"branchCode"})
+//    public ResponseEntity<?> getAreaListByBranchCode(@PathVariable String branchCode) {
+//        try {
+//            var listArea = areaService.getBranchAreas(branchCode);
+//            return ResponseEntity.ok().body(listArea);
+//        } catch (Exception ex) {
+//            System.out.printf("Error from controller" + ex.getMessage());
+//            return ResponseEntity.status(400).body("Error from controller: " + ex.getMessage());
+//        }
+//    }
+
 //    @GetMapping("{id}")
 //    public ResponseEntity<?> getAreaById(@PathVariable String id){
 //            AreaDTO check = areaService.getAreaById(id);

@@ -4,21 +4,14 @@ import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
 import com.example.deliveryecommercebackend.DTO.UserDTO;
 import com.example.deliveryecommercebackend.DTO.getUserListDTO;
 import com.example.deliveryecommercebackend.model.Role;
-import com.example.deliveryecommercebackend.model.Store;
 import com.example.deliveryecommercebackend.model.User;
-import com.example.deliveryecommercebackend.repository.RoleRepository;
-import com.example.deliveryecommercebackend.repository.StoreRepository;
-import com.example.deliveryecommercebackend.repository.UserRepository;
+import com.example.deliveryecommercebackend.repository.*;
 import jakarta.transaction.Transactional;
-import lombok.ToString;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,9 +25,16 @@ public class UserService {
     private RoleRepository roleRepository;
     @Autowired
     private StoreRepository storeRepository;
+    @Autowired
+    private BranchRepository branchRepo;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    @Autowired
+    private ShippingAssignmentRepository shipRepo;
+
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BranchRepository branchRepo, ShippingAssignmentRepository shipRepo) {
         this.userRepository = userRepository;
+        this.branchRepo = branchRepo;
+        this.shipRepo = shipRepo;
         this.roleRepository = roleRepository;
     }
 
@@ -66,16 +66,16 @@ public class UserService {
     }
 
 
-    public List<Store> getStoreByUser(String userId) {
-        try {
-            var storeList = storeRepository.findStoreByUser(userId);
-            return storeList;
-        } catch (Exception ex) {
-            System.out.printf("Error from services: " + ex.getMessage());
-        }
-
-        return Collections.emptyList();
-    }
+//    public List<Store> getStoreByUser(String userId) {
+//        try {
+//            var storeList = storeRepository.findStoreByUser(userId);
+//            return storeList;
+//        } catch (Exception ex) {
+//            System.out.printf("Error from services: " + ex.getMessage());
+//        }
+//
+//        return Collections.emptyList();
+//    }
 
     public HttpStatus createUser(UserCreateDTO userDTO) {
         Role role = roleRepository.findById(userDTO.getRole()).get();
@@ -216,31 +216,47 @@ public class UserService {
         }
     }
 
-//    public ResponseEntity<?> getShipperByBranch(String branchId) {
-//        try {
-//            var roleStaff = roleRepository.findRoleByName("shipper");
-//
-//            if(roleStaff == null) {
-//                return ResponseEntity.badRequest().body("Not found role");
-//            }
-//
-////            var shipperList = userRepository.findUserByBranchId(branchId);
-////            var shipperBranchList = shipperList
-//
-//            List<getUserListDTO> res = new ArrayList<getUserListDTO>();
-//            for(User user : staffList){
-//                getUserListDTO temp = new getUserListDTO();
-//                temp.setData(user);
-//                res.add(temp);
-//            }
-//
-//            return ResponseEntity.ok().body(res);
-//
-//        }catch (Exception ex) {
-//            System.out.println("Error from services: " + ex);
-//            return ResponseEntity.badRequest().body("Error from services" + ex);
-//        }
-//    }
+    public ResponseEntity<?> getAssignmentShipperInfo(String branchID) {
+        try {
+            var branch = branchRepo.findById(branchID).get();
+            System.out.println(branch);
+            var assignList = shipRepo.findShippingAssignmentByBranch(branch);
+            System.out.printf(assignList.toString());
+            return ResponseEntity.ok().body(assignList);
+        }
+        catch (Exception exception) {
+            System.out.println("Error: " + exception.getMessage());
+            return ResponseEntity.badRequest().body("Error from server");
+        }
+    }
+
+    public ResponseEntity<?> getShipperByBranch(String branchCode) {
+        try {
+
+            var roleStaff = roleRepository.findRoleByName("shipper");
+
+            if(roleStaff == null) {
+                return ResponseEntity.badRequest().body("Not found role");
+            }
+
+            var branch = branchRepo.findBranchByCode(branchCode);
+           var shipperList = userRepository.findShipperByBranch(branch, roleStaff);
+            System.out.println(roleStaff.getName());
+
+            List<getUserListDTO> res = new ArrayList<>();
+            for(User user : shipperList){
+                getUserListDTO temp = new getUserListDTO();
+                temp.setData(user);
+                res.add(temp);
+            }
+
+            return ResponseEntity.ok().body(res);
+
+        }catch (Exception ex) {
+            System.out.println("Error from services: " + ex);
+            return ResponseEntity.badRequest().body("Error from services" + ex);
+        }
+    }
 
 
 

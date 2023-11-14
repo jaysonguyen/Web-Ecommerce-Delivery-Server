@@ -2,9 +2,12 @@ package com.example.deliveryecommercebackend.model;
 
 
 import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.example.deliveryecommercebackend.DTO.UserDTO;
+import com.fasterxml.jackson.annotation.*;
+import jakarta.annotation.Resource;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.id.GUIDGenerator;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Date;

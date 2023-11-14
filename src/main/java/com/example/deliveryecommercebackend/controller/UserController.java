@@ -5,6 +5,7 @@ import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
 import com.example.deliveryecommercebackend.DTO.UserDTO;
 import com.example.deliveryecommercebackend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -145,4 +146,25 @@ public class UserController {
         }
     }
 
+    @GetMapping("/shipper/branch/{branchCode}")
+    @ResponseBody
+    public ResponseEntity<?> getShipperByBranch(@PathVariable String branchCode) {
+        try {
+            var getListShipperByBranch = userService.getShipperByBranch(branchCode);
+            return getListShipperByBranch;
+        }catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from controller");
+        }
+    }
+
+    @GetMapping("/shipper/assignment/{branchID}")
+    @ResponseBody
+    public ResponseEntity<?> getShippingAssignment(@PathVariable String branchID) {
+        try {
+            var getShippingInfo = userService.getAssignmentShipperInfo(branchID);
+            return getShippingInfo;
+        }catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from controller");
+        }
+    }
 }
