@@ -3,12 +3,12 @@ package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.BranchCreateDTO;
 import com.example.deliveryecommercebackend.DTO.BranchDisplayDTO;
+import com.example.deliveryecommercebackend.DTO.BranchDropdownDTO;
 import com.example.deliveryecommercebackend.model.Branch;
 import com.example.deliveryecommercebackend.model.City;
 import com.example.deliveryecommercebackend.repository.BranchRepository;
 import com.example.deliveryecommercebackend.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -59,6 +59,21 @@ public class BranchService {
             return ResponseEntity.ok().body(res);
         } catch(Exception ex) {
             System.out.printf("Get branch failed - Error: " + ex);
+            return ResponseEntity.badRequest().body(Collections.emptyList());
+        }
+    }
+    public  ResponseEntity<?> getBranchDropdown(){
+        try{
+            var branchDropdown = branchRepo.findAllActiveBranchesDropdown();
+            List<BranchDropdownDTO> res = new ArrayList<>();
+            for(Branch branch: branchDropdown){
+                BranchDropdownDTO temp = new BranchDropdownDTO();
+                temp.setData(branch);
+                res.add(temp);
+            }
+            return ResponseEntity.ok().body(res);
+        }catch (Exception ex){
+            System.out.print("Get branch dropdown failed" + ex);
             return ResponseEntity.badRequest().body(Collections.emptyList());
         }
     }
