@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -36,19 +37,31 @@ public class OrderService {
     @Autowired
     private UserService userService;
 
-    public List<OrderDisplayListDTO> getAllOrderByAction(String actionCode) {
+    public ResponseEntity<?> getAllOrderByAction(String actionCode, String userID) {
         try {
+            ///find user
+            User user = userRepo.findUserById(userID);
+            if(user == null) {
+                return ResponseEntity.badRequest().body("User not found");
+            }
+
             // find action match
             Action action = actionRepo.findActionByCode(actionCode);
             if(action == null) {
-                return Collections.emptyList();
+                return ResponseEntity.badRequest().body("Action not found");
             }
 
             //check orders exists
-            List<Order> orders = orderRepo.findOrderByAction(actionCode);
-            if(orders == null) {
-                return Collections.emptyList();
+            List<Order> orders = new ArrayList<>();
+            if(Objects.equals(user.getRole().getName(), "admin")) {
+                orders = orderRepo.findOrderByAction(actionCode);
+            } else {
+                orders = orderRepo.findOrderByActionAndUser(actionCode, user);
             }
+            if(orders == null) {
+                return ResponseEntity.badRequest().body("Order not found");
+            }
+
 
             List<OrderDisplayListDTO> res = new ArrayList<OrderDisplayListDTO>();
             for(Order order : orders){
@@ -57,26 +70,26 @@ public class OrderService {
                 res.add(temp);
             }
 
-            return res;
+            return ResponseEntity.ok().body(res);
         } catch(Exception ex) {
             System.out.printf("Get order list failed - Error: " + ex);
-            return Collections.emptyList();
+            return ResponseEntity.badRequest().body(Collections.emptyList());
         }
     }
 
-    public OrderDetailsDTO getOrderByCode(String orderCode) {
+    public ResponseEntity<?> getOrderByCode(String orderCode) {
         //find order
         Order order = orderRepo.findOrderByCode(orderCode);
         System.out.println(order);
         if(order == null) {
-            return null;
+            return ResponseEntity.badRequest().body("Order not found");
         }
 
         //find product type
         ProductType productType = productTypeRepo.findNoneDeleteProductTypeByCode(order.getProduct_type_code());
         System.out.println(productType);
         if(productType == null) {
-            return null;
+            return ResponseEntity.badRequest().body("Product type not found");
         }
 
         //find shipper
@@ -90,13 +103,14 @@ public class OrderService {
         try {
             var checkSave = orderRepo.save(order);
             if(checkSave != null) {
-                return orderDetailsDTO;
+                return ResponseEntity.ok().body(orderDetailsDTO);
             } else {
-                return null;
+                return ResponseEntity.badRequest().body("Get order failed");
             }
         } catch (Exception ex) {
             System.out.printf("Error from service: " + ex);
-            return null;
+            return ResponseEntity.badRequest().body("Error from service: " + ex.getMessage());
+
         }
     }
 

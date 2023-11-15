@@ -21,7 +21,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String order_id;
-
+    @Column(name = "code", unique = true, nullable = false)
     private String order_code; //new
 
     private String action_code;

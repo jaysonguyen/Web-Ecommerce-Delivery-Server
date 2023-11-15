@@ -49,17 +49,13 @@ public class UserController {
         }
     }
 
-    @GetMapping("{user_id}")
-    public ResponseEntity<?>getUserById(@PathVariable String user_id) {
+    @GetMapping("{user_code}")
+    public ResponseEntity<?>getUserByCode(@PathVariable String user_code) {
         try {
-            var user = userService.getUserById(user_id);
-            if (user.getId() == null) {
-                return ResponseEntity.ok().body("User not found.");
-            } else {
-                return ResponseEntity.ok().body(user);
-            }
+            var user = userService.getUserByCode(user_code);
+            return user;
         } catch (Exception ex) {
-            return ResponseEntity.badRequest().body("Error from server");
+            return ResponseEntity.badRequest().body("Error from controller: " + ex.getMessage());
         }
 
     }
