@@ -28,10 +28,12 @@ public class OrderController {
 
     @GetMapping("/action/{actionCode}")
     @ResponseBody
-    public ResponseEntity<?>getOrderListByAction(@PathVariable String actionCode) {
+    public ResponseEntity<?>getOrderListByAction(@PathVariable String actionCode, @RequestHeader(name ="Authorization") String userID) {
         try {
-            var listOrder = orderService.getAllOrderByAction(actionCode);
-            return ResponseEntity.ok().body(listOrder);
+            System.out.println(userID.split(" ")[1]);
+
+            var listOrder = orderService.getAllOrderByAction(actionCode, userID.split(" ")[1]);
+            return listOrder;
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server");
         }
@@ -65,11 +67,9 @@ public class OrderController {
     public ResponseEntity<?>getOrderByCode(@PathVariable String orderCode) {
         try {
             var listOrder = orderService.getOrderByCode(orderCode);
-            if(listOrder == null) {
-                return ResponseEntity.badRequest().body("List null");
-            }
-            return ResponseEntity.ok().body(listOrder);
+            return listOrder;
         } catch (Exception ex) {
+            System.out.println("Error at get orderByCode: " + ex.getMessage());
             return ResponseEntity.badRequest().body("Error from server");
         }
 

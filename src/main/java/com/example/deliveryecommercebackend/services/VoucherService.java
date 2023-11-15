@@ -7,6 +7,7 @@ import com.example.deliveryecommercebackend.model.Voucher;
 import com.example.deliveryecommercebackend.repository.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -25,7 +26,7 @@ public class VoucherService {
         this.voucherRepository = voucherRepository;
     }
 
-    public List<VoucherDisplayDTO> getAllVouchers() {
+    public ResponseEntity<?> getAllVouchers() {
         try {
             List<Voucher> vouchers = voucherRepository.findNoneDeleteVoucher();
 
@@ -36,10 +37,11 @@ public class VoucherService {
                 res.add(temp);
             }
 
-            return res;
+            return ResponseEntity.ok().body(res);
         } catch(Exception ex) {
             System.out.printf("Get voucher failed - Error: " + ex);
-            return Collections.emptyList();
+//            return Collections.emptyList();
+            return ResponseEntity.badRequest().body("Error from services: " + ex.getMessage());
         }
     }
 

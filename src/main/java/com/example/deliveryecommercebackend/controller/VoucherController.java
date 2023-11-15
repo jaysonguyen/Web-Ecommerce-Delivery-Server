@@ -23,11 +23,7 @@ public class VoucherController {
     public ResponseEntity<?>getAllVoucher() {
         try {
             var listVoucher = voucherService.getAllVouchers();
-            if (listVoucher.isEmpty()) {
-                return ResponseEntity.ok().body("Empty list voucher.");
-            } else {
-                return ResponseEntity.ok(listVoucher);
-            }
+            return listVoucher;
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server");
         }

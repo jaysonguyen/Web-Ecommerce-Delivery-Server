@@ -1,5 +1,6 @@
 package com.example.deliveryecommercebackend.services;
 
+import com.example.deliveryecommercebackend.DTO.CityDropdownDTO;
 import com.example.deliveryecommercebackend.DTO.order.CityDTO;
 import com.example.deliveryecommercebackend.model.City;
 import com.example.deliveryecommercebackend.repository.CityRepository;
@@ -34,9 +35,9 @@ public class CityService {
         try {
             //check orders exists
             List<City> cityList = cityRepository.findNoneDeleteCity();
-            List<CityDTO> cityDTOS = new ArrayList<>();
+            List<CityDropdownDTO> cityDTOS = new ArrayList<>();
             for(City city : cityList){
-                CityDTO temp = new CityDTO(city);
+                CityDropdownDTO temp = new CityDropdownDTO(city);
                 cityDTOS.add(temp);
             }
 

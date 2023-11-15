@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class HistoryDelivery {
 
-    private Order order;
-    private Branch branch;
-    private String nameShipper;
-    private LocalDateTime data_time;
+    private String order_code;
+    private String branch_code;
+    private String shipper_name;
+    private LocalDateTime date_time;
     private String input_by;
     private String state;
 }

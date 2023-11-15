@@ -32,4 +32,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @Query("SELECT u FROM User u WHERE u.is_delete = false AND u.user_id = :id")
     User getUserById(@Param("id") String userId);
+
+    @Query("SELECT u FROM User u WHERE u.is_delete = false AND u.code = :code")
+    User findUserByCode(@Param("code") String code);
 }

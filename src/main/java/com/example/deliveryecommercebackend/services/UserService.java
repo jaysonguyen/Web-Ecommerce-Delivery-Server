@@ -58,13 +58,13 @@ public class UserService {
         }
     }
 
-    public UserDTO getUserById(String id) {
+    public ResponseEntity<?> getUserByCode(String code) {
         try {
-            User user = userRepository.findUserById(id);
-            return new UserDTO(user);
+            User user = userRepository.findUserByCode(code);
+            return ResponseEntity.ok().body(new UserDTO(user));
         } catch(Exception ex) {
             System.out.printf("Get user failed - Error: " + ex);
-            return new UserDTO();
+            return ResponseEntity.badRequest().body("Error from services: " + ex.getMessage());
         }
     }
 
