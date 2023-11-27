@@ -1,72 +1,50 @@
-//package com.example.deliveryecommercebackend.services;
-//
-//import com.example.deliveryecommercebackend.DTO.HistoryDeliveryDTO;
-//import com.example.deliveryecommercebackend.model.HistoryDelivery;
-//import com.example.deliveryecommercebackend.repository.BranchRepository;
-//import com.example.deliveryecommercebackend.repository.HistoryDeliveryRepository;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.stereotype.Service;
-//
-//import java.time.LocalDateTime;
-//import java.util.List;
-//
-//@Service
-//public class HistoryDeliveryService {
-//    @Autowired
-//    private HistoryDeliveryRepository hsRepo;
-//
-//    private BranchRepository branchRepo;
-//
-//    public ResponseEntity<?> createHistory(HistoryDeliveryDTO hisDTO) {
-//
-//        try {
-//            var branch = branchRepo.findById(hisDTO.getBranch_id()).get();
-//            HistoryDelivery his = new HistoryDelivery();
-//            his.setState(hisDTO.getState());
-//            his.setBranch(branch);
-//            his.setData_time(LocalDateTime.now());
-//            his.setInput_by(hisDTO.getInput_by());
-//
-//            var checkSave = branchRepo.save(branch);
-//            if(checkSave != null) {
-//                return ResponseEntity.ok().body("Insert history success");
-//            }
-//        }catch (Exception exception) {
-//            System.out.println("Error from services" + exception);
-//        }
-//        return ResponseEntity.badRequest().body("Create history failed");
-//    }
-//
-//    public ResponseEntity<?> getHistory() {
-//        try {
-//            List<HistoryDelivery> his = hsRepo.findAll();
-//            if(his.isEmpty()) {
-//                return ResponseEntity.badRequest().body("List empty");
-//            }
-//            return ResponseEntity.ok().body(his);
-//
-//
-//        }catch (Exception ex) {
-//            System.out.println("Error from service");
-//        }
-//
-//        return ResponseEntity.badRequest().body("Get list history failed");
-//    }
-//
-////    public ResponseEntity<?> getHistoryByBranch(String branchId) {
-////        try {
-////            List<HistoryDelivery> his = hsRepo.findHistoryDeliveriesByBranch(branchId);
-////            if(his.isEmpty()) {
-////                return ResponseEntity.badRequest().body("List empty");
-////            }
-////            return ResponseEntity.ok().body(his);
-////
-////
-////        }catch (Exception ex) {
-////            System.out.println("Error from service");
-////        }
-////
-////        return ResponseEntity.badRequest().body("Get list history failed");
-////    }
-//}
+package com.example.deliveryecommercebackend.services;
+
+import com.example.deliveryecommercebackend.DTO.HistoryDeliveryDTO;
+import com.example.deliveryecommercebackend.model.HistoryDelivery;
+import com.example.deliveryecommercebackend.repository.HistoryDeliveryRepository;
+import com.example.deliveryecommercebackend.repository.OrderRepository;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+
+@Service
+public class HistoryDeliveryService {
+
+    private HistoryDeliveryRepository hisRepo;
+    private OrderRepository orderRepo;
+
+    public HistoryDeliveryService(HistoryDeliveryRepository hisRepo, OrderRepository orderRepo) {
+        this.hisRepo = hisRepo;
+        this.orderRepo = orderRepo;
+    }
+
+    public boolean confirmReceivePackage(HistoryDeliveryDTO hisDTO) {
+        try {
+            var order = orderRepo.findOrderById(hisDTO.getOrder_id());
+
+            if(order != null) {
+                order.setAction_code("1");
+                orderRepo.save(order);
+            }
+
+            //INSERT INTO HISTORY
+            var historyDeli = new HistoryDelivery();
+            historyDeli.setInput_by(hisDTO.getInput_by());
+            historyDeli.setData_time(LocalDateTime.now());
+            historyDeli.setState("Received");
+            historyDeli.setImage(hisDTO.getImage());
+            historyDeli.setBranch_id(hisDTO.getBranch_id());
+            historyDeli.setOrder_id(hisDTO.getOrder_id());
+            historyDeli.setMoney_collect((long)hisDTO.getMoney_collect());
+            historyDeli.setShipper_code(hisDTO.getShipper_code());
+
+            hisRepo.save(historyDeli);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+
+}

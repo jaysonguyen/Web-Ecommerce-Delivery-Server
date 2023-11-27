@@ -17,6 +17,8 @@ public interface UserRepository extends JpaRepository<User, String> {
     User findUserByAccountAndPassword(String account, String password);
     User findUsersByEmail(String email);
 
+    @Query("SELECT U FROM User U WHERE U.code =:user_code")
+    User findUsersByCode(@Param("user_code") String code);
     @Query("SELECT u FROM User u WHERE u.role = :role AND u.is_delete = false")
     List<User> findUsersByRole(@Param("role") Role role);
     @Query("SELECT u FROM User u WHERE u.role = :role ANd u.code = :code AND u.is_delete = false")
@@ -27,4 +29,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @Query("SELECT u FROM User u WHERE u.branch = :branch AND u.is_delete = false AND u.role = :role")
     List<User> findShipperByBranch(@Param("branch") Branch branch, @Param("role") Role role);
+
+
 }

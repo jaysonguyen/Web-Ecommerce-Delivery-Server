@@ -1,20 +1,16 @@
 package com.example.deliveryecommercebackend.services;
 
-import com.example.deliveryecommercebackend.DTO.AreaDTO;
-import com.example.deliveryecommercebackend.DTO.BranchDTO;
+import com.example.deliveryecommercebackend.DTO.AreaCreatedDTO;
 import com.example.deliveryecommercebackend.model.Area;
-import com.example.deliveryecommercebackend.model.Branch;
 import com.example.deliveryecommercebackend.model.City;
 import com.example.deliveryecommercebackend.repository.AreaRepository;
 import com.example.deliveryecommercebackend.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -58,8 +54,8 @@ public class AreaService {
             return null;
         }
     }
-    public HttpStatus updateArea( Area area) {
-        var checkExistsArea = areaRepository.findById(area.getId()).get();
+    public HttpStatus updateArea( AreaCreatedDTO area) {
+        var checkExistsArea = areaRepository.findByCode(area.getCode());
 
         if(checkExistsArea == null) {
             return HttpStatus.CONFLICT;
@@ -78,10 +74,11 @@ public class AreaService {
             return HttpStatus.BAD_REQUEST;
         }
     }
-    public HttpStatus createArea(Area area) {
+    public HttpStatus createArea(AreaCreatedDTO area) {
         //check exists city
 //        City city = cityRepository.findNoneDeleteCityById(area.getCity());
-        City city = cityRepository.findById(area.getCity().getId()).get();
+        City city = cityRepository.findNoneDeleteCityByCode(area.getCity());
+        System.out.println(city);
         if(city == null)
             return HttpStatus.NOT_FOUND;
         Area newArea = new Area();

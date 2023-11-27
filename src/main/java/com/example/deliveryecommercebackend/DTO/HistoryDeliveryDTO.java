@@ -14,11 +14,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HistoryDeliveryDTO {
-
+    private String delivery_history_id;
     private String order_id;
     private String branch_id;
-    private String nameShipper;
     private LocalDateTime data_time;
     private String input_by;
     private String state;
+    private String image;
+    private String shipper_code;
+    private long money_collect;
 }

@@ -1,7 +1,7 @@
 package com.example.deliveryecommercebackend.model;
 
 
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,12 +14,20 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class HistoryDelivery {
+@Entity
 
-    private Order order;
-    private Branch branch;
-    private String nameShipper;
+@Table(name="history_delivery")
+public class HistoryDelivery {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String delivery_history_id;
+    private String order_id;
+    private String branch_id;
     private LocalDateTime data_time;
     private String input_by;
     private String state;
+    @Column(columnDefinition = "TEXT")
+    private String image;
+    private String shipper_code;
+    private long money_collect;
 }

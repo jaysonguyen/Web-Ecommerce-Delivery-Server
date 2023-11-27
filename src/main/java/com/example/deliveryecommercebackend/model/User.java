@@ -72,8 +72,6 @@ public class User {
     @JsonManagedReference
     private List<Order> orders;
 
-    @OneToOne(mappedBy = "user")
-    private ShippingAssignment shippingAssignment;
 
     public void setDataCreate(UserCreateDTO userDTO, Role role){
         try {

@@ -1,7 +1,7 @@
 package com.example.deliveryecommercebackend.controller;
 
 
-import com.example.deliveryecommercebackend.DTO.BranchDTO;
+import com.example.deliveryecommercebackend.DTO.BranchCreateDTO;
 import com.example.deliveryecommercebackend.services.BranchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class BranchController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createBranch(@RequestBody BranchDTO branch) {
+    public ResponseEntity<?> createBranch(@RequestBody BranchCreateDTO branch) {
         var checkCreate = HttpStatus.OK;
         try {
             checkCreate = branchServices.insertBranch(branch);
@@ -44,7 +44,7 @@ public class BranchController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateBranch(@RequestBody BranchDTO branch) {
+    public ResponseEntity<?> updateBranch(@RequestBody BranchCreateDTO branch) {
         return branchServices.updateBranch(branch);
     }
 

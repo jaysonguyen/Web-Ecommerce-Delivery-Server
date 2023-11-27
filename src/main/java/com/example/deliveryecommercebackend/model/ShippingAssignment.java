@@ -10,10 +10,7 @@ import com.example.deliveryecommercebackend.model.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Date;
 import java.util.List;
@@ -24,17 +21,15 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "shipping_assigment")
-@IdClass(ShippingAssignmentID.class)
-
 public class ShippingAssignment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String shipping_assigment_id;
 
-    @Id
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonManagedReference
     private User user;
 
     @OneToOne
@@ -42,11 +37,9 @@ public class ShippingAssignment {
     @JsonManagedReference
     private Area area;
 
-    @Id
     private boolean status;
     private Date data_date;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "branch_id")
     @JsonManagedReference

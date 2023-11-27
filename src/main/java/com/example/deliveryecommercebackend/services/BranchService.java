@@ -1,26 +1,14 @@
 package com.example.deliveryecommercebackend.services;
 
 
-import com.example.deliveryecommercebackend.DTO.BranchDTO;
-import com.example.deliveryecommercebackend.DTO.UserDTO;
-import com.example.deliveryecommercebackend.DTO.getUserListDTO;
-import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
+import com.example.deliveryecommercebackend.DTO.BranchCreateDTO;
 import com.example.deliveryecommercebackend.model.Branch;
-import com.example.deliveryecommercebackend.model.Role;
-import com.example.deliveryecommercebackend.model.User;
 import com.example.deliveryecommercebackend.repository.BranchRepository;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,12 +19,12 @@ public class BranchService {
     @Autowired
     private BranchRepository branchRepo;
 
-    public HttpStatus insertBranch(BranchDTO branchDTO) {
+    public HttpStatus insertBranch(BranchCreateDTO branchCreateDTO) {
         Branch branch = new Branch();
 
-        branch.setName(branchDTO.getName());
-        branch.setAddress(branchDTO.getAddress());
-        branch.setDes(branchDTO.getDes());
+        branch.setName(branchCreateDTO.getName());
+        branch.setAddress(branchCreateDTO.getAddress());
+        branch.setDes(branchCreateDTO.getDes());
 
         try {
             Branch checkSave = branchRepo.save(branch);
@@ -49,12 +37,12 @@ public class BranchService {
         return HttpStatus.NOT_ACCEPTABLE;
     }
 
-    public List<BranchDTO> getBranch() {
+    public List<BranchCreateDTO> getBranch() {
         try {
             var branchList = branchRepo.findNoneDeleteBranch();
-            List<BranchDTO> res = new ArrayList<BranchDTO>();
+            List<BranchCreateDTO> res = new ArrayList<BranchCreateDTO>();
             for(Branch branch : branchList){
-                BranchDTO temp = new BranchDTO();
+                BranchCreateDTO temp = new BranchCreateDTO();
                 temp.setData(branch);
                 res.add(temp);
             }
@@ -66,15 +54,15 @@ public class BranchService {
         }
     }
 
-    public ResponseEntity<?> updateBranch(BranchDTO branchDTO) {
-        var checkExistsBranch = branchRepo.findById(branchDTO.getBranch_id()).get();
+    public ResponseEntity<?> updateBranch(BranchCreateDTO branchCreateDTO) {
+        var checkExistsBranch = branchRepo.findById(branchCreateDTO.getBranch_id()).get();
 
         if(checkExistsBranch == null) {
             return ResponseEntity.badRequest().body("Exists branch");
         }
         try {
-            checkExistsBranch.setName(branchDTO.getName());
-            checkExistsBranch.setDes(branchDTO.getDes());
+            checkExistsBranch.setName(branchCreateDTO.getName());
+            checkExistsBranch.setDes(branchCreateDTO.getDes());
 
             var checkSave = branchRepo.save(checkExistsBranch);
             if(checkSave != null)

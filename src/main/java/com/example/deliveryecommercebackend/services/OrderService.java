@@ -7,6 +7,7 @@ import com.example.deliveryecommercebackend.model.*;
 import com.example.deliveryecommercebackend.model.Order;
 import com.example.deliveryecommercebackend.repository.*;
 import jakarta.transaction.Transactional;
+import net.bytebuddy.description.type.TypeList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,9 +62,9 @@ public class OrderService {
         }
     }
 
-    public OrderDetailsDTO getOrderById(String orderId) {
+    public OrderDetailsDTO getOrderByCode(String orderCode) {
         //find order
-        Order order = orderRepo.findOrderById(orderId);
+        Order order = orderRepo.findOrderByCode(orderCode);
         System.out.println(order);
         if(order == null) {
             return null;
@@ -121,9 +122,9 @@ public class OrderService {
 
     }
 
-    public HttpStatus setOrderAction(String orderID, String actionCode) {
+    public HttpStatus setOrderAction(String orderCode, String actionCode) {
         //find order
-        Order order = orderRepo.findOrderById(orderID);
+        Order order = orderRepo.findOrderByCode(orderCode);
         order.setAction_code(actionCode);
 
         try {
@@ -172,6 +173,24 @@ public class OrderService {
             return areaDTOS;
         } catch(Exception ex) {
             System.out.printf("Get area list failed - Error: " + ex);
+            return Collections.emptyList();
+        }
+    }
+
+    public List<ShipperOrderDTO> getShippersOrder(String shipperCode) {
+        try {
+
+            var listOrder = orderRepo.findOrderByShipperAssigned(shipperCode);
+            List<ShipperOrderDTO> spOr = new ArrayList<>();
+            for (var i: listOrder) {
+               ShipperOrderDTO spDTO = new ShipperOrderDTO();
+               spDTO.setCustomerName(i.getUser().getFullName());
+               spDTO.setOrders(i);
+                spOr.add(spDTO);
+            }
+            return spOr;
+        } catch (Exception ex) {
+            System.out.println("Error from service, Error: " + ex);
             return Collections.emptyList();
         }
     }
