@@ -1,6 +1,7 @@
 package com.example.deliveryecommercebackend.model;
 import com.example.deliveryecommercebackend.DTO.OrderCreateDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -33,9 +35,10 @@ public class Order {
     @Column(columnDefinition = "TEXT")
     private String receiver;
 
-    private String product_type_code;
-    private LocalDateTime created;
-    private LocalDateTime updated;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    private Date created;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    private Date updated;
 
     @Column(columnDefinition = "TEXT")
     private String address;
@@ -71,9 +74,8 @@ public class Order {
         this.package_order = orderDTO.getPackage_order();
 //        this.ship_cost = orderDTO.getShip_cost();
         this.receiver = orderDTO.getReceiver();
-        this.product_type_code = orderDTO.getProduct_type_code();
 
-        this.created = LocalDateTime.now();
-        this.updated = LocalDateTime.now();
+        this.created = new Date();
+        this.updated = new Date();
     }
 }

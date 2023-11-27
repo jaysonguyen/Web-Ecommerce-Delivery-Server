@@ -24,6 +24,16 @@ public class ProductTypeController {
             return ResponseEntity.status(400).body("Error from controller: " + ex.getMessage());
         }
     }
+    @GetMapping("/dropdown")
+    public ResponseEntity<?> getProductTypeDropdownList(){
+        try {
+            var listProductType = productTypeService.getProductTypeDropdown();
+            return listProductType;
+        } catch (Exception ex) {
+            System.out.printf("Error from controller" + ex.getMessage());
+            return ResponseEntity.status(400).body("Error from controller: " + ex.getMessage());
+        }
+    }
 
     @GetMapping("{id}")
     public ResponseEntity<?> getProductTypeById(@PathVariable String id){

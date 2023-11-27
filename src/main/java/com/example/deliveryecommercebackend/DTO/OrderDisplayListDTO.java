@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Getter
@@ -21,21 +21,19 @@ public class OrderDisplayListDTO {
     private String action_name;
     private String receiver;
 
-    private String product_type_name;
     private String product;
 
     private boolean collect_money;
 
-    private LocalDateTime created;
-    private LocalDateTime updated;
+    private Date created;
+    private Date updated;
     // sender
     private String user_name;
-    public OrderDisplayListDTO(Order order, String actionName, String producTypeName) {
+    public OrderDisplayListDTO(Order order, String actionName) {
         this.order_id = order.getOrder_id();
         this.order_code = order.getOrder_code();
         this.created = order.getCreated();
         this.updated = order.getUpdated();
-        this.product_type_name = producTypeName;
         this.collect_money = order.isCollect_money();
         this.action_name = actionName;
         this.user_name = order.getUser().getFullName();

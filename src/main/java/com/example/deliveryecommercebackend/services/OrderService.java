@@ -2,6 +2,7 @@ package com.example.deliveryecommercebackend.services;
 
 
 import com.example.deliveryecommercebackend.DTO.*;
+import com.example.deliveryecommercebackend.DTO.order.NoteDTO;
 import com.example.deliveryecommercebackend.DTO.order.ProductDTO;
 import com.example.deliveryecommercebackend.model.*;
 import com.example.deliveryecommercebackend.model.Order;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +28,8 @@ public class OrderService {
     @Autowired
     private ActionRepository actionRepo;
     @Autowired
+    private HistoryOrderRepository HistoryOrderRepository;
+    @Autowired
     private UserRepository userRepo;
     @Autowired
     private ProductTypeRepository productTypeRepo;
@@ -37,7 +41,7 @@ public class OrderService {
     @Autowired
     private UserService userService;
 
-    public ResponseEntity<?> getAllOrderByAction(String actionCode, String userID) {
+    public ResponseEntity<?> getAllOrderByAction(String actionCode, String userID, DateRange dateRange) {
         try {
             ///find user
             User user = userRepo.findUserById(userID);
@@ -54,19 +58,17 @@ public class OrderService {
             //check orders exists
             List<Order> orders = new ArrayList<>();
             if(Objects.equals(user.getRole().getName(), "admin")) {
-                orders = orderRepo.findOrderByAction(actionCode);
+                orders = orderRepo.findOrderByAction(actionCode, dateRange.getStart(), dateRange.getEnd());
             } else {
-                orders = orderRepo.findOrderByActionAndUser(actionCode, user);
+                orders = orderRepo.findOrderByActionAndUser(actionCode, user, dateRange.getStart(), dateRange.getEnd());
             }
             if(orders == null) {
                 return ResponseEntity.badRequest().body("Order not found");
             }
 
-
             List<OrderDisplayListDTO> res = new ArrayList<OrderDisplayListDTO>();
             for(Order order : orders){
-                ProductType productType = productTypeRepo.findNoneDeleteProductTypeByCode(order.getProduct_type_code());
-                OrderDisplayListDTO temp = new OrderDisplayListDTO(order, action.getName(), productType.getName());
+                OrderDisplayListDTO temp = new OrderDisplayListDTO(order, action.getName());
                 res.add(temp);
             }
 
@@ -85,20 +87,13 @@ public class OrderService {
             return ResponseEntity.badRequest().body("Order not found");
         }
 
-        //find product type
-        ProductType productType = productTypeRepo.findNoneDeleteProductTypeByCode(order.getProduct_type_code());
-        System.out.println(productType);
-        if(productType == null) {
-            return ResponseEntity.badRequest().body("Product type not found");
-        }
-
         //find shipper
 //        User shipper = userRepo.findNoneDeleteShipperByCode(order.getShipper_code());
 //        if(city == null) {
 //            return null;
 //        }
 
-        OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(order, productType.getName() );
+        OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(order);
 
         try {
             var checkSave = orderRepo.save(order);
@@ -137,21 +132,44 @@ public class OrderService {
 
     }
 
-    public HttpStatus setOrderAction(String orderCode, String actionCode) {
+    public ResponseEntity<?> setOrderAction(String orderId, String actionCode, String userID, NoteDTO note) {
+        System.out.println(note);
+
         //find order
-        Order order = orderRepo.findOrderByCode(orderCode);
+        Order order = orderRepo.findOrderById(orderId);
         order.setAction_code(actionCode);
 
         try {
             var checkSave = orderRepo.save(order);
-            if(checkSave != null) {
-                return HttpStatus.OK;
+            if(checkSave.getOrder_id() != null) {
+                //save data to history
+                //find user update order
+                User user = userRepo.findUserById(userID);
+                if(user == null){
+                    return ResponseEntity.badRequest().body("User not found");
+                }
+
+                HistoryOrder history;
+                //if shipper set action for order
+                if(user.getRole().getName().equals("shipper")){
+                    history = new HistoryOrder(order, user, user.getFullName(), actionCode, note.getNote());
+                }
+                else {
+                    history = new HistoryOrder(order, user, "", actionCode, note.getNote());
+                }
+
+                var checkSave2 = HistoryOrderRepository.save(history);
+                if(checkSave2.getOrder_id() != null) {
+                return ResponseEntity.ok().body("Set action successfully");
+                }
+
+                return ResponseEntity.badRequest().body("Set history failed");
             } else {
-                return HttpStatus.BAD_REQUEST;
+                return ResponseEntity.badRequest().body("Set action failed");
             }
         } catch (Exception ex) {
             System.out.printf("Error from service: " + ex);
-            return HttpStatus.BAD_REQUEST;
+            return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
         }
 
     }

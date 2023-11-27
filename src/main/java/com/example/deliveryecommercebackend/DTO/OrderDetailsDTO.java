@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.time.LocalDateTime;
 
 
@@ -21,9 +22,8 @@ public class OrderDetailsDTO {
     private double ship_cost;
     //json
     private String receiver;
-    private String product_type_name;
-    private LocalDateTime created;
-    private LocalDateTime updated;
+    private Date created;
+    private Date updated;
     private boolean collect_money;
     //json
     private String product;
@@ -33,7 +33,6 @@ public class OrderDetailsDTO {
     private String shipper_name;
 
     public OrderDetailsDTO(Order order, String cityName, String productTypeName, String shipperName) {
-        this.product_type_name = productTypeName;
         this.shipper_name = shipperName;
 
         this.order_code = order.getOrder_code();
@@ -51,8 +50,7 @@ public class OrderDetailsDTO {
         this.package_order = order.getPackage_order();
     }
 
-    public OrderDetailsDTO(Order order, String productTypeName) {
-        this.product_type_name = productTypeName;
+    public OrderDetailsDTO(Order order) {
 
         this.order_code = order.getOrder_code();
         this.order_id = order.getOrder_id();

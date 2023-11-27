@@ -1,14 +1,18 @@
 package com.example.deliveryecommercebackend.services;
 
+import com.example.deliveryecommercebackend.DTO.ProductTypeDropdownDTO;
 import com.example.deliveryecommercebackend.DTO.order.ProductTypeDTO;
 import com.example.deliveryecommercebackend.model.ProductType;
 import com.example.deliveryecommercebackend.repository.ProductTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,6 +29,22 @@ public class ProductTypeService {
         } catch(Exception ex) {
             System.out.printf("Get productType failed - Error: " + ex);
             return Collections.emptyList();
+        }
+    }
+
+    public ResponseEntity<?> getProductTypeDropdown() {
+        try {
+            List<ProductType> prot = productTypeRepository.findNoneDeleteProductType();
+            List<ProductTypeDropdownDTO> protDTO = new ArrayList<>();
+            for(var item : prot){
+                ProductTypeDropdownDTO temp = new ProductTypeDropdownDTO(item);
+                protDTO.add(temp);
+            }
+
+            return ResponseEntity.ok().body(protDTO);
+        } catch(Exception ex) {
+            System.out.printf("Get productType failed - Error: " + ex);
+            return ResponseEntity.badRequest().body("Error from service");
         }
     }
 

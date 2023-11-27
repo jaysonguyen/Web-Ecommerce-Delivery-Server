@@ -20,7 +20,7 @@ public class AreaController {
     public ResponseEntity<?> getAreaList(@PathVariable String cityId){
         try {
             var listArea = areaService.getAllAreas(cityId);
-            return ResponseEntity.ok().body(listArea);
+            return listArea;
         } catch (Exception ex) {
             System.out.printf("Error from controller" + ex.getMessage());
             return ResponseEntity.status(400).body("Error from controller: " + ex.getMessage());
@@ -69,14 +69,10 @@ public class AreaController {
 
     @PostMapping
     public ResponseEntity<?> createArea(@RequestBody AreaCreatedDTO area) {
-        var checkCreate = HttpStatus.OK;
         try {
-            checkCreate = areaService.createArea(area);
+            var checkCreate = areaService.createArea(area);
 //            return areaService.createArea(area);
-            if(checkCreate == HttpStatus.OK)
-                return ResponseEntity.ok().body("Insert data success");
-
-            return ResponseEntity.status(checkCreate).body("Insert area failed");
+            return checkCreate;
         } catch (Exception ex) {
             System.out.println("Error from controller");
             return ResponseEntity.status(400).body("Server error");

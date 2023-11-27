@@ -3,6 +3,8 @@ package com.example.deliveryecommercebackend.controller;
 
 import com.example.deliveryecommercebackend.DTO.OrderCreateDTO;
 import com.example.deliveryecommercebackend.DTO.OrderDetailsDTO;
+import com.example.deliveryecommercebackend.DTO.order.NoteDTO;
+import com.example.deliveryecommercebackend.model.DateRange;
 import com.example.deliveryecommercebackend.repository.CityRepository;
 import com.example.deliveryecommercebackend.services.CityService;
 import com.example.deliveryecommercebackend.services.OrderService;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.Collections;
 
 @RestController
@@ -26,18 +29,18 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/action/{actionCode}")
+    @PostMapping("/action/{actionCode}")
     @ResponseBody
-    public ResponseEntity<?>getOrderListByAction(@PathVariable String actionCode, @RequestHeader(name ="Authorization") String userID) {
+    public ResponseEntity<?>getOrderListByAction(@PathVariable String actionCode,
+                                                 @RequestHeader(name ="Authorization") String userID,
+                                                 @RequestBody DateRange dateRange) {
         try {
             System.out.println(userID.split(" ")[1]);
-
-            var listOrder = orderService.getAllOrderByAction(actionCode, userID.split(" ")[1]);
+            var listOrder = orderService.getAllOrderByAction(actionCode, userID.split(" ")[1], dateRange);
             return listOrder;
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server");
         }
-
     }
     @GetMapping("/city")
     @ResponseBody
@@ -115,13 +118,16 @@ public class OrderController {
         }
     }
 
-    @PutMapping("{orderCode}/action/{actionCode}")
-    public ResponseEntity<?> setActionOrder(@PathVariable String orderCode, @PathVariable String actionCode) {
+    @PutMapping("{orderId}/action/{actionCode}")
+    public ResponseEntity<?> setActionOrder(@PathVariable String orderId,
+                                            @RequestHeader(name ="Authorization") String userID,
+                                            @PathVariable String actionCode,
+                                            @RequestBody NoteDTO note
+                                            ) {
         try {
-            HttpStatus check = orderService.setOrderAction(orderCode, actionCode);
-            if(check != HttpStatus.OK)
-                return ResponseEntity.status(check).body("Set action failed");
-            return ResponseEntity.status(check).body("Set action successfully");
+            System.out.println(note.getNote());
+            var check = orderService.setOrderAction(orderId, actionCode, userID.split(" ")[1], note);
+            return check;
         } catch (Exception ex) {
             System.out.printf("Error from controller" + ex);
             return ResponseEntity.badRequest().body("Error from server" + ex);
