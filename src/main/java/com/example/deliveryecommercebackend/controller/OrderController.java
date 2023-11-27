@@ -134,4 +134,19 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/shipper/{shipperCode}")
+    public ResponseEntity<?> getShippersListOrder(@PathVariable String shipperCode) {
+        try {
+            var getOrderList = orderService.getShippersOrder(shipperCode);
+
+
+            if(getOrderList != null) {
+                return ResponseEntity.ok().body(getOrderList);
+            }
+            return ResponseEntity.badRequest().body("Not found user");
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from body, Error: " + ex.getMessage());
+        }
+    }
+
 }

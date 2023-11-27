@@ -1,19 +1,16 @@
 package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.AreaCreatedDTO;
-import com.example.deliveryecommercebackend.DTO.AreaDetailDTO;
 import com.example.deliveryecommercebackend.model.Area;
 import com.example.deliveryecommercebackend.model.City;
 import com.example.deliveryecommercebackend.repository.AreaRepository;
 import com.example.deliveryecommercebackend.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +22,7 @@ public class AreaService {
     @Autowired
     CityRepository cityRepository;
 
-    public ResponseEntity<?> getAllAreas(String cityId) {
+    public List<Area> getAllAreas(String cityId) {
         try {
             //check city exists
             City city = cityRepository.findNoneDeleteCityById(cityId);
@@ -47,6 +44,27 @@ public class AreaService {
         }
     }
 
+    public List<Area> getBranchAreas(String branchCode) {
+        try {
+            //check city exists
+            City city = cityRepository.findNoneDeleteCityById(branchCode);
+            if(city == null) {
+                return Collections.emptyList();
+            }
+
+            List<Area> areas = areaRepository.findNoneDeleteAreaByCity(city);
+//            List<AreaDTO> res = new ArrayList<AreaDTO>();
+//            for(Area area : areas){
+//                AreaDTO temp = new AreaDTO(area);
+//                res.add(temp);
+//            }
+
+            return areas;
+        } catch(Exception ex) {
+            System.out.printf("Get area failed - Error: " + ex);
+            return Collections.emptyList();
+        }
+    }
 
     public Area getAreaById(String id){
         try {

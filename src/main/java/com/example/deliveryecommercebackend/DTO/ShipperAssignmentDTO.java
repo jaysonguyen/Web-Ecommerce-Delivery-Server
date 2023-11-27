@@ -22,10 +22,10 @@ import java.util.List;
 
 public class ShipperAssignmentDTO {
     private String shipping_assigment_id;
-    private String user_id;
-    private String area_id;
+    private String user_code;
+    private String area_code;
     private boolean status;
     private Date data_date;
-    private String branch_id;
+    private String branch_code;
 
 }

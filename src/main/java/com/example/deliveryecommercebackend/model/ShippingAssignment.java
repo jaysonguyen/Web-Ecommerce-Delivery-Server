@@ -1,14 +1,19 @@
 package com.example.deliveryecommercebackend.model;
 
 
+import com.example.deliveryecommercebackend.CompositeID.ShippingAssignmentID;
+import com.example.deliveryecommercebackend.DTO.ShipperAssignmentDTO;
+import com.example.deliveryecommercebackend.model.Area;
+import com.example.deliveryecommercebackend.model.Branch;
+import com.example.deliveryecommercebackend.model.Store;
+import com.example.deliveryecommercebackend.model.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,6 +29,7 @@ public class ShippingAssignment {
 
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonManagedReference
     private User user;
 
     @OneToOne

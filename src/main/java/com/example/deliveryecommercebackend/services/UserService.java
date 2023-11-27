@@ -2,6 +2,7 @@ package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.*;
 import com.example.deliveryecommercebackend.model.Role;
+import com.example.deliveryecommercebackend.model.ShippingAssignment;
 import com.example.deliveryecommercebackend.model.Store;
 import com.example.deliveryecommercebackend.model.User;
 import com.example.deliveryecommercebackend.repository.*;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,16 +30,20 @@ public class UserService {
     private RoleRepository roleRepository;
     @Autowired
     private StoreRepository storeRepository;
-    @Autowired
+
     private BranchRepository branchRepo;
+
+    @Autowired
+    private AreaRepository areaRepo;
 
     @Autowired
     private ShippingAssignmentRepository shipRepo;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BranchRepository branchRepo, ShippingAssignmentRepository shipRepo) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BranchRepository branchRepo, ShippingAssignmentRepository shipRepo, AreaRepository areaRepo) {
         this.userRepository = userRepository;
         this.branchRepo = branchRepo;
         this.shipRepo = shipRepo;
+        this.areaRepo = areaRepo;
         this.roleRepository = roleRepository;
     }
 
@@ -89,6 +95,7 @@ public class UserService {
             System.out.printf("Error from services: " + ex.getMessage());
             return ResponseEntity.status(500).body("Error from server");
         }
+
     }
 
     public ResponseEntity<?> createUser(UserCreateDTO userDTO) {
@@ -233,9 +240,8 @@ public class UserService {
     public ResponseEntity<?> getAssignmentShipperInfo(String branchID) {
         try {
             var branch = branchRepo.findById(branchID).get();
-            System.out.println(branch);
             var assignList = shipRepo.findShippingAssignmentByBranch(branch);
-            System.out.printf(assignList.toString());
+
             return ResponseEntity.ok().body(assignList);
         }
         catch (Exception exception) {
@@ -269,6 +275,48 @@ public class UserService {
         }catch (Exception ex) {
             System.out.println("Error from services: " + ex);
             return ResponseEntity.badRequest().body("Error from services" + ex);
+        }
+    }
+
+    public ResponseEntity<?> setAssignmentShipment(String area_code, String  branch_code, String user_code) {
+        try {
+            var branch = branchRepo.findBranchByCode(branch_code);
+            var area = areaRepo.findByCode(area_code);
+            var user = userRepository.findUsersByCode(user_code);
+            var assignment = shipRepo.findShippingAssignmentByAreaAndAndBranch(branch, area);
+
+            assignment.setUser(user);
+            assignment.setStatus(true);
+
+            var checkSave = shipRepo.save(assignment);
+            if(checkSave != null) {
+                return ResponseEntity.ok().body("Insert success");
+            }
+            return ResponseEntity.badRequest().body("Insert failed");
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from services, " + ex.getMessage());
+        }
+    }
+
+
+    public ResponseEntity<?> deleteShipment(String area_code, String  branch_code) {
+        try {
+            var branch = branchRepo.findBranchByCode(branch_code);
+            var area = areaRepo.findByCode(area_code);
+            var assignment = shipRepo.findShippingAssignmentByAreaAndAndBranch(branch, area);
+
+            assignment.setUser(null);
+            assignment.setStatus(false);
+
+            var checkSave = shipRepo.save(assignment);
+            if(checkSave != null) {
+                return ResponseEntity.ok().body("Delete success");
+            }
+            return ResponseEntity.badRequest().body("Insert failed");
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from services, " + ex.getMessage());
         }
     }
 

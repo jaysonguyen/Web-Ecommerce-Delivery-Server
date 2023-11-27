@@ -1,8 +1,11 @@
 package com.example.deliveryecommercebackend.controller;
 
 
+import com.example.deliveryecommercebackend.DTO.ShipperAssignmentDTO;
 import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
 import com.example.deliveryecommercebackend.DTO.UserDTO;
+import com.example.deliveryecommercebackend.model.ShippingAssignment;
+import com.example.deliveryecommercebackend.services.AuthenticationServices;
 import com.example.deliveryecommercebackend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -47,6 +50,7 @@ public class UserController {
             System.out.printf("Error from server");
             return ResponseEntity.badRequest().body("Error from controller: " + ex.getMessage());
         }
+        return ResponseEntity.badRequest().body("Get list store failed");
     }
 
     @GetMapping("{user_code}")
@@ -153,6 +157,27 @@ public class UserController {
         try {
             var getShippingInfo = userService.getAssignmentShipperInfo(branchID);
             return getShippingInfo;
+        }catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from controller");
+        }
+    }
+
+
+    @PostMapping("/shipper/assignment/{area_code}/{branch_code}/{user_code}")
+    public ResponseEntity<?> setShippingAssignment(@PathVariable String area_code, @PathVariable String branch_code, @PathVariable String user_code) {
+        try {
+            var setShipment = userService.setAssignmentShipment(area_code, branch_code, user_code);
+            return setShipment;
+        }catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from controller");
+        }
+    }
+
+    @DeleteMapping("/shipper/assignment/{area_code}/{branch_code}")
+    public ResponseEntity<?> deleteShippingAssignment(@PathVariable String area_code, @PathVariable String branch_code) {
+        try {
+            var setShipment = userService.deleteShipment(area_code, branch_code);
+            return setShipment;
         }catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from controller");
         }

@@ -1,6 +1,5 @@
 package com.example.deliveryecommercebackend.repository;
 
-import com.example.deliveryecommercebackend.DTO.UserDTO;
 import com.example.deliveryecommercebackend.model.Branch;
 import com.example.deliveryecommercebackend.model.Role;
 import com.example.deliveryecommercebackend.model.User;
@@ -19,6 +18,8 @@ public interface UserRepository extends JpaRepository<User, String> {
     User findUserByAccountAndPassword(String account, String password);
     User findUsersByEmail(String email);
 
+    @Query("SELECT U FROM User U WHERE U.code =:user_code")
+    User findUsersByCode(@Param("user_code") String code);
     @Query("SELECT u FROM User u WHERE u.role = :role AND u.is_delete = false")
     List<User> findUsersByRole(@Param("role") Role role);
     @Query("SELECT u FROM User u WHERE u.role = :role ANd u.code = :code AND u.is_delete = false")

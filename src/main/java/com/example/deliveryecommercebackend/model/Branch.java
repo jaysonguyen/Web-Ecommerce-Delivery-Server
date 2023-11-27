@@ -2,6 +2,8 @@ package com.example.deliveryecommercebackend.model;
 
 import com.example.deliveryecommercebackend.DTO.BranchCreateDTO;
 import com.example.deliveryecommercebackend.model.ShippingAssignment;
+
+import com.example.deliveryecommercebackend.model.ShippingAssignment;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
