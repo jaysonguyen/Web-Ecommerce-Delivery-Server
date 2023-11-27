@@ -50,7 +50,6 @@ public class UserController {
             System.out.printf("Error from server");
             return ResponseEntity.badRequest().body("Error from controller: " + ex.getMessage());
         }
-        return ResponseEntity.badRequest().body("Get list store failed");
     }
 
     @GetMapping("{user_code}")

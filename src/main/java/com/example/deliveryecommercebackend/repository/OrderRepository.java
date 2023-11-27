@@ -1,5 +1,6 @@
 package com.example.deliveryecommercebackend.repository;
 
+import com.example.deliveryecommercebackend.DTO.chart.DataQuery;
 import com.example.deliveryecommercebackend.model.Action;
 import com.example.deliveryecommercebackend.model.City;
 import com.example.deliveryecommercebackend.model.Order;
@@ -8,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, String> {
@@ -32,6 +35,8 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     @Query("SELECT u FROM Order u WHERE u.action_code = :action_code AND u.user = :user AND " +
             "function('date_format', u.created,'%m-%d-%Y') BETWEEN function('date_format', :start,'%m-%d-%Y') AND function('date_format', :end,'%m-%d-%Y')")
     List<Order> findOrderByActionAndUser(@Param("action_code") String actionCode,@Param("user") User user,@Param("start") Date dateStart,@Param("end") Date dateEnd);
+    @Query("SELECT u FROM Order u WHERE u.user = :user")
+    Order findOrderByCustomer(@Param("user") User userId);
 
     @Query("SELECT u FROM Order u WHERE u.shipper_code= :shipperCode")
     List<Order> findOrderByShipperAssigned(@Param("shipperCode") String code);

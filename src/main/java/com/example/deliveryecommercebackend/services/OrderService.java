@@ -110,6 +110,43 @@ public class OrderService {
         }
     }
 
+
+
+    public ResponseEntity<?> getOrderByCustomer(String userId) {
+        //find user
+        User user = userRepo.findUserById(userId);
+        if(user == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+
+        //find order
+        Order order = orderRepo.findOrderByCustomer(user);
+        if(order == null) {
+            return ResponseEntity.badRequest().body("Order not found");
+        }
+
+        //find shipper
+//        User shipper = userRepo.findNoneDeleteShipperByCode(order.getShipper_code());
+//        if(city == null) {
+//            return null;
+//        }
+
+        OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(order);
+
+        try {
+            var checkSave = orderRepo.save(order);
+            if(checkSave != null) {
+                return ResponseEntity.ok().body(orderDetailsDTO);
+            } else {
+                return ResponseEntity.badRequest().body("Get order failed");
+            }
+        } catch (Exception ex) {
+            System.out.printf("Error from service: " + ex);
+            return ResponseEntity.badRequest().body("Error from service: " + ex.getMessage());
+
+        }
+    }
+
     public ResponseEntity<?> createOrder(OrderCreateDTO orderDTO) {
         try {
             //find user
