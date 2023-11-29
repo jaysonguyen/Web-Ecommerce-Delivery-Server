@@ -19,9 +19,9 @@ public class HistoryDeliveryService {
         this.orderRepo = orderRepo;
     }
 
-    public boolean confirmReceivePackage(HistoryDeliveryDTO hisDTO) {
+    public boolean confirmReceivePackage(String orderId, String branchId,long moneyCollect, String shipperCode) {
         try {
-            var order = orderRepo.findOrderById(hisDTO.getOrder_id());
+            var order = orderRepo.findOrderById(orderId);
 
             if(order != null) {
                 order.setAction_code("1");
@@ -30,14 +30,14 @@ public class HistoryDeliveryService {
 
             //INSERT INTO HISTORY
             var historyDeli = new HistoryDelivery();
-            historyDeli.setInput_by(hisDTO.getInput_by());
+            historyDeli.setInput_by(shipperCode);
             historyDeli.setData_time(LocalDateTime.now());
             historyDeli.setState("Received");
-            historyDeli.setImage(hisDTO.getImage());
-            historyDeli.setBranch_id(hisDTO.getBranch_id());
-            historyDeli.setOrder_id(hisDTO.getOrder_id());
-            historyDeli.setMoney_collect((long)hisDTO.getMoney_collect());
-            historyDeli.setShipper_code(hisDTO.getShipper_code());
+            historyDeli.setImage(null);
+            historyDeli.setBranch_id(branchId);
+            historyDeli.setOrder_id(orderId);
+            historyDeli.setMoney_collect((long)moneyCollect);
+            historyDeli.setShipper_code(shipperCode);
 
             hisRepo.save(historyDeli);
             return true;

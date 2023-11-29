@@ -250,7 +250,7 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<?> getShipperByBranch(String branchCode) {
+    public ResponseEntity<?> getShipperByBranch(String branchID) {
         try {
 
             var roleStaff = roleRepository.findRoleByName("shipper");
@@ -259,7 +259,7 @@ public class UserService {
                 return ResponseEntity.badRequest().body("Not found role");
             }
 
-            var branch = branchRepo.findBranchByCode(branchCode);
+            var branch = branchRepo.findById(branchID).get();
            var shipperList = userRepository.findShipperByBranch(branch, roleStaff);
             System.out.println(roleStaff.getName());
 

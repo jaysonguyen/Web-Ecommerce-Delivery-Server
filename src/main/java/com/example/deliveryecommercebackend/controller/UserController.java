@@ -139,23 +139,23 @@ public class UserController {
         }
     }
 
-    @GetMapping("/shipper/branch/{branchCode}")
-    @ResponseBody
-    public ResponseEntity<?> getShipperByBranch(@PathVariable String branchCode) {
-        try {
-            var getListShipperByBranch = userService.getShipperByBranch(branchCode);
-            return getListShipperByBranch;
-        }catch (Exception ex) {
-            return ResponseEntity.badRequest().body("Error from controller");
-        }
-    }
-
     @GetMapping("/shipper/assignment/{branchID}")
     @ResponseBody
     public ResponseEntity<?> getShippingAssignment(@PathVariable String branchID) {
         try {
             var getShippingInfo = userService.getAssignmentShipperInfo(branchID);
             return getShippingInfo;
+        }catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from controller");
+        }
+    }
+
+    @GetMapping("/shipper/branch/{branchID}")
+    @ResponseBody
+    public ResponseEntity<?> getShipperByBranch(@PathVariable String branchID) {
+        try {
+            var getListShipperByBranch = userService.getShipperByBranch(branchID);
+            return getListShipperByBranch;
         }catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from controller");
         }
