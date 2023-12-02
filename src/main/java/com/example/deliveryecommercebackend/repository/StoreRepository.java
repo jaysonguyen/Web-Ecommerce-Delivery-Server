@@ -13,4 +13,7 @@ public interface StoreRepository extends JpaRepository<Store, String> {
     List<Store> findStoreByUser(@Param("user") User user);
     @Query("SELECT u FROM Store u WHERE u.code = :code")
     Store findByCode(@Param("code") String storeCode);
+
+    @Query("SELECT u FROM Store u WHERE u.store_id = :id")
+    Store findStoreById(@Param("id") String storeID);
 }

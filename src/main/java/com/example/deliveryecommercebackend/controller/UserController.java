@@ -63,6 +63,17 @@ public class UserController {
 
     }
 
+    @GetMapping("/profile")
+    public ResponseEntity<?>getUserProfile(@RequestHeader(name ="Authorization") String userID) {
+        try {
+            var user = userService.getUserByID(userID.split(" ")[1]);
+            return user;
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from controller: " + ex.getMessage());
+        }
+
+    }
+
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody UserCreateDTO user) {
         try {

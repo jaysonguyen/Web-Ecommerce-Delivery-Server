@@ -26,6 +26,16 @@ public class AreaController {
             return ResponseEntity.status(400).body("Error from controller: " + ex.getMessage());
         }
     }
+    @GetMapping("dropdown/{cityCode}")
+    public ResponseEntity<?> getAreaDropdownList(@PathVariable String cityCode){
+        try {
+            var listArea = areaService.getAreasDropdownByCityCode(cityCode);
+            return listArea;
+        } catch (Exception ex) {
+            System.out.printf("Error from controller" + ex.getMessage());
+            return ResponseEntity.status(400).body("Error from controller: " + ex.getMessage());
+        }
+    }
 
 
 //    @GetMapping({"branchCode"})

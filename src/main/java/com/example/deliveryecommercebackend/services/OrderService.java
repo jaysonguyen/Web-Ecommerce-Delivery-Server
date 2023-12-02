@@ -87,6 +87,18 @@ public class OrderService {
         if(order == null) {
             return ResponseEntity.badRequest().body("Order not found");
         }
+        System.out.println(order.getCity_code());
+        //find city
+        City city = cityRepo.findNoneDeleteCityByCode(order.getCity_code());
+        if(city == null) {
+            return ResponseEntity.badRequest().body("City not found");
+        }
+
+        //find area
+        Area area = areaRepo.findByCode(order.getArea_code());
+        if(area == null) {
+            return ResponseEntity.badRequest().body("Area not found");
+        }
 
         //find shipper
 //        User shipper = userRepo.findNoneDeleteShipperByCode(order.getShipper_code());
@@ -94,7 +106,7 @@ public class OrderService {
 //            return null;
 //        }
 
-        OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(order);
+        OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(order, city.getName(), area.getName());
 
         try {
             var checkSave = orderRepo.save(order);
@@ -125,13 +137,25 @@ public class OrderService {
             return ResponseEntity.badRequest().body("Order not found");
         }
 
+        //find city
+        City city = cityRepo.findNoneDeleteCityByCode(order.getCity_code());
+        if(city == null) {
+            return ResponseEntity.badRequest().body("City not found");
+        }
+
+        //find area
+        Area area = areaRepo.findByCode(order.getArea_code());
+        if(area == null) {
+            return ResponseEntity.badRequest().body("Area not found");
+        }
+
         //find shipper
 //        User shipper = userRepo.findNoneDeleteShipperByCode(order.getShipper_code());
 //        if(city == null) {
 //            return null;
 //        }
 
-        OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(order);
+        OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(order, city.getName(), area.getName());
 
         try {
             var checkSave = orderRepo.save(order);
@@ -153,6 +177,12 @@ public class OrderService {
             User user = userRepo.getUserById(orderDTO.getUser_id());
             if(user == null) {
                 return ResponseEntity.badRequest().body("User not found");
+            }
+
+            //find order
+            Order orderCheck = orderRepo.findOrderByCode(orderDTO.getOrder_code());
+            if(orderCheck != null) {
+                return ResponseEntity.badRequest().body("Order exists");
             }
 
             Order order = new Order();

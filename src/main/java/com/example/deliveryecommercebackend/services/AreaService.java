@@ -1,6 +1,7 @@
 package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.AreaCreatedDTO;
+import com.example.deliveryecommercebackend.DTO.AreaDTO;
 import com.example.deliveryecommercebackend.DTO.AreaDetailDTO;
 import com.example.deliveryecommercebackend.model.Area;
 import com.example.deliveryecommercebackend.model.City;
@@ -37,6 +38,28 @@ public class AreaService {
             List<AreaDetailDTO> res = new ArrayList<>();
             for(Area area : areas){
                 AreaDetailDTO temp = new AreaDetailDTO(area);
+                res.add(temp);
+            }
+
+            return ResponseEntity.ok().body(res);
+        } catch(Exception ex) {
+            System.out.printf("Get area failed - Error: " + ex.getMessage());
+            return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> getAreasDropdownByCityCode(String cityCode) {
+        try {
+            //check city exists
+            City city = cityRepository.findNoneDeleteCityByCode(cityCode);
+            if(city == null) {
+                return ResponseEntity.badRequest().body("City not found" );
+            }
+
+            List<Area> areas = areaRepository.findNoneDeleteAreaByCity(city);
+            List<AreaDTO> res = new ArrayList<>();
+            for(Area area : areas){
+                AreaDTO temp = new AreaDTO(area);
                 res.add(temp);
             }
 

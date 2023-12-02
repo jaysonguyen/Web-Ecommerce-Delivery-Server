@@ -93,4 +93,17 @@ public class StoreService {
         }
     }
 
+    public ResponseEntity<?> getStoreByID(String storeID) {
+        try {
+            System.out.println(storeID);
+            Store store = storeRepo.findStoreById(storeID);
+            if(store == null) {
+                return ResponseEntity.badRequest().body("Store not found");
+            }
+            return ResponseEntity.ok().body(store);
+        } catch (Exception ex) {
+            System.out.printf("Error from services - Error: " + ex.getMessage());
+            return ResponseEntity.status(500).body(Collections.emptyList());
+        }
+    }
 }

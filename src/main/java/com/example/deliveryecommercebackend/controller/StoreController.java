@@ -16,19 +16,16 @@ public class StoreController {
     @Autowired
     private StoreService storeService;
 
-//    @GetMapping
-//    @ResponseBody
-//    public ResponseEntity<?> getStoreList(String userID) {
-//        try {
-//            var storeList = storeService.getStoreList(userID);
-//            if(storeList != null) {
-//                return ResponseEntity.ok(storeList);
-//            }
-//        } catch (Exception ex) {
-//            System.out.printf("Error from server");
-//        }
-//        return ResponseEntity.badRequest().body("Get list store failed");
-//    }
+    @GetMapping("{storeId}")
+    public ResponseEntity<?> getStoreByID(@PathVariable String storeId) {
+        try {
+            var check = storeService.getStoreByID(storeId);
+            return check;
+        } catch (Exception ex) {
+            System.out.printf("Error from server");
+            return ResponseEntity.badRequest().body("Get store by id failed");
+        }
+    }
 
     @PostMapping
     public ResponseEntity<?> createStore(@RequestBody StoreDTO storeDto) {

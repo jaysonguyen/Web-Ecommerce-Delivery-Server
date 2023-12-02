@@ -19,6 +19,9 @@ public class OrderCreateDTO {
     private String order_code;
     private String package_order;
     private String product;
+    private String address;
+    private String city_code;
+    private String area_code;
     private String receiver;
     private String user_id;
 

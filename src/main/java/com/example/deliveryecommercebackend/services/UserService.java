@@ -74,6 +74,16 @@ public class UserService {
         }
     }
 
+    public ResponseEntity<?> getUserByID(String id) {
+        try {
+            User user = userRepository.findUserById(id);
+            return ResponseEntity.ok().body(new UserDTO(user));
+        } catch(Exception ex) {
+            System.out.printf("Get user failed - Error: " + ex.getMessage());
+            return ResponseEntity.badRequest().body("Error from services");
+        }
+    }
+
 
     public ResponseEntity<?> getStoreByUser(String userId) {
         try {

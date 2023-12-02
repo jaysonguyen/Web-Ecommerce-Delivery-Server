@@ -22,6 +22,7 @@ public class VoucherDTO {
     private Date created;
     private int period;
     private int quantity;
+    private int points;
     private int used;
     private String status;
 
@@ -48,6 +49,7 @@ public class VoucherDTO {
         quantity = voucher.getQuantity();
        used = voucher.getUsed();
        status = voucher.getStatus();
+        points = voucher.getPoints();
 
     }
 }

@@ -19,6 +19,8 @@ public class OrderDetailsDTO {
     private String order_code;
 
     private String action_code;
+    private String city_name;
+    private String area_name;
     private double ship_cost;
     //json
     private String receiver;
@@ -50,7 +52,7 @@ public class OrderDetailsDTO {
         this.package_order = order.getPackage_order();
     }
 
-    public OrderDetailsDTO(Order order) {
+    public OrderDetailsDTO(Order order, String city_name, String area_name) {
 
         this.order_code = order.getOrder_code();
         this.order_id = order.getOrder_id();
@@ -59,6 +61,8 @@ public class OrderDetailsDTO {
         this.ship_cost = order.getShip_cost();
         this.created = order.getCreated();
         this.updated = order.getUpdated();
+        this.city_name = city_name;
+        this.area_name = area_name;
         this.collect_money = order.isCollect_money();
         //json
         this.address = order.getAddress();

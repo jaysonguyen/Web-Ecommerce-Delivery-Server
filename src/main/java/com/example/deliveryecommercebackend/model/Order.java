@@ -28,6 +28,7 @@ public class Order {
 
     private String action_code;
     private String city_code;
+    private String area_code;
 
     private double ship_cost;
 
@@ -71,6 +72,9 @@ public class Order {
         this.order_code = orderDTO.getOrder_code();
         this.action_code = orderDTO.getAction_code();
         this.product = orderDTO.getProduct();
+        this.city_code = orderDTO.getCity_code();
+        this.area_code = orderDTO.getArea_code();
+        this.address = orderDTO.getAddress();
         this.package_order = orderDTO.getPackage_order();
 //        this.ship_cost = orderDTO.getShip_cost();
         this.receiver = orderDTO.getReceiver();
