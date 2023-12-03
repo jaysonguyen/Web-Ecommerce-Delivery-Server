@@ -1,19 +1,11 @@
 package com.example.deliveryecommercebackend.model;
 
 
-import com.example.deliveryecommercebackend.CompositeID.ShippingAssignmentID;
-import com.example.deliveryecommercebackend.DTO.ShipperAssignmentDTO;
-import com.example.deliveryecommercebackend.model.Area;
-import com.example.deliveryecommercebackend.model.Branch;
-import com.example.deliveryecommercebackend.model.Store;
-import com.example.deliveryecommercebackend.model.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
-import java.util.List;
 
 @Getter
 @Setter

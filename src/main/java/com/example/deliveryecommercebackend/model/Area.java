@@ -38,6 +38,7 @@ public class Area {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "city_id")
     @ToString.Exclude
+    @JsonBackReference
     private City city;
 
 

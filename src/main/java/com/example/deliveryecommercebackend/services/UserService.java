@@ -1,10 +1,9 @@
 package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.*;
-import com.example.deliveryecommercebackend.model.Role;
-import com.example.deliveryecommercebackend.model.ShippingAssignment;
-import com.example.deliveryecommercebackend.model.Store;
-import com.example.deliveryecommercebackend.model.User;
+import com.example.deliveryecommercebackend.factory.user.*;
+import com.example.deliveryecommercebackend.model.*;
+import com.example.deliveryecommercebackend.model.user.Admin;
 import com.example.deliveryecommercebackend.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.ToString;
@@ -108,8 +107,70 @@ public class UserService {
 
     }
 
+    public ResponseEntity<?> createUser_v2(UserCreateDTO userDTO) {
+        try {
+            UserFactory userFactory;
+            User newUser;
+
+            //find role object
+            Role role = roleRepository.findById(userDTO.getRole_id()).get();
+            if(role == null){
+                return ResponseEntity.badRequest().body("Role not found");
+            }
+
+            userDTO.setRole(role);
+
+            switch(userDTO.getRole_id()){
+                case 2 -> {
+                    userFactory = new CustomerFactory();
+                    newUser = userFactory.createUser(userDTO);
+                    //create store default
+                    if (newUser.getStores() != null && !newUser.getStores().isEmpty()) {
+                        Store defaultStore = newUser.getStores().get(0);
+                        var check_2 = storeRepository.save(defaultStore);
+                        if(check_2.getStore_id() == null) {
+                            return ResponseEntity.badRequest().body("Cannot create store by default");
+                        }
+                    } else {
+                        return ResponseEntity.badRequest().body("Cannot create default store");
+                    }
+
+                }
+                case 3 -> {
+                    //find branch
+                    Branch branch = branchRepo.findBranchByCode(userDTO.getBranch_code());
+                    if(branch == null) {
+                        return ResponseEntity.badRequest().body("Branch not found");
+                    }
+                    //attach branch to userDTO
+                    userDTO.setBranch(branch);
+                    userFactory = new StaffFactory();
+                    newUser = userFactory.createUser(userDTO);
+                }
+                case 4 -> {
+                    userFactory = new ShipperFactory();
+                    newUser = userFactory.createUser(userDTO);
+
+                }
+                default -> {
+                    userFactory = new AdminFactory();
+                    newUser = userFactory.createUser(userDTO);
+
+                }
+            }
+
+            var check = userRepository.save(newUser);
+            if(check.getUser_id() == null) {
+                return ResponseEntity.badRequest().body("Create user failed");
+            }
+            return ResponseEntity.ok().body(newUser);
+        } catch(Exception ex) {
+            System.out.printf("Create user failed - Error" + ex);
+            return ResponseEntity.status(500).body("Server error: " + ex.getMessage());
+        }
+    }
     public ResponseEntity<?> createUser(UserCreateDTO userDTO) {
-        Role role = roleRepository.findById(userDTO.getRole()).get();
+        Role role = roleRepository.findById(userDTO.getRole_id()).get();
         System.out.println(role.toString());
 
         var checkValidAccount = userRepository.findUserByAccount(userDTO.getAccount());
@@ -122,8 +183,9 @@ public class UserService {
         if(checkValidAccount != null) {
             return ResponseEntity.badRequest().body("Account is not valid");
         }
-        User newUser = new User();
-        newUser.setDataCreate(userDTO, role);
+        //remember change it later
+        User newUser = new Admin();
+        newUser.setDataCreate(userDTO);
 
         try {
             User checkSave = userRepository.save(newUser);

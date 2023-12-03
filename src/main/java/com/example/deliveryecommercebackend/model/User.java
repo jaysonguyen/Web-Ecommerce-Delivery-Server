@@ -2,10 +2,13 @@ package com.example.deliveryecommercebackend.model;
 
 
 import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
+import com.example.deliveryecommercebackend.DTO.UserPayload;
+import com.example.deliveryecommercebackend.repository.UserRepository;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -20,7 +23,7 @@ import java.util.concurrent.ExecutionException;
 @EqualsAndHashCode
 @Entity
 @Table(name="user")
-public class User {
+public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String user_id;
@@ -67,27 +70,24 @@ public class User {
     @JsonManagedReference
     private List<Order> orders;
 
-    public void setDataCreate(UserCreateDTO userDTO, Role role){
-        try {
-            this.created = Date.valueOf(LocalDate.now());
-            this.updated = Date.valueOf(LocalDate.now());
-            this.account = userDTO.getAccount();
-            this.email = userDTO.getEmail();
-            this.code = role.getName() + new Random().nextInt(1000, 9999);
-            this.password = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt(12));
-            this.phone = userDTO.getPhone();
-            this.des = userDTO.getDes();
-            this.fullName = userDTO.getFullName();
-            this.purpose = userDTO.getPurpose();
-            this.is_delete = false;
-            this.cod = 0;
-            this.point = 0;
-//            this.major = userDTO.getMajor();
-//            this.scale = userDTO.getScale();
-            this.role = role;
-        } catch (Exception ex) {
-            // Log the exception for debugging
-            System.out.println("Error in setDataCreate: " + ex.getMessage());
-        }
+    public void setDataCreate(UserCreateDTO userDTO){
+        this.created = Date.valueOf(LocalDate.now());
+        this.updated = Date.valueOf(LocalDate.now());
+        this.account = userDTO.getAccount();
+        this.email = userDTO.getEmail();
+        this.code = userDTO.getRole().getName() + new Random().nextInt(1000, 9999);
+        this.password = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt(12));
+        this.phone = userDTO.getPhone();
+        this.des = userDTO.getDes();
+        this.fullName = userDTO.getFullName();
+        this.purpose = userDTO.getPurpose();
+        this.is_delete = false;
+        this.cod = 0;
+        this.point = 0;
+        this.role = userDTO.getRole();
+//      this.major = userDTO.getMajor();
+//      this.scale = userDTO.getScale();
     }
 }
+
+

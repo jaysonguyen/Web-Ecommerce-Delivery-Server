@@ -43,10 +43,7 @@ public class Order {
 
     @Column(columnDefinition = "TEXT")
     private String address;
-    // cost of package
-    private double cost;
-    private double voucher_discount; //new
-    private boolean collect_money;
+
 
     // json
     @Column(columnDefinition = "TEXT")
@@ -57,6 +54,10 @@ public class Order {
 
     // shipper cost
     private double total_cost;
+    // cost of package
+    private double cost;
+    private double voucher_discount; //new
+    private boolean collect_money;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -65,6 +66,7 @@ public class Order {
 
     //user code
     private String shipper_code;
+
 
     public void setDataCreate(OrderCreateDTO orderDTO, User user) {
         this.user = user;
@@ -78,6 +80,10 @@ public class Order {
         this.package_order = orderDTO.getPackage_order();
 //        this.ship_cost = orderDTO.getShip_cost();
         this.receiver = orderDTO.getReceiver();
+
+        this.total_cost = orderDTO.getTotal_cost();
+        this.cost = orderDTO.getCost();
+        this.voucher_discount = orderDTO.getVoucher_discount();
 
         this.created = new Date();
         this.updated = new Date();

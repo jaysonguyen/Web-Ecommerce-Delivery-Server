@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 
 public class OrderCreateDTO {
     private String action_code;
-    private boolean collect_money;
     private String order_code;
     private String package_order;
     private String product;
@@ -24,6 +23,13 @@ public class OrderCreateDTO {
     private String area_code;
     private String receiver;
     private String user_id;
+
+    // shipper cost
+    private double total_cost;
+    // cost of package
+    private double cost;
+    private double voucher_discount; //new
+    private boolean collect_money;
 
     private LocalDateTime created;
     private LocalDateTime updated;

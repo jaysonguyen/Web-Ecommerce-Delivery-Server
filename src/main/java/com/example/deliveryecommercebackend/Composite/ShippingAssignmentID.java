@@ -1,7 +1,5 @@
-package com.example.deliveryecommercebackend.CompositeID;
+package com.example.deliveryecommercebackend.Composite;
 
-import com.example.deliveryecommercebackend.model.Branch;
-import com.example.deliveryecommercebackend.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

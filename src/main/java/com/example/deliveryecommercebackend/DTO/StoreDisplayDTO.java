@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,7 +18,7 @@ public class StoreDisplayDTO {
     private String store_id;
     private String store_code;
     private String name;
-    private LocalDateTime created;
+    private Date created;
     private int state;
 
     public StoreDisplayDTO(Store store) {

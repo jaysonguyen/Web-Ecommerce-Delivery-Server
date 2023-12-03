@@ -48,6 +48,15 @@ public class CityService {
         }
     }
 
+    public City getCityDetailsById(String id){
+        try {
+            return cityRepository.findNoneDeleteCityById(id);
+        } catch(Exception ex) {
+            System.out.printf("Get city failed - Error: " + ex);
+            return new City();
+        }
+    }
+
     public ResponseEntity<?> getCityById(String id){
         try {
             City city = cityRepository.findNoneDeleteCityById(id);

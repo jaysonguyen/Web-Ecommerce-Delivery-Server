@@ -6,6 +6,7 @@ import com.example.deliveryecommercebackend.model.ShippingAssignment;
 import com.example.deliveryecommercebackend.model.ShippingAssignment;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,11 +30,13 @@ public class Branch {
     private String des;
     @JsonIgnore
     private boolean is_delete;
+    @Column(name = "code", unique = true, nullable = false)
     private String code;
 
     @OneToOne
     @JoinColumn(name = "city_id")
-    @JsonBackReference
+//    @JsonBackReference
+    @JsonManagedReference
     private City city;
 
     @OneToMany(mappedBy = "branch")

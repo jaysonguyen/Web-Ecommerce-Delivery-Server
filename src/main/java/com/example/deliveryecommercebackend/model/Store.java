@@ -6,7 +6,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Random;
 
 @Getter
 @Setter
@@ -24,8 +27,8 @@ public class Store {
     @Column(name = "code", unique = true, nullable = false)
     private String code;
     private String name;
-    private LocalDateTime created;
-    private LocalDateTime updated;
+    private Date created;
+    private Date updated;
     private String des;
     private boolean is_delete;
     private String address;
@@ -41,8 +44,8 @@ public class Store {
     public void setCreateData(StoreDTO storeDto, User user){
         System.out.println(storeDto.getStore_code());
 
-        this.created = (LocalDateTime.now());
-        this.updated = (LocalDateTime.now());
+        this.created = Date.valueOf(LocalDate.now());
+        this.updated = Date.valueOf(LocalDate.now());
         this.address = (storeDto.getAddress());
         this.name = (storeDto.getName());
         this.des = (storeDto.getDes());
@@ -52,4 +55,17 @@ public class Store {
         this.user = (user);
     }
 
+    public Store(User user) {
+        this.code = user.getCode() + new Random().nextInt(1000, 9999);
+        this.name = "store default";
+        this.created = Date.valueOf(LocalDate.now());
+        this.updated = Date.valueOf(LocalDate.now());
+        this.des = "This is store des";
+        this.is_delete = false;
+        this.address = "";
+        this.state = 1;
+        this.is_default = true;
+        this.phone = "";
+        this.user = user;
+    }
 }

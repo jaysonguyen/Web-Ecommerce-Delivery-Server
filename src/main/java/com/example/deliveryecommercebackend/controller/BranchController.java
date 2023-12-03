@@ -36,6 +36,17 @@ public class BranchController {
             return ResponseEntity.status(400).body("Error from controller" + ex.getMessage());
         }
     }
+    @GetMapping("{code}")
+    @ResponseBody
+    public ResponseEntity<?> getBranchByCode(@PathVariable String code){
+        try{
+            var check =  branchServices.getBranchModelByCode(code);
+            return ResponseEntity.ok().body(check);
+        }catch (Exception ex){
+            System.out.println("Error from controller" +  ex.getMessage());
+            return ResponseEntity.status(400).body("Error from controller" + ex.getMessage());
+        }
+    }
 
     @PostMapping
     public ResponseEntity<?> createBranch(@RequestBody BranchCreateDTO branch) {

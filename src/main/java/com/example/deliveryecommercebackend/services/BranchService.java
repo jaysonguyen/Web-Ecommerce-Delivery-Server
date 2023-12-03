@@ -62,6 +62,14 @@ public class BranchService {
             return ResponseEntity.badRequest().body(Collections.emptyList());
         }
     }
+    public Branch getBranchModelByCode(String code) {
+        try {
+            return branchRepo.findBranchByCode(code);
+        } catch(Exception ex) {
+            System.out.printf("Get branch failed - Error: " + ex);
+            return new Branch();
+        }
+    }
     public  ResponseEntity<?> getBranchDropdown(){
         try{
             var branchDropdown = branchRepo.findAllActiveBranchesDropdown();
