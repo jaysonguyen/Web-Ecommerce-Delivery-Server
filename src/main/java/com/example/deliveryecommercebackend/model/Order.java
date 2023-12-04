@@ -1,5 +1,6 @@
 package com.example.deliveryecommercebackend.model;
 import com.example.deliveryecommercebackend.DTO.OrderCreateDTO;
+import com.example.deliveryecommercebackend.model.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -8,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter

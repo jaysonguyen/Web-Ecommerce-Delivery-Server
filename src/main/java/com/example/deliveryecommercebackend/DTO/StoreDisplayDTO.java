@@ -1,13 +1,11 @@
 package com.example.deliveryecommercebackend.DTO;
 
-import com.example.deliveryecommercebackend.model.Store;
-import com.example.deliveryecommercebackend.model.User;
+import com.example.deliveryecommercebackend.model.user.Store;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter

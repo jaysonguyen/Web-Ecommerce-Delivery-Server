@@ -3,18 +3,15 @@ package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.*;
 import com.example.deliveryecommercebackend.DTO.order.NoteDTO;
-import com.example.deliveryecommercebackend.DTO.order.ProductDTO;
 import com.example.deliveryecommercebackend.model.*;
 import com.example.deliveryecommercebackend.model.Order;
+import com.example.deliveryecommercebackend.model.user.User;
 import com.example.deliveryecommercebackend.repository.*;
 import jakarta.transaction.Transactional;
-import net.bytebuddy.description.type.TypeList;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -186,6 +183,7 @@ public class OrderService {
             }
 
             Order order = new Order();
+            System.out.println(orderDTO.getTotal_cost());
             order.setDataCreate(orderDTO, user);
             var checkSave = orderRepo.save(order);
             if(checkSave != null) {
@@ -208,14 +206,21 @@ public class OrderService {
         order.setAction_code(actionCode);
 
         try {
+            //find user update order
+            User user = userRepo.findUserById(userID);
+            if(user == null){
+                return ResponseEntity.badRequest().body("User not found");
+            }
+
+            //add points if order is finished
+            if(actionCode.equals("6") && !addPointsToUser(actionCode, user, order.getTotal_cost())) {
+                userRepo.save(user);
+                return ResponseEntity.badRequest().body("Cannot add points for user");
+            }
+
             var checkSave = orderRepo.save(order);
             if(checkSave.getOrder_id() != null) {
                 //save data to history
-                //find user update order
-                User user = userRepo.findUserById(userID);
-                if(user == null){
-                    return ResponseEntity.badRequest().body("User not found");
-                }
 
                 HistoryOrder history;
                 //if shipper set action for order
@@ -239,8 +244,18 @@ public class OrderService {
             System.out.printf("Error from service: " + ex);
             return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
         }
-
     }
+
+    private boolean addPointsToUser(String action_code, User user, double total) {
+        switch(action_code) {
+            case "6":
+                int newPoints = (int) Math.round(user.getPoint() + (total / 1000));
+                user.setPoint(newPoints);
+                return true;
+        }
+        return false;
+    }
+
 
     public List<AreaDTO> getAreaList(String cityCode) {
         try {

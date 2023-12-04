@@ -1,19 +1,12 @@
 package com.example.deliveryecommercebackend.DTO;
 
-import com.example.deliveryecommercebackend.model.Role;
-import com.example.deliveryecommercebackend.model.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.example.deliveryecommercebackend.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
-import java.util.List;
 
 
 @Getter

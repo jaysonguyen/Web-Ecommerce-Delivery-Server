@@ -2,7 +2,7 @@ package com.example.deliveryecommercebackend.repository;
 
 import com.example.deliveryecommercebackend.model.Branch;
 import com.example.deliveryecommercebackend.model.Role;
-import com.example.deliveryecommercebackend.model.User;
+import com.example.deliveryecommercebackend.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

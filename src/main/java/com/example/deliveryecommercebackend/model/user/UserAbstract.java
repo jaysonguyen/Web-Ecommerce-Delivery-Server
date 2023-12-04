@@ -1,20 +1,20 @@
-package com.example.deliveryecommercebackend.model;
+package com.example.deliveryecommercebackend.model.user;
 
 
 import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
-import com.example.deliveryecommercebackend.DTO.UserPayload;
-import com.example.deliveryecommercebackend.repository.UserRepository;
+import com.example.deliveryecommercebackend.model.Branch;
+import com.example.deliveryecommercebackend.model.Order;
+import com.example.deliveryecommercebackend.model.Role;
+import com.example.deliveryecommercebackend.model.user.Store;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.mindrot.jbcrypt.BCrypt;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 @Getter
 @Setter
@@ -23,7 +23,7 @@ import java.util.concurrent.ExecutionException;
 @EqualsAndHashCode
 @Entity
 @Table(name="user")
-public abstract class User {
+public abstract class UserAbstract {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String user_id;

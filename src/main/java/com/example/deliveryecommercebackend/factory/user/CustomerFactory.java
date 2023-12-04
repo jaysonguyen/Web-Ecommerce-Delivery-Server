@@ -1,8 +1,8 @@
 package com.example.deliveryecommercebackend.factory.user;
 
 import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
-import com.example.deliveryecommercebackend.model.Store;
-import com.example.deliveryecommercebackend.model.User;
+import com.example.deliveryecommercebackend.model.user.Store;
+import com.example.deliveryecommercebackend.model.user.User;
 import com.example.deliveryecommercebackend.model.user.Customer;
 
 import java.util.ArrayList;

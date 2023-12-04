@@ -2,8 +2,9 @@ package com.example.deliveryecommercebackend.controller;
 
 
 import com.example.deliveryecommercebackend.DTO.LoginDTO;
-import com.example.deliveryecommercebackend.model.User;
+import com.example.deliveryecommercebackend.advice.LoginInterceptor;
 import com.example.deliveryecommercebackend.services.AuthenticationServices;
+import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,13 @@ public class AuthenticationController {
     @PostMapping
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginObject) {
         try {
-            var checkLogin = authenticationServeces.loginUser(loginObject);
+            LoginInterceptor loginInterceptor = new LoginInterceptor();
+            ProxyFactory factory = new ProxyFactory(authenticationServeces);
+            factory.addAdvice(loginInterceptor);
+
+            AuthenticationServices myService = (AuthenticationServices) factory.getProxy();
+
+            var checkLogin = myService.loginUser(loginObject);
             return checkLogin;
         }
         catch (Exception ex) {

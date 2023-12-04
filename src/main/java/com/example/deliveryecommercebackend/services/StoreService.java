@@ -2,8 +2,8 @@ package com.example.deliveryecommercebackend.services;
 
 
 import com.example.deliveryecommercebackend.DTO.StoreDTO;
-import com.example.deliveryecommercebackend.model.Store;
-import com.example.deliveryecommercebackend.model.User;
+import com.example.deliveryecommercebackend.model.user.Store;
+import com.example.deliveryecommercebackend.model.user.User;
 import com.example.deliveryecommercebackend.repository.StoreRepository;
 import com.example.deliveryecommercebackend.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -12,9 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.List;
 
 @Service
 @Transactional

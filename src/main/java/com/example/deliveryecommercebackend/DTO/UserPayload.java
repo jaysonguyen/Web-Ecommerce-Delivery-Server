@@ -1,9 +1,7 @@
 package com.example.deliveryecommercebackend.DTO;
 
 
-import com.example.deliveryecommercebackend.model.Branch;
-import com.example.deliveryecommercebackend.model.Role;
-import com.example.deliveryecommercebackend.model.User;
+import com.example.deliveryecommercebackend.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

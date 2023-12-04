@@ -2,7 +2,7 @@ package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.BlackListDTO;
 import com.example.deliveryecommercebackend.model.BlackList;
-import com.example.deliveryecommercebackend.model.User;
+import com.example.deliveryecommercebackend.model.user.User;
 import com.example.deliveryecommercebackend.repository.BlackListRepository;
 import com.example.deliveryecommercebackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

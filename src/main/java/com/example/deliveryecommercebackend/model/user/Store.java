@@ -1,4 +1,4 @@
-package com.example.deliveryecommercebackend.model;
+package com.example.deliveryecommercebackend.model.user;
 
 
 import com.example.deliveryecommercebackend.DTO.StoreDTO;
@@ -8,7 +8,6 @@ import lombok.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Random;
 
 @Getter

@@ -1,10 +1,8 @@
 package com.example.deliveryecommercebackend.repository;
 
 import com.example.deliveryecommercebackend.DTO.chart.DataQuery;
-import com.example.deliveryecommercebackend.model.Action;
-import com.example.deliveryecommercebackend.model.City;
 import com.example.deliveryecommercebackend.model.Order;
-import com.example.deliveryecommercebackend.model.User;
+import com.example.deliveryecommercebackend.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

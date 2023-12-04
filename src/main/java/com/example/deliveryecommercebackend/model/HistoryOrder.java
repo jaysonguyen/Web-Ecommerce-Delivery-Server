@@ -1,6 +1,7 @@
 package com.example.deliveryecommercebackend.model;
 
 
+import com.example.deliveryecommercebackend.model.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -3,8 +3,7 @@ package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.LoginDTO;
 import com.example.deliveryecommercebackend.DTO.UserPayload;
-import com.example.deliveryecommercebackend.model.Branch;
-import com.example.deliveryecommercebackend.model.User;
+import com.example.deliveryecommercebackend.model.user.User;
 import com.example.deliveryecommercebackend.repository.BranchRepository;
 import com.example.deliveryecommercebackend.repository.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
@@ -26,6 +25,7 @@ public class AuthenticationServices {
     }
 
     public ResponseEntity<?> loginUser(LoginDTO loginDTO) {
+        System.out.println(loginDTO.getAccount());
         User user = userRepository.findUserByAccount(loginDTO.getAccount());
         if(user == null) {
             return ResponseEntity.badRequest().body("Account not found");

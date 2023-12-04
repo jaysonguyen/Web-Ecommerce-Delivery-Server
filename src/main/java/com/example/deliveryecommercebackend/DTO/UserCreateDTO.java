@@ -2,15 +2,11 @@ package com.example.deliveryecommercebackend.DTO;
 
 import com.example.deliveryecommercebackend.model.Branch;
 import com.example.deliveryecommercebackend.model.Role;
-import com.example.deliveryecommercebackend.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.sql.Date;
-import java.time.LocalDate;
 
 
 @Getter

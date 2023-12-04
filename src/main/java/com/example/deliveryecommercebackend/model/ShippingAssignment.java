@@ -1,6 +1,7 @@
 package com.example.deliveryecommercebackend.model;
 
 
+import com.example.deliveryecommercebackend.model.user.User;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
