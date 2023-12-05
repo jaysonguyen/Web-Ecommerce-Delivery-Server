@@ -25,14 +25,31 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     Order findOrderById(@Param("id") String orderId);
 
     @Query("SELECT u FROM Order u WHERE u.action_code = :action_code AND " +
-            "function('date_format', u.created,'%m-%d-%Y') BETWEEN function('date_format', :start,'%m-%d-%Y') AND function('date_format', :end,'%m-%d-%Y')")
-    List<Order> findOrderByAction(@Param("action_code") String action_code,@Param("start") Date dateStart,@Param("end") Date dateEnd);
+            "function('date_format', u.created,'%m-%d-%Y') BETWEEN function('date_format', :start,'%m-%d-%Y') AND " +
+            "function('date_format', :end,'%m-%d-%Y') AND " +
+            "(:cityCode = '' OR u.city_code = :cityCode) AND " +
+            "(:areaCode = '' OR u.area_code = :areaCode)")
+    List<Order> findOrderByAction(@Param("action_code") String action_code,
+                                  @Param("start") Date dateStart,
+                                  @Param("end") Date dateEnd,
+                                  @Param("cityCode") String city_code,
+                                  @Param("areaCode") String area_code
+                                  );
 
     @Query("SELECT u FROM Order u WHERE u.order_code = :code")
     Order findOrderByCode(@Param("code") String orderCode);
     @Query("SELECT u FROM Order u WHERE u.action_code = :action_code AND u.user = :user AND " +
-            "function('date_format', u.created,'%m-%d-%Y') BETWEEN function('date_format', :start,'%m-%d-%Y') AND function('date_format', :end,'%m-%d-%Y')")
-    List<Order> findOrderByActionAndUser(@Param("action_code") String actionCode,@Param("user") User user,@Param("start") Date dateStart,@Param("end") Date dateEnd);
+            "function('date_format', u.created,'%m-%d-%Y') BETWEEN function('date_format', :start,'%m-%d-%Y') AND " +
+            "function('date_format', :end,'%m-%d-%Y') AND " +
+            "(:cityCode = '' OR u.city_code = :cityCode) AND " +
+            "(:areaCode = '' OR u.area_code = :areaCode)")
+    List<Order> findOrderByActionAndUser(@Param("action_code") String actionCode,
+                                         @Param("user") User user,
+                                         @Param("start") Date dateStart,
+                                         @Param("end") Date dateEnd,
+                                         @Param("cityCode") String city_code,
+                                         @Param("areaCode") String area_code
+    );
     @Query("SELECT u FROM Order u WHERE u.user = :user")
     Order findOrderByCustomer(@Param("user") User userId);
 

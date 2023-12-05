@@ -1,11 +1,14 @@
 package com.example.deliveryecommercebackend.DTO;
 
+import com.example.deliveryecommercebackend.model.Voucher;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -23,6 +26,7 @@ public class OrderCreateDTO {
     private String area_code;
     private String receiver;
     private String user_id;
+    private ArrayList<VoucherDTO> voucher_used_list;
 
     // shipper cost
     private double total_cost;

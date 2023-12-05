@@ -3,6 +3,7 @@ package com.example.deliveryecommercebackend.controller;
 
 import com.example.deliveryecommercebackend.DTO.OrderCreateDTO;
 import com.example.deliveryecommercebackend.DTO.OrderDetailsDTO;
+import com.example.deliveryecommercebackend.DTO.order.GetOrderListParams;
 import com.example.deliveryecommercebackend.DTO.order.NoteDTO;
 import com.example.deliveryecommercebackend.model.DateRange;
 import com.example.deliveryecommercebackend.repository.CityRepository;
@@ -33,10 +34,10 @@ public class OrderController {
     @ResponseBody
     public ResponseEntity<?>getOrderListByAction(@PathVariable String actionCode,
                                                  @RequestHeader(name ="Authorization") String userID,
-                                                 @RequestBody DateRange dateRange) {
+                                                 @RequestBody GetOrderListParams params) {
         try {
             System.out.println(userID.split(" ")[1]);
-            var listOrder = orderService.getAllOrderByAction(actionCode, userID.split(" ")[1], dateRange);
+            var listOrder = orderService.getAllOrderByAction(actionCode, userID.split(" ")[1], params);
             return listOrder;
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server");

@@ -2,6 +2,7 @@ package com.example.deliveryecommercebackend.services;
 
 
 import com.example.deliveryecommercebackend.DTO.*;
+import com.example.deliveryecommercebackend.DTO.order.GetOrderListParams;
 import com.example.deliveryecommercebackend.DTO.order.NoteDTO;
 import com.example.deliveryecommercebackend.model.*;
 import com.example.deliveryecommercebackend.model.Order;
@@ -30,7 +31,7 @@ public class OrderService {
     @Autowired
     private UserRepository userRepo;
     @Autowired
-    private ProductTypeRepository productTypeRepo;
+    private HistoryVoucherService historyVoucherService;
     @Autowired
     private CityRepository cityRepo;
     @Autowired
@@ -39,7 +40,7 @@ public class OrderService {
     @Autowired
     private UserService userService;
 
-    public ResponseEntity<?> getAllOrderByAction(String actionCode, String userID, DateRange dateRange) {
+    public ResponseEntity<?> getAllOrderByAction(String actionCode, String userID, GetOrderListParams params) {
         try {
             ///find user
             User user = userRepo.findUserById(userID);
@@ -55,10 +56,10 @@ public class OrderService {
 
             //check orders exists
             List<Order> orders = new ArrayList<>();
-            if(Objects.equals(user.getRole().getName(), "admin")) {
-                orders = orderRepo.findOrderByAction(actionCode, dateRange.getStart(), dateRange.getEnd());
+            if(Objects.equals(user.getRole().getName(), "admin") || Objects.equals(user.getRole().getName(), "staff")) {
+                orders = orderRepo.findOrderByAction(actionCode, params.getStart(), params.getEnd(), params.getCity_code(), params.getArea_code());
             } else {
-                orders = orderRepo.findOrderByActionAndUser(actionCode, user, dateRange.getStart(), dateRange.getEnd());
+                orders = orderRepo.findOrderByActionAndUser(actionCode, user, params.getStart(), params.getEnd(), params.getCity_code(), params.getArea_code());
             }
             if(orders == null) {
                 return ResponseEntity.badRequest().body("Order not found");
@@ -186,7 +187,16 @@ public class OrderService {
             System.out.println(orderDTO.getTotal_cost());
             order.setDataCreate(orderDTO, user);
             var checkSave = orderRepo.save(order);
-            if(checkSave != null) {
+            if(checkSave.getOrder_id() != null) {
+                //save to voucher history
+                ArrayList<VoucherDTO> voucherList = orderDTO.getVoucher_used_list();
+                for(var i = 0; i < voucherList.size(); i++){
+                    var checkAddHistory = historyVoucherService.createHistoryByVoucher(voucherList.get(i).getVoucherId(), checkSave.getOrder_id(), user);
+                    if(!checkAddHistory) {
+                        return ResponseEntity.badRequest().body("Get error at adding history");
+                    }
+                }
+
                 return ResponseEntity.ok().body("Created successfully");
             } else {
                 return ResponseEntity.badRequest().body("Created failed");
