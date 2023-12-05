@@ -1,6 +1,4 @@
 package com.example.deliveryecommercebackend.model;
-
-
 import com.example.deliveryecommercebackend.CompositeID.ShippingAssignmentID;
 import com.example.deliveryecommercebackend.DTO.ShipperAssignmentDTO;
 import com.example.deliveryecommercebackend.model.Area;
@@ -11,6 +9,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Date;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "shipping_assigment")
+
 public class ShippingAssignment {
 
     @Id

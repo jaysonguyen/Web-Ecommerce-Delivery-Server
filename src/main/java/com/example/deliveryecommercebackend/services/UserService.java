@@ -1,14 +1,13 @@
 package com.example.deliveryecommercebackend.services;
 
-import com.example.deliveryecommercebackend.DTO.*;
+import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
+import com.example.deliveryecommercebackend.DTO.UserDTO;
+import com.example.deliveryecommercebackend.DTO.getUserListDTO;
 import com.example.deliveryecommercebackend.model.Role;
-import com.example.deliveryecommercebackend.model.ShippingAssignment;
 import com.example.deliveryecommercebackend.model.Store;
 import com.example.deliveryecommercebackend.model.User;
 import com.example.deliveryecommercebackend.repository.*;
 import jakarta.transaction.Transactional;
-import lombok.ToString;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,13 +38,14 @@ public class UserService {
     @Autowired
     private ShippingAssignmentRepository shipRepo;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BranchRepository branchRepo, ShippingAssignmentRepository shipRepo, AreaRepository areaRepo) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BranchRepository branchRepo, ShippingAssignmentRepository shipRepo, AreaRepository areaRepo, RoleRepository roleRepo) {
         this.userRepository = userRepository;
         this.branchRepo = branchRepo;
         this.shipRepo = shipRepo;
         this.areaRepo = areaRepo;
-        this.roleRepository = roleRepository;
+        this.roleRepository = roleRepo;
     }
+
 
     public List<getUserListDTO> getAllUsers() {
         try {
@@ -229,7 +229,7 @@ public class UserService {
         try {
             var branch = branchRepo.findById(branchID).get();
             var assignList = shipRepo.findShippingAssignmentByBranch(branch);
-
+            System.out.printf(assignList.toString());
             return ResponseEntity.ok().body(assignList);
         }
         catch (Exception exception) {

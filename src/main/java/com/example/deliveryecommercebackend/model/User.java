@@ -73,6 +73,9 @@ public class User {
     private List<Order> orders;
 
 
+    @OneToOne(mappedBy = "user")
+    private ShippingAssignment shippingAssignment;
+
     public void setDataCreate(UserCreateDTO userDTO, Role role){
         try {
             this.created = Date.valueOf(LocalDate.now());
