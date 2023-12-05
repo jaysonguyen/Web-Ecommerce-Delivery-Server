@@ -35,11 +35,14 @@ public class HistoryDeliveryController {
     public ResponseEntity<String> createDeliveryHistory(@RequestParam("order_id") String orderId,
                                                         @RequestParam("branch_id") String branchId,
                                                         @RequestParam("shipper_code") String shipperCode,
-                                                        @RequestParam("money_collect") long moneyCollect) {
+                                                        @RequestParam("money_collect") long moneyCollect,
+                                                        @RequestParam("state") String state,
+                                                        @RequestParam("reason_reject") String reason
+                                                        ) {
         try {
 
 
-            var insertHistory = hisSer.confirmReceivePackage(orderId, branchId, moneyCollect, shipperCode);
+            var insertHistory = hisSer.confirmReceivePackage(orderId, branchId, moneyCollect, shipperCode, state, reason);
             if(insertHistory == true) {
                 return ResponseEntity.ok().body("Insert success");
 
@@ -49,6 +52,4 @@ public class HistoryDeliveryController {
             return new ResponseEntity<>("Error creating delivery history: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }

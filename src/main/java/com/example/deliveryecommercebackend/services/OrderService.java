@@ -177,10 +177,10 @@ public class OrderService {
         }
     }
 
-    public List<ShipperOrderDTO> getShippersOrder(String shipperCode) {
+    public List<ShipperOrderDTO> getShippersOrder(String shipperID) {
         try {
 
-            var listOrder = orderRepo.findOrderByShipperAssigned(shipperCode);
+            var listOrder = orderRepo.findOrderByShipperAssigned(shipperID);
             List<ShipperOrderDTO> spOr = new ArrayList<>();
             for (var i: listOrder) {
                ShipperOrderDTO spDTO = new ShipperOrderDTO();

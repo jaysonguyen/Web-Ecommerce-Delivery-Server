@@ -63,9 +63,8 @@ public class Order {
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
-
     //user code
-    private String shipper_code;
+    private String shipper_id;
 
     public void setDataCreate(OrderCreateDTO orderDTO, User user) {
         this.user = user;
@@ -77,7 +76,6 @@ public class Order {
 //        this.ship_cost = orderDTO.getShip_cost();
         this.receiver = orderDTO.getReceiver();
         this.product_type_code = orderDTO.getProduct_type_code();
-
         this.created = LocalDateTime.now();
         this.updated = LocalDateTime.now();
     }

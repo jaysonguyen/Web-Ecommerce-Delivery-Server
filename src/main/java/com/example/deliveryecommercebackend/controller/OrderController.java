@@ -128,11 +128,10 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/shipper/{shipperCode}")
-    public ResponseEntity<?> getShippersListOrder(@PathVariable String shipperCode) {
+    @GetMapping("/shipper/{shipperID}")
+    public ResponseEntity<?> getShippersListOrder(@PathVariable String shipperID) {
         try {
-            var getOrderList = orderService.getShippersOrder(shipperCode);
-
+            var getOrderList = orderService.getShippersOrder(shipperID);
 
             if(getOrderList != null) {
                 return ResponseEntity.ok().body(getOrderList);
