@@ -53,6 +53,6 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     @Query("SELECT u FROM Order u WHERE u.user = :user")
     Order findOrderByCustomer(@Param("user") User userId);
 
-    @Query("SELECT u FROM Order u WHERE u.shipper_code= :shipperCode")
-    List<Order> findOrderByShipperAssigned(@Param("shipperCode") String code);
+    @Query("SELECT u FROM Order u WHERE u.shipper_id= :shipperID")
+    List<Order> findOrderByShipperAssigned(@Param("shipperID") String shipperID);
 }

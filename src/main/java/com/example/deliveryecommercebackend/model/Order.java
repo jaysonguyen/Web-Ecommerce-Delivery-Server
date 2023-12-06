@@ -65,7 +65,7 @@ public class Order {
     private User user;
 
     //user code
-    private String shipper_code;
+    private String shipper_id;
 
 
     public void setDataCreate(OrderCreateDTO orderDTO, User user) {

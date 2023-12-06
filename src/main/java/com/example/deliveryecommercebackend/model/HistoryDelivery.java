@@ -30,4 +30,5 @@ public class HistoryDelivery {
     private String image;
     private String shipper_code;
     private long money_collect;
+    private String reason_reject;
 }
