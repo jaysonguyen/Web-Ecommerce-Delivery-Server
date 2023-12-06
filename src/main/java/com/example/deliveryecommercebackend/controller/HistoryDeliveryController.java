@@ -37,12 +37,13 @@ public class HistoryDeliveryController {
                                                         @RequestParam("shipper_code") String shipperCode,
                                                         @RequestParam("money_collect") long moneyCollect,
                                                         @RequestParam("state") String state,
-                                                        @RequestParam("reason_reject") String reason
+                                                        @RequestParam("reason_reject") String reason,
+                                                        @RequestParam("image") String image
                                                         ) {
         try {
 
 
-            var insertHistory = hisSer.confirmReceivePackage(orderId, branchId, moneyCollect, shipperCode, state, reason);
+            var insertHistory = hisSer.confirmReceivePackage(orderId, branchId, moneyCollect, shipperCode, state, reason, image);
             if(insertHistory == true) {
                 return ResponseEntity.ok().body("Insert success");
 
