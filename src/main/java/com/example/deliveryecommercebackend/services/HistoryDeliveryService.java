@@ -47,7 +47,7 @@ public class HistoryDeliveryService {
         }
     }
 
-    public boolean  confirmReceivePackage(String orderId, String branchId,long moneyCollect, String shipperCode, String state, String reason) {
+    public boolean  confirmReceivePackage(String orderId, String branchId,long moneyCollect, String shipperCode, String state, String reason, String image) {
         try {
             var order = orderRepo.findOrderById(orderId);
 
@@ -68,7 +68,7 @@ public class HistoryDeliveryService {
             historyDeli.setInput_by(shipperCode);
             historyDeli.setData_time(LocalDateTime.now());
             historyDeli.setState(state);
-            historyDeli.setImage(null);
+            historyDeli.setImage(image);
             historyDeli.setBranch_id(branchId);
             historyDeli.setOrder_id(orderId);
             historyDeli.setMoney_collect((long)moneyCollect);
