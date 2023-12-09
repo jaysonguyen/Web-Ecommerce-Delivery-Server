@@ -340,6 +340,7 @@ public class UserService {
         }
     }
 
+
     public ResponseEntity<?> setAssignmentShipment(String area_code, String  branch_code, String user_code) {
         try {
             var branch = branchRepo.findBranchByCode(branch_code);
