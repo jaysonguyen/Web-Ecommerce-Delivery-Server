@@ -57,7 +57,7 @@ public class Order {
     // cost of package
     private double cost;
     private double voucher_discount; //new
-    private boolean collect_money;
+    private double collect_money;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
