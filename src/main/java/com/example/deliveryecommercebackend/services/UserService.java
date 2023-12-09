@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-@Transactional
+//@Transactional
 public class UserService {
 
     @Autowired
@@ -197,16 +197,9 @@ public class UserService {
         }
     }
 
-    public HttpStatus updateUserAdmin(UserDTO userDto) {
-        var user = userRepository.findUserByAccount(userDto.getAccount());
-        user.setFullName(userDto.getFullName());
-        user.setPurpose(userDto.getPurpose());
-        user.setPhone(userDto.getPhone());
-        user.set_delete(userDto.isDelete());
-        user.setDes(userDto.getDes());
-        user.setMajor(userDto.getMajor());
-        user.setScale(userDto.getScale());
-
+    public HttpStatus updateUserAdmin(UserCreateDTO userDto) {
+        User user = userRepository.findUserByAccount(userDto.getAccount());
+        user.setDataUpdated(userDto);
         try {
             var checkSave = userRepository.save(user);
             if (checkSave != null)

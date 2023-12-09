@@ -87,7 +87,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateUserFromAdmin(@RequestBody UserDTO user) {
+    public ResponseEntity<?> updateUserFromAdmin(@RequestBody UserCreateDTO user) {
         try {
             HttpStatus check = userService.updateUserAdmin(user);
             if(check != HttpStatus.OK)

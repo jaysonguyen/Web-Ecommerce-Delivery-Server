@@ -36,9 +36,20 @@ public class OrderController {
                                                  @RequestHeader(name ="Authorization") String userID,
                                                  @RequestBody GetOrderListParams params) {
         try {
-            System.out.println(userID.split(" ")[1]);
+//            System.out.println(userID.split(" ")[1]);
             var listOrder = orderService.getAllOrderByAction(actionCode, userID.split(" ")[1], params);
             return listOrder;
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from server");
+        }
+    }
+    @GetMapping("/search")
+    @ResponseBody
+    public ResponseEntity<?>searchOrderByIdOrUser(@RequestParam("userName") String userName,
+                                                  @RequestParam("orderId") String orderId ) {
+        try {
+            var check = orderService.getOrderByIdOrUser(orderId, userName);
+            return check;
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server");
         }

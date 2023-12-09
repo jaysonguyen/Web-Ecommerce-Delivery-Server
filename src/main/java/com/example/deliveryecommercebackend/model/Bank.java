@@ -25,6 +25,7 @@ public class Bank {
 
     @Column(name = "state")
     private boolean state;
+    private boolean is_delete = false;
 
 //    public Bank(String code, String name, Integer state) {
 //        this.code = code;

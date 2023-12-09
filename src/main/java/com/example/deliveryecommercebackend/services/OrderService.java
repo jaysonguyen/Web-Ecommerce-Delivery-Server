@@ -303,4 +303,27 @@ public class OrderService {
             return Collections.emptyList();
         }
     }
+
+    public ResponseEntity<?> getOrderByIdOrUser(String orderId, String userName) {
+        try {
+            List<Order> orders = orderRepo.findOrderLikeId(orderId);
+
+            List<OrderSearchDTO> orderSearchDTOS = new ArrayList<>();
+            for (var item : orders){
+                if(item.getReceiver().contains(userName)){
+                    Action action = actionRepo.findActionByCode(item.getAction_code());
+                    City city = cityRepo.findNoneDeleteCityByCode(item.getCity_code());
+                    Area area = areaRepo.findByCode(item.getArea_code());
+                    OrderSearchDTO orderSearchDTO = new OrderSearchDTO(item, action, city, area);
+                    orderSearchDTOS.add(orderSearchDTO);
+                }
+            }
+
+            return ResponseEntity.ok().body(orderSearchDTOS);
+        } catch (Exception ex){
+            System.out.println("Error from service - Error: " + ex.getMessage());
+            return ResponseEntity.badRequest().body("Error");
+        }
+
+    }
 }

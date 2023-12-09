@@ -19,6 +19,7 @@ public class CityDTO {
     private String des;
 
     public CityDTO(City city) {
+            this.id = city.getId();
             this.code = city.getCode();
             this.name = city.getName();
             this.des = city.getDes();

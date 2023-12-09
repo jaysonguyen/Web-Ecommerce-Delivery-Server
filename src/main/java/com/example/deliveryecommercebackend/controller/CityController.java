@@ -18,7 +18,7 @@ public class CityController {
     public ResponseEntity<?> getCityList(){
         try {
             var listCity = cityService.getAllCitys();
-            return ResponseEntity.ok().body(listCity);
+            return listCity;
         } catch (Exception ex) {
             System.out.printf("Error from controller" + ex.getMessage());
             return ResponseEntity.status(400).body("Error from controller: " + ex.getMessage());

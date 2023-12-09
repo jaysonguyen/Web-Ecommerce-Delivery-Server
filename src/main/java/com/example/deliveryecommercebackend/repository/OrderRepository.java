@@ -52,6 +52,8 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     );
     @Query("SELECT u FROM Order u WHERE u.user = :user")
     Order findOrderByCustomer(@Param("user") User userId);
+    @Query("SELECT u FROM Order u WHERE u.order_id LIKE CONCAT('%',:orderId,'%')")
+    List<Order> findOrderLikeId(@Param("orderId") String orderId);
 
     @Query("SELECT u FROM Order u WHERE u.shipper_id= :shipperID")
     List<Order> findOrderByShipperAssigned(@Param("shipperID") String shipperID);

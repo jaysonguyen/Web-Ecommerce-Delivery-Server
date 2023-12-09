@@ -2,7 +2,6 @@ package com.example.deliveryecommercebackend.DTO;
 
 import com.example.deliveryecommercebackend.model.Area;
 import com.example.deliveryecommercebackend.model.Branch;
-import com.example.deliveryecommercebackend.model.User;
 import com.example.deliveryecommercebackend.model.ShippingAssignment;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;

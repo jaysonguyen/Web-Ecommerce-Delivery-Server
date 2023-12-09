@@ -18,7 +18,7 @@ public class BankController {
     private BankService bankService;
 
     @GetMapping
-    public List<Bank> getBankList(){
+    public ResponseEntity<?> getBankList(){
         return bankService.getAllBanks();
     }
 
@@ -27,10 +27,10 @@ public class BankController {
         return bankService.getBankById(code);
     }
 
-    @PutMapping("{code}")
-    public ResponseEntity<Bank> updateBank(@PathVariable String code,@RequestBody BankDTO bankDetails) {
-        return bankService.updateBank(code, bankDetails);
-    }
+//    @PutMapping("{code}")
+//    public ResponseEntity<Bank> updateBank(@PathVariable String code,@RequestBody BankDTO bankDetails) {
+//        return bankService.updateBank(code, bankDetails);
+//    }
 
     @PostMapping
     public Bank createBank(@RequestBody Bank bankDetails) {

@@ -30,10 +30,18 @@ public class CustomerBankController {
     @PostMapping
     public ResponseEntity<?> insertBankToCustomer(@org.springframework.web.bind.annotation.RequestBody CustomerBankDTO customerBank) {
         try {
-            System.out.println(customerBank.getUser_id());
-            System.out.println(customerBank.getBank_number());
             System.out.println(customerBank.getBank_name());
             return customerBankService.addBankToCustomer(customerBank);
+        } catch (Exception ex) {
+            System.out.println("Error from controller");
+            return ResponseEntity.status(400).body("Server error");
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<?> deleteBankToCustomer(@org.springframework.web.bind.annotation.RequestBody CustomerBankDTO customerBank) {
+        try {
+            return customerBankService.deleteBankAccount(customerBank);
         } catch (Exception ex) {
             System.out.println("Error from controller");
             return ResponseEntity.status(400).body("Server error");

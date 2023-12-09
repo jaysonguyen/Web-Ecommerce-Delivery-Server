@@ -33,6 +33,15 @@ public class CustomerBankService {
     }
     public ResponseEntity<?> addBankToCustomer(CustomerBankDTO customerBank) {
         try {
+            //find delete bank account of customer by bank_name and user_id
+            CustomerBank checkExists = customerBankRepository.findAccountDeleted(customerBank.getUser_id(),
+                    customerBank.getBank_name(),
+                    customerBank.getBank_number());
+            if(checkExists != null){
+                checkExists.set_deleted(false);
+                return ResponseEntity.ok().body("Add bank to customer successfully");
+            }
+
             Bank bank =  bankRepository.findBankByName(customerBank.getBank_name());
             if(bank == null) {
                 return ResponseEntity.badRequest().body("Bank not found");
@@ -52,7 +61,24 @@ public class CustomerBankService {
             }
             return ResponseEntity.ok().body("Add bank to customer successfully");
         }catch (Exception ex) {
-            System.out.println("Error from service - Error: " + ex.getMessage());
+            System.out.println("Error from customer bank service - Error: " + ex.getMessage());
+            return ResponseEntity.badRequest().body("Error");
+        }
+    }
+    public ResponseEntity<?> deleteBankAccount(CustomerBankDTO customerBank) {
+        try {
+            CustomerBank bank =  customerBankRepository.findAccountDeleted(customerBank.getUser_id(),
+                    customerBank.getBank_name(),
+                    customerBank.getBank_number());
+            if(bank == null) {
+                return ResponseEntity.badRequest().body("Bank account not found");
+            }
+
+            bank.set_deleted(true);
+
+            return ResponseEntity.ok().body("Delete bank to customer successfully");
+        }catch (Exception ex) {
+            System.out.println("Error from customer bank service - Error: " + ex.getMessage());
             return ResponseEntity.badRequest().body("Error");
         }
     }

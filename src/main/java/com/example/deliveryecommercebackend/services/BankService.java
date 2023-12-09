@@ -1,6 +1,6 @@
 package com.example.deliveryecommercebackend.services;
 
-import com.example.deliveryecommercebackend.DTO.order.BankDTO;
+import com.example.deliveryecommercebackend.DTO.BankDropdownDTO;
 import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
 import com.example.deliveryecommercebackend.model.Bank;
 import com.example.deliveryecommercebackend.repository.BankRepository;
@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,12 +19,20 @@ public class BankService {
     @Autowired
     BankRepository bankRepository;
 
-    public List<Bank> getAllBanks() {
+    public ResponseEntity<?> getAllBanks() {
         try {
-            return bankRepository.findAll();
+            var bankList = bankRepository.findAll();
+
+            List<BankDropdownDTO> bankDTOS = new ArrayList<>();
+            for (var item : bankList) {
+                BankDropdownDTO temp = new BankDropdownDTO(item);
+                bankDTOS.add(temp);
+            }
+
+            return ResponseEntity.ok().body(bankDTOS);
         } catch(Exception ex) {
             System.out.printf("Get bank failed - Error: " + ex);
-            return Collections.emptyList();
+            return ResponseEntity.badRequest().body("Error");
         }
     }
 
@@ -32,17 +41,17 @@ public class BankService {
                 .orElseThrow(() -> new ResourceNotfoundException("Bank not exist with code:" + code));
         return ResponseEntity.ok(bank);
     }
-    public ResponseEntity<Bank> updateBank(String code, BankDTO bankDetails) {
-        Bank updateBank = bankRepository.findById(code)
-                .orElseThrow(() -> new ResourceNotfoundException("Bank not exist with id: " + code));
-
-        updateBank.setName(bankDetails.getName());
-//        updateBank.setState(bankDetails.get());
-
-        bankRepository.save(updateBank);
-
-        return ResponseEntity.ok(updateBank);
-    }
+//    public ResponseEntity<Bank> updateBank(String code, BankDTO bankDetails) {
+//        Bank updateBank = bankRepository.findById(code)
+//                .orElseThrow(() -> new ResourceNotfoundException("Bank not exist with id: " + code));
+//
+//        updateBank.setName(bankDetails.getName());
+////        updateBank.setState(bankDetails.get());
+//
+//        bankRepository.save(updateBank);
+//
+//        return ResponseEntity.ok(updateBank);
+//    }
     public Bank createBank(Bank bankDetails) {
         return bankRepository.save(bankDetails);
     }

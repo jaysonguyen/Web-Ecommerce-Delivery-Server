@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserCreateDTO {
+public class  UserCreateDTO {
     private String code;
     private String fullName;
     private String des;

@@ -88,6 +88,16 @@ public abstract class UserAbstract {
 //      this.major = userDTO.getMajor();
 //      this.scale = userDTO.getScale();
     }
+
+    public void setDataUpdated(UserCreateDTO userDTO){
+        this.updated = Date.valueOf(LocalDate.now());
+        this.email = userDTO.getEmail();
+        if(userDTO.getPassword() != null) this.password = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt(12));
+        this.phone = userDTO.getPhone();
+        this.des = userDTO.getDes();
+        this.fullName = userDTO.getFullName();
+        this.purpose = userDTO.getPurpose();
+    }
 }
 
 

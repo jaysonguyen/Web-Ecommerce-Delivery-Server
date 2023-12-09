@@ -22,12 +22,20 @@ public class CityService {
     @Autowired
     CityRepository cityRepository;
 
-    public List<City> getAllCitys() {
+    public ResponseEntity<?> getAllCitys() {
         try {
-            return cityRepository.findNoneDeleteCity();
+            List<City> list = cityRepository.findNoneDeleteCity();
+
+            List<CityDTO> cityDTOS = new ArrayList<>();
+            for(var item : list){
+                CityDTO temp = new CityDTO(item);
+                cityDTOS.add(temp);
+            }
+
+            return ResponseEntity.ok().body(cityDTOS);
         } catch(Exception ex) {
-            System.out.printf("Get city failed - Error: " + ex);
-            return Collections.emptyList();
+            System.out.printf("Get city failed - Error: " + ex.getMessage());
+            return ResponseEntity.badRequest().body("Error");
         }
     }
 

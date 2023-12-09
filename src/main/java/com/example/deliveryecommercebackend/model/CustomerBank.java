@@ -26,11 +26,14 @@ public class CustomerBank {
     private String bank_number;
     private String bank_name;
     private Date date_time;
+    private boolean is_deleted;
+
 
     public CustomerBank(CustomerBankDTO customerBank) {
         this.user_id = customerBank.getUser_id();
         this.bank_name = customerBank.getBank_name();
         this.bank_number = customerBank.getBank_number();
         this.date_time = Date.valueOf(LocalDate.now());
+        this.is_deleted = false;
     }
 }

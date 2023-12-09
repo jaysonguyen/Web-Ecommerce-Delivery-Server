@@ -12,9 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoreDTO {
-
-    private String store_id;
     private String store_code;
+    private String store_id;
     private String name;
     private LocalDateTime created;
     private LocalDateTime updated;
