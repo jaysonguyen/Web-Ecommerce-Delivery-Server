@@ -14,12 +14,14 @@ public class CustomerFactory implements UserFactory {
         Customer newCustomer = new Customer();
 
         newCustomer.setDataCreate(userCreateDTO);
+
         Store defaultStore = new Store(newCustomer);
         newCustomer.setStores(new ArrayList<Store>(){
             {
                 add(defaultStore);
             }
         });
+
         return newCustomer;
     }
 }
