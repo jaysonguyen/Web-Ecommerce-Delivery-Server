@@ -8,6 +8,7 @@ import com.example.deliveryecommercebackend.model.user.Store;
 import com.example.deliveryecommercebackend.model.user.User;
 import com.example.deliveryecommercebackend.repository.*;
 import jakarta.transaction.Transactional;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -116,11 +117,17 @@ public class UserService {
             }
 
             userDTO.setRole(role);
-
             switch(userDTO.getRole_id()){
                 case 2 -> {
+                    System.out.println("Create customer");
                     userFactory = new CustomerFactory();
                     newUser = userFactory.createUser(userDTO);
+                    //create user first
+                    var check = userRepository.save(newUser);
+                    if(check.getUser_id() == null) {
+                        return ResponseEntity.badRequest().body("Create user failed");
+                    }
+
                     //create store default
                     if (newUser.getStores() != null && !newUser.getStores().isEmpty()) {
                         Store defaultStore = newUser.getStores().get(0);
@@ -128,6 +135,7 @@ public class UserService {
                         if(check_2.getStore_id() == null) {
                             return ResponseEntity.badRequest().body("Cannot create store by default");
                         }
+                        return ResponseEntity.ok().body("Created successfully");
                     } else {
                         return ResponseEntity.badRequest().body("Cannot create default store");
                     }
@@ -155,12 +163,11 @@ public class UserService {
 
                 }
             }
-
             var check = userRepository.save(newUser);
             if(check.getUser_id() == null) {
                 return ResponseEntity.badRequest().body("Create user failed");
             }
-            return ResponseEntity.ok().body(newUser);
+            return ResponseEntity.ok().body("Created successfully");
         } catch(Exception ex) {
             System.out.printf("Create user failed - Error" + ex);
             return ResponseEntity.status(500).body("Server error: " + ex.getMessage());
