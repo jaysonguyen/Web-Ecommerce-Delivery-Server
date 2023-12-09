@@ -285,7 +285,6 @@ public class UserService {
     public ResponseEntity<?> getShipper() {
         try {
             var roleStaff = roleRepository.findRoleByName("shipper");
-
             if(roleStaff == null) {
                 return ResponseEntity.badRequest().body("Not found role");
             }
@@ -367,8 +366,6 @@ public class UserService {
             return ResponseEntity.badRequest().body("Error from services, " + ex.getMessage());
         }
     }
-
-
     public ResponseEntity<?> deleteShipment(String area_code, String  branch_code) {
         try {
             var branch = branchRepo.findBranchByCode(branch_code);
@@ -388,7 +385,4 @@ public class UserService {
             return ResponseEntity.badRequest().body("Error from services, " + ex.getMessage());
         }
     }
-
-
-
 }
