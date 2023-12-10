@@ -195,5 +195,15 @@ public class UserController {
         }
     }
 
+    @GetMapping("/shipper/point/amount/{shipper_id}")
+    public ResponseEntity<?> getPointAndAmount(@PathVariable String shipper_id) {
+        try {
+            var getShipperPointAndAmount = userService.getPointAndAmountShipper(shipper_id);
+            return getShipperPointAndAmount;
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from controller");
+        }
+    }
+
 
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 //@Transactional
@@ -80,8 +81,6 @@ public class UserService {
             return ResponseEntity.badRequest().body("Error from services");
         }
     }
-
-
     public ResponseEntity<?> getStoreByUser(String userId) {
         try {
             //find user
@@ -234,7 +233,7 @@ public class UserService {
     }
 
 
-//    STAFF
+    //    STAFF
     public ResponseEntity<?> getStaff() {
         try {
             var roleStaff = roleRepository.findRoleByName("staff");
@@ -285,7 +284,6 @@ public class UserService {
     public ResponseEntity<?> getShipper() {
         try {
             var roleStaff = roleRepository.findRoleByName("shipper");
-
             if(roleStaff == null) {
                 return ResponseEntity.badRequest().body("Not found role");
             }
@@ -329,7 +327,7 @@ public class UserService {
             }
 
             var branch = branchRepo.findById(branchID).get();
-           var shipperList = userRepository.findShipperByBranch(branch, roleStaff);
+            var shipperList = userRepository.findShipperByBranch(branch, roleStaff);
             System.out.println(roleStaff.getName());
 
             List<getUserListDTO> res = new ArrayList<>();
@@ -346,7 +344,6 @@ public class UserService {
             return ResponseEntity.badRequest().body("Error from services" + ex);
         }
     }
-
 
     public ResponseEntity<?> setAssignmentShipment(String area_code, String  branch_code, String user_code) {
         try {
@@ -368,8 +365,6 @@ public class UserService {
             return ResponseEntity.badRequest().body("Error from services, " + ex.getMessage());
         }
     }
-
-
     public ResponseEntity<?> deleteShipment(String area_code, String  branch_code) {
         try {
             var branch = branchRepo.findBranchByCode(branch_code);
@@ -390,6 +385,23 @@ public class UserService {
         }
     }
 
+    public ResponseEntity<?> getPointAndAmountShipper(String shipperID) {
+        try {
+            var findUserById = userRepository.findUserById(shipperID);
+            if(findUserById != null)
+            {
+                int point = findUserById.getPoint();
+                double amount = findUserById.getShipment_salary();
 
+                Object[] array = new Object[2];
+                array[0] = point;
+                array[1] = amount;
 
+                return  ResponseEntity.ok().body(array);
+            }
+            return ResponseEntity.badRequest().body("Cannot found shipper");
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("");
+        }
+    }
 }

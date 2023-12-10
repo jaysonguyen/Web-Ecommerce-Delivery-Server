@@ -4,6 +4,7 @@ import com.example.deliveryecommercebackend.DTO.HistoryDeliveryDTO;
 import com.example.deliveryecommercebackend.model.HistoryDelivery;
 import com.example.deliveryecommercebackend.repository.HistoryDeliveryRepository;
 import com.example.deliveryecommercebackend.repository.OrderRepository;
+import com.example.deliveryecommercebackend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,66 +14,47 @@ public class HistoryDeliveryService {
 
     private HistoryDeliveryRepository hisRepo;
     private OrderRepository orderRepo;
+    private UserRepository userRepo;
 
-    public HistoryDeliveryService(HistoryDeliveryRepository hisRepo, OrderRepository orderRepo) {
+    public HistoryDeliveryService(HistoryDeliveryRepository hisRepo, OrderRepository orderRepo, UserRepository userRepo) {
         this.hisRepo = hisRepo;
         this.orderRepo = orderRepo;
+        this.userRepo = userRepo;
     }
 
-    public boolean confirmRejectPackage(String orderId, String branchId,long moneyCollect, String shipperId, String reasonReject) {
+    public boolean  confirmReceivePackage(String orderId, String branchId,long moneyCollect, String shipperID, String state, String reason, String image) {
         try {
             var order = orderRepo.findOrderById(orderId);
+            var user = userRepo.findUserById(shipperID);
 
             if(order != null) {
-                order.setAction_code("1");
-                orderRepo.save(order);
-            }
-
-            //INSERT INTO HISTORY
-            var historyDeli = new HistoryDelivery();
-            historyDeli.setInput_by(shipperId);
-            historyDeli.setData_time(LocalDateTime.now());
-            historyDeli.setState("Reject");
-            historyDeli.setImage(null);
-            historyDeli.setBranch_id(branchId);
-            historyDeli.setOrder_id(orderId);
-            historyDeli.setReason_reject(reasonReject);
-            historyDeli.setMoney_collect(0);
-            historyDeli.setShipper_code(shipperId);
-
-            hisRepo.save(historyDeli);
-            return true;
-        } catch(Exception ex) {
-            return false;
-        }
-    }
-
-    public boolean  confirmReceivePackage(String orderId, String branchId,long moneyCollect, String shipperCode, String state, String reason, String image) {
-        try {
-            var order = orderRepo.findOrderById(orderId);
-
-            if(order != null) {
-                if(reason != null) {
-                    order.setAction_code("2");
+                if(state.toLowerCase().equals("reject")) {
+                    order.setAction_code("5");
                 } else {
-                    order.setAction_code("1");
+                    order.setAction_code("7");
+                    if(order.getShip_cost() >= 0)
+                    {
+                        double salary = user.getShipment_salary() + order.getShip_cost();
+                        int point = user.getPoint() + 1;
+                        user.setShipment_salary(salary);
+                        user.setPoint(point);
+                    }
+                    userRepo.save(user);
                 }
-                orderRepo.save(order);
-
             }
-
-
+            orderRepo.save(order);
+            System.out.println(image);
 
             //INSERT INTO HISTORY
             var historyDeli = new HistoryDelivery();
-            historyDeli.setInput_by(shipperCode);
+            historyDeli.setInput_by(shipperID);
             historyDeli.setData_time(LocalDateTime.now());
             historyDeli.setState(state);
             historyDeli.setImage(image);
             historyDeli.setBranch_id(branchId);
             historyDeli.setOrder_id(orderId);
-            historyDeli.setMoney_collect((long)moneyCollect);
-            historyDeli.setShipper_code(shipperCode);
+            historyDeli.setMoney_collect(moneyCollect);
+            historyDeli.setShipper_code(shipperID);
             historyDeli.setReason_reject(reason);
 
             hisRepo.save(historyDeli);
