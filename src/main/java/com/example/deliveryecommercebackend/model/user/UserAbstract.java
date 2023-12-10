@@ -42,10 +42,11 @@ public abstract class UserAbstract {
     private String purpose;
     private String major;
     private String scale;
-
     //new
     private double cod; //tien co the rut
     private int point;
+    private double shipment_salary;
+    private int shipmentPoint;
 
 //    @JsonIgnore
 //    private String role_id_hide;
@@ -85,6 +86,7 @@ public abstract class UserAbstract {
         this.cod = 0;
         this.point = 0;
         this.role = userDTO.getRole();
+
 //      this.major = userDTO.getMajor();
 //      this.scale = userDTO.getScale();
     }

@@ -25,8 +25,8 @@ public class AuthenticationServices {
     }
 
     public ResponseEntity<?> loginUser(LoginDTO loginDTO) {
-        System.out.println(loginDTO.getAccount());
         User user = userRepository.findUserByAccount(loginDTO.getAccount());
+        System.out.println(">>>>>>>" + user.getAccount());
         if(user == null) {
             return ResponseEntity.badRequest().body("Account not found");
         }

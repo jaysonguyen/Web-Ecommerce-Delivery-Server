@@ -1,5 +1,9 @@
 package com.example.deliveryecommercebackend;
 
+import com.example.deliveryecommercebackend.model.Action;
+import com.example.deliveryecommercebackend.model.Bank;
+import com.example.deliveryecommercebackend.model.ProductType;
+import com.example.deliveryecommercebackend.model.Role;
 import com.example.deliveryecommercebackend.repository.ActionRepository;
 import com.example.deliveryecommercebackend.repository.BankRepository;
 import com.example.deliveryecommercebackend.repository.ProductTypeRepository;
@@ -8,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.sql.Date;
+import java.time.LocalDate;
 
 @SpringBootApplication
 

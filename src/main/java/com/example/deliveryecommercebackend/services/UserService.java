@@ -166,14 +166,13 @@ public class UserService {
                 case 4 -> {
                     userFactory = new ShipperFactory();
                     newUser = userFactory.createUser(userDTO);
+
                 }
                 default -> {
                     userFactory = new AdminFactory();
                     newUser = userFactory.createUser(userDTO);
+
                 }
-            }
-            if(newUser == null) {
-                return ResponseEntity.badRequest().body("Create user failed, user got null");
             }
             var check = userRepository.save(newUser);
             if(check.getUser_id() == null) {
@@ -297,6 +296,7 @@ public class UserService {
     public ResponseEntity<?> getShipper() {
         try {
             var roleStaff = roleRepository.findRoleByName("shipper");
+
             if(roleStaff == null) {
                 return ResponseEntity.badRequest().body("Not found role");
             }
@@ -340,7 +340,7 @@ public class UserService {
             }
 
             var branch = branchRepo.findById(branchID).get();
-           var shipperList = userRepository.findShipperByBranch(branch, roleStaff);
+            var shipperList = userRepository.findShipperByBranch(branch, roleStaff);
             System.out.println(roleStaff.getName());
 
             List<getUserListDTO> res = new ArrayList<>();
@@ -378,6 +378,8 @@ public class UserService {
             return ResponseEntity.badRequest().body("Error from services, " + ex.getMessage());
         }
     }
+
+
     public ResponseEntity<?> deleteShipment(String area_code, String  branch_code) {
         try {
             var branch = branchRepo.findBranchByCode(branch_code);
@@ -395,6 +397,26 @@ public class UserService {
 
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from services, " + ex.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> getPointAndAmountShipper(String shipperID) {
+        try {
+            var findUserById = userRepository.findUserById(shipperID);
+            if(findUserById != null)
+            {
+                int point = findUserById.getPoint();
+                double amount = findUserById.getShipment_salary();
+
+                Object[] array = new Object[2];
+                array[0] = point;
+                array[1] = amount;
+
+                return  ResponseEntity.ok().body(array);
+            }
+            return ResponseEntity.badRequest().body("Cannot found shipper");
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("");
         }
     }
 }

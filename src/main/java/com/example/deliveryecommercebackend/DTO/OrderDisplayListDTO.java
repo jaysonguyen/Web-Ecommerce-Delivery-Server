@@ -23,7 +23,7 @@ public class OrderDisplayListDTO {
 
     private String product;
 
-    private boolean collect_money;
+    private double collect_money;
     private double total_cost;
 
     private Date created;
@@ -35,7 +35,7 @@ public class OrderDisplayListDTO {
         this.order_code = order.getOrder_code();
         this.created = order.getCreated();
         this.updated = order.getUpdated();
-        this.collect_money = order.isCollect_money();
+        this.collect_money = order.getCollect_money();
         this.action_name = actionName;
         this.user_name = order.getUser().getFullName();
         this.total_cost = order.getTotal_cost();

@@ -6,7 +6,6 @@ import org.aopalliance.intercept.MethodInvocation;
 import java.util.Arrays;
 
 public class LoginInterceptor implements MethodInterceptor {
-
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         System.out.println("Before method " + invocation.getMethod().getName());

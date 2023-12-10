@@ -291,9 +291,12 @@ public class OrderService extends OrderTemplate {
             List<ShipperOrderDTO> spOr = new ArrayList<>();
             for (var i: listOrder) {
                ShipperOrderDTO spDTO = new ShipperOrderDTO();
-               spDTO.setCustomerName(i.getUser().getFullName());
-               spDTO.setOrders(i);
-                spOr.add(spDTO);
+               if(i.getUser() != null)
+               {
+                   spDTO.setCustomerName(i.getUser().getFullName());
+                   spDTO.setOrders(i);
+                   spOr.add(spDTO);
+               }
             }
             return spOr;
         } catch (Exception ex) {

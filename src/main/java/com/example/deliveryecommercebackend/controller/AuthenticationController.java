@@ -15,21 +15,19 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     @Autowired
-    private AuthenticationServices authenticationServeces;
+    private AuthenticationServices authenticationServices;
 
-    public AuthenticationController(AuthenticationServices authenticationServeces) {
-        this.authenticationServeces = authenticationServeces;
+    public AuthenticationController(AuthenticationServices authenticationServices) {
+        this.authenticationServices = authenticationServices;
     }
 
     @PostMapping
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginObject) {
         try {
-            LoginInterceptor loginInterceptor = new LoginInterceptor();
-            ProxyFactory factory = new ProxyFactory(authenticationServeces);
-            factory.addAdvice(loginInterceptor);
+            ProxyFactory factory = new ProxyFactory(authenticationServices);
+            //factory.addAdvice(loginInterceptor);
 
             AuthenticationServices myService = (AuthenticationServices) factory.getProxy();
-
             var checkLogin = myService.loginUser(loginObject);
             return checkLogin;
         }
