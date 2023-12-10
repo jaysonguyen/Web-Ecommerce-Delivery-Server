@@ -2,6 +2,7 @@ package com.example.deliveryecommercebackend.services;
 
 import com.example.deliveryecommercebackend.DTO.HistoryDeliveryDTO;
 import com.example.deliveryecommercebackend.model.HistoryDelivery;
+import com.example.deliveryecommercebackend.model.user.Shipper;
 import com.example.deliveryecommercebackend.repository.HistoryDeliveryRepository;
 import com.example.deliveryecommercebackend.repository.OrderRepository;
 import com.example.deliveryecommercebackend.repository.UserRepository;
@@ -25,7 +26,7 @@ public class HistoryDeliveryService {
     public boolean  confirmReceivePackage(String orderId, String branchId,long moneyCollect, String shipperID, String state, String reason, String image) {
         try {
             var order = orderRepo.findOrderById(orderId);
-            var user = userRepo.findUserById(shipperID);
+            Shipper user = userRepo.findShipperById(shipperID);
 
             if(order != null) {
                 if(state.toLowerCase().equals("reject")) {

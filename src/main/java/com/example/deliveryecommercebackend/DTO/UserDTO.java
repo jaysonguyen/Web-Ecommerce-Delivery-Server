@@ -31,7 +31,7 @@ public class UserDTO {
     private String major;
     private String scale;
     private String shipment_salary;
-    private int shipmentPoint;
+//    private int shipmentPoint;
 
     public UserDTO(User user) {
         this.id = user.getUser_id();

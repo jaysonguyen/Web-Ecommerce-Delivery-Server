@@ -4,6 +4,7 @@ import com.example.deliveryecommercebackend.DTO.*;
 import com.example.deliveryecommercebackend.factory.user.*;
 import com.example.deliveryecommercebackend.model.*;
 import com.example.deliveryecommercebackend.model.user.Admin;
+import com.example.deliveryecommercebackend.model.user.Shipper;
 import com.example.deliveryecommercebackend.model.user.Store;
 import com.example.deliveryecommercebackend.model.user.User;
 import com.example.deliveryecommercebackend.repository.*;
@@ -402,7 +403,7 @@ public class UserService {
 
     public ResponseEntity<?> getPointAndAmountShipper(String shipperID) {
         try {
-            var findUserById = userRepository.findUserById(shipperID);
+            Shipper findUserById = userRepository.findShipperById(shipperID);
             if(findUserById != null)
             {
                 int point = findUserById.getPoint();

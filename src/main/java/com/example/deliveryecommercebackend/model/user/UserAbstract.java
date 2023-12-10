@@ -45,8 +45,8 @@ public abstract class UserAbstract {
     //new
     private double cod; //tien co the rut
     private int point;
-    private double shipment_salary;
-    private int shipmentPoint;
+    private double shipment_salary = 0;
+    private int shipmentPoint = 0;
 
 //    @JsonIgnore
 //    private String role_id_hide;
