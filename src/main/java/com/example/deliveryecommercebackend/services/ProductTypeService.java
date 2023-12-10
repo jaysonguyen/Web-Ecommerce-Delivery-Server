@@ -37,8 +37,26 @@ public class ProductTypeService {
     public ResponseEntity<?> saveProductypesToDatabase(MultipartFile file){
         if(ExcelUploadService.isValidExcelFile(file)){
             try {
-                List<ProductType> productTypes = ExcelUploadService.getProductTypeFromExcel(file.getInputStream());
-                var check = this.productTypeRepository.saveAll(productTypes);
+                List<ProductTypeDTO> productTypes = ExcelUploadService.getProductTypeFromExcel(file.getInputStream());
+
+                //check exists
+                List<ProductType> productTypesToSave = new ArrayList<>();
+                for(var i = 0; i < productTypes.size(); i++){
+                    ProductType checkExists = productTypeRepository.findDeleteProductTypeByCode(productTypes.get(i).getCode());
+                    if(checkExists != null) {
+                        checkExists.setState(false);
+                        checkExists.setUpdated(Date.valueOf(LocalDate.now()));
+                        this.productTypeRepository.save(checkExists);
+                    } else {
+                        productTypesToSave.add(new ProductType(productTypes.get(i)));
+                    }
+                }
+
+                if(productTypesToSave.isEmpty()) {
+                    return ResponseEntity.ok().body("Save data successfully");
+                }
+
+                var check = this.productTypeRepository.saveAll(productTypesToSave);
                 if(check.isEmpty()) {
                     return ResponseEntity.badRequest().body("Cannot save product type data");
                 }
@@ -96,16 +114,16 @@ public class ProductTypeService {
         }
     }
     public HttpStatus createProductType(ProductTypeDTO productType) {
-        ProductType newProductType = new ProductType();
-
-        newProductType.setName(productType.getName());
-        newProductType.setDes(productType.getDes());
-        newProductType.setState(false);
-        newProductType.setUpdated(Date.valueOf(LocalDate.now()));
-        newProductType.setCreated(Date.valueOf(LocalDate.now()));
-
+        ProductType newProductType = new ProductType(productType);
 
         try {
+            //check if exists
+            ProductType checkExists = productTypeRepository.findNoneDeleteProductTypeByCode(productType.getCode());
+            if(checkExists != null){
+                checkExists.setState(false);
+                return HttpStatus.OK;
+            }
+
             ProductType checkSave = productTypeRepository.save(newProductType);
             if(checkSave != null) {
                 return HttpStatus.OK;

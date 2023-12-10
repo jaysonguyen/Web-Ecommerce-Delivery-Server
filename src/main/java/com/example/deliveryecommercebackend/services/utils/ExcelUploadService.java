@@ -1,5 +1,6 @@
 package com.example.deliveryecommercebackend.services.utils;
 
+import com.example.deliveryecommercebackend.DTO.order.ProductTypeDTO;
 import com.example.deliveryecommercebackend.model.ProductType;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.poi.ss.usermodel.Cell;
@@ -21,8 +22,8 @@ public class ExcelUploadService {
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" );
     }
 
-    public static List<ProductType> getProductTypeFromExcel(InputStream inputStream){
-        List<ProductType>productTypes =new ArrayList<>();
+    public static List<ProductTypeDTO> getProductTypeFromExcel(InputStream inputStream){
+        List<ProductTypeDTO>productTypes =new ArrayList<>();
         try{
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
             XSSFSheet sheet = workbook.getSheet("Sheet1");
@@ -35,7 +36,7 @@ public class ExcelUploadService {
                 }
                 Iterator<Cell> cellIterator = row.iterator();
                 int cellIndex = 0;
-                ProductType productType = new ProductType();
+                ProductTypeDTO productType = new ProductTypeDTO();
                 while (cellIterator.hasNext()){
                     Cell cell = cellIterator.next();
                     switch (cellIndex){
@@ -47,7 +48,6 @@ public class ExcelUploadService {
                     }
                     cellIndex++;
                 }
-                productType.setCreated(Date.valueOf(LocalDate.now()));
                 productTypes.add(productType);
             }
         } catch(Exception e) {

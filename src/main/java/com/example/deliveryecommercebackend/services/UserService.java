@@ -8,6 +8,7 @@ import com.example.deliveryecommercebackend.model.user.Shipper;
 import com.example.deliveryecommercebackend.model.user.Store;
 import com.example.deliveryecommercebackend.model.user.User;
 import com.example.deliveryecommercebackend.repository.*;
+import com.example.deliveryecommercebackend.template.UserTemplate;
 import jakarta.transaction.Transactional;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.util.List;
 
 @Service
 //@Transactional
-public class UserService {
+public class UserService extends UserTemplate {
 
     @Autowired
     private UserRepository userRepository;
@@ -44,7 +45,7 @@ public class UserService {
         this.areaRepo = areaRepo;
         this.roleRepository = roleRepository;
     }
-
+    @Override
     public List<getUserListDTO> getAllUsers() {
         try {
             var staffList = userRepository.findNoneDeleteUser();
@@ -61,7 +62,7 @@ public class UserService {
             return Collections.emptyList();
         }
     }
-
+    @Override
     public ResponseEntity<?> getUserByCode(String code) {
         try {
             User user = userRepository.findUserByCode(code);
@@ -71,7 +72,7 @@ public class UserService {
             return ResponseEntity.badRequest().body("Error from services: " + ex.getMessage());
         }
     }
-
+    @Override
     public ResponseEntity<?> getUserByID(String id) {
         try {
             User user = userRepository.findUserById(id);
@@ -81,8 +82,6 @@ public class UserService {
             return ResponseEntity.badRequest().body("Error from services");
         }
     }
-
-
     public ResponseEntity<?> getStoreByUser(String userId) {
         try {
             //find user
@@ -105,8 +104,8 @@ public class UserService {
         }
 
     }
-
-    public ResponseEntity<?> create_customer(UserCreateDTO userDTO){
+    @Override
+    protected ResponseEntity<?> create_customer(UserCreateDTO userDTO){
         UserFactory userFactory = new CustomerFactory();
         User newUser = userFactory.createUser(userDTO);
         //create user first
@@ -127,7 +126,8 @@ public class UserService {
             return ResponseEntity.badRequest().body("Cannot create default store");
         }
     }
-    public ResponseEntity<?> create_staff(UserCreateDTO userDTO){
+    @Override
+    protected ResponseEntity<?> create_staff(UserCreateDTO userDTO){
         //find branch
         Branch branch = branchRepo.findBranchByCode(userDTO.getBranch_code());
         if(branch == null) {
@@ -142,6 +142,18 @@ public class UserService {
             return ResponseEntity.badRequest().body("Create user failed");
         }
         return ResponseEntity.ok().body("Created successfully");
+    }
+    @Override
+    protected User create_shipper(UserCreateDTO userDTO) {
+        UserFactory userFactory = new ShipperFactory();
+        User newUser = userFactory.createUser(userDTO);
+        return newUser;
+    }
+    @Override
+    protected User create_admin(UserCreateDTO userDTO) {
+        UserFactory userFactory = new AdminFactory();
+        User newUser = userFactory.createUser(userDTO);
+        return newUser;
     }
 
     public ResponseEntity<?> createUser_v2(UserCreateDTO userDTO) {
@@ -162,17 +174,16 @@ public class UserService {
                     return create_customer(userDTO);
                 }
                 case 3 -> {
+                    System.out.println("create staff");
                     return create_staff(userDTO);
                 }
                 case 4 -> {
-                    userFactory = new ShipperFactory();
-                    newUser = userFactory.createUser(userDTO);
-
+                    System.out.println("create shipper");
+                    newUser = create_shipper(userDTO);
                 }
                 default -> {
-                    userFactory = new AdminFactory();
-                    newUser = userFactory.createUser(userDTO);
-
+                    System.out.println("create admin");
+                    newUser = create_admin(userDTO);
                 }
             }
             var check = userRepository.save(newUser);
@@ -215,7 +226,6 @@ public class UserService {
             return ResponseEntity.status(500).body("Server error: " + ex.getMessage());
         }
     }
-
     public HttpStatus updateUserAdmin(UserCreateDTO userDto) {
         User user = userRepository.findUserByAccount(userDto.getAccount());
         user.setDataUpdated(userDto);
@@ -228,7 +238,6 @@ public class UserService {
         }
         return HttpStatus.BAD_REQUEST;
     }
-
     public HttpStatus deleteUser(String account) {
         User user = userRepository.findUserById(account);
         user.set_delete(true);
@@ -317,7 +326,6 @@ public class UserService {
             return ResponseEntity.badRequest().body("Error: " + ex);
         }
     }
-
     public ResponseEntity<?> getAssignmentShipperInfo(String branchID) {
         try {
             var branch = branchRepo.findById(branchID).get();
@@ -330,7 +338,6 @@ public class UserService {
             return ResponseEntity.badRequest().body("Error from server");
         }
     }
-
     public ResponseEntity<?> getShipperByBranch(String branchID) {
         try {
 
@@ -358,7 +365,6 @@ public class UserService {
             return ResponseEntity.badRequest().body("Error from services" + ex);
         }
     }
-
     public ResponseEntity<?> setAssignmentShipment(String area_code, String  branch_code, String user_code) {
         try {
             var branch = branchRepo.findBranchByCode(branch_code);
@@ -379,8 +385,6 @@ public class UserService {
             return ResponseEntity.badRequest().body("Error from services, " + ex.getMessage());
         }
     }
-
-
     public ResponseEntity<?> deleteShipment(String area_code, String  branch_code) {
         try {
             var branch = branchRepo.findBranchByCode(branch_code);
@@ -400,7 +404,6 @@ public class UserService {
             return ResponseEntity.badRequest().body("Error from services, " + ex.getMessage());
         }
     }
-
     public ResponseEntity<?> getPointAndAmountShipper(String shipperID) {
         try {
             Shipper findUserById = userRepository.findShipperById(shipperID);

@@ -12,11 +12,13 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ProductTypeDTO {
     private String id;
+    private String code;
     private String name;
     private String des;
 
     public ProductTypeDTO(ProductType productType) {
         this.id = productType.getId();
+        this.code = productType.getCode();
         this.name = productType.getName();
         this.des = productType.getDes();
     }
