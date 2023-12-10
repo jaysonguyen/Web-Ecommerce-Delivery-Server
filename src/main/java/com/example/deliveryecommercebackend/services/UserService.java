@@ -105,10 +105,48 @@ public class UserService {
 
     }
 
+    public ResponseEntity<?> create_customer(UserCreateDTO userDTO){
+        UserFactory userFactory = new CustomerFactory();
+        User newUser = userFactory.createUser(userDTO);
+        //create user first
+        var check = userRepository.save(newUser);
+        if(check.getUser_id() == null) {
+            return ResponseEntity.badRequest().body("Create user failed");
+        }
+
+        //create store default
+        if (newUser.getStores() != null && !newUser.getStores().isEmpty()) {
+            Store defaultStore = newUser.getStores().get(0);
+            var check_2 = storeRepository.save(defaultStore);
+            if(check_2.getStore_id() == null) {
+                return ResponseEntity.badRequest().body("Cannot create store by default");
+            }
+            return ResponseEntity.ok().body("Created successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Cannot create default store");
+        }
+    }
+    public ResponseEntity<?> create_staff(UserCreateDTO userDTO){
+        //find branch
+        Branch branch = branchRepo.findBranchByCode(userDTO.getBranch_code());
+        if(branch == null) {
+            return ResponseEntity.badRequest().body("Branch not found");
+        }
+        //attach branch to userDTO
+        userDTO.setBranch(branch);
+        UserFactory userFactory = new StaffFactory();
+        User newUser = userFactory.createUser(userDTO);
+        var check = userRepository.save(newUser);
+        if(check.getUser_id() == null) {
+            return ResponseEntity.badRequest().body("Create user failed");
+        }
+        return ResponseEntity.ok().body("Created successfully");
+    }
+
     public ResponseEntity<?> createUser_v2(UserCreateDTO userDTO) {
         try {
             UserFactory userFactory;
-            User newUser;
+            User newUser = null;
 
             //find role object
             Role role = roleRepository.findById(userDTO.getRole_id()).get();
@@ -120,48 +158,22 @@ public class UserService {
             switch(userDTO.getRole_id()){
                 case 2 -> {
                     System.out.println("Create customer");
-                    userFactory = new CustomerFactory();
-                    newUser = userFactory.createUser(userDTO);
-                    //create user first
-                    var check = userRepository.save(newUser);
-                    if(check.getUser_id() == null) {
-                        return ResponseEntity.badRequest().body("Create user failed");
-                    }
-
-                    //create store default
-                    if (newUser.getStores() != null && !newUser.getStores().isEmpty()) {
-                        Store defaultStore = newUser.getStores().get(0);
-                        var check_2 = storeRepository.save(defaultStore);
-                        if(check_2.getStore_id() == null) {
-                            return ResponseEntity.badRequest().body("Cannot create store by default");
-                        }
-                        return ResponseEntity.ok().body("Created successfully");
-                    } else {
-                        return ResponseEntity.badRequest().body("Cannot create default store");
-                    }
-
+                    return create_customer(userDTO);
                 }
                 case 3 -> {
-                    //find branch
-                    Branch branch = branchRepo.findBranchByCode(userDTO.getBranch_code());
-                    if(branch == null) {
-                        return ResponseEntity.badRequest().body("Branch not found");
-                    }
-                    //attach branch to userDTO
-                    userDTO.setBranch(branch);
-                    userFactory = new StaffFactory();
-                    newUser = userFactory.createUser(userDTO);
+                    return create_staff(userDTO);
                 }
                 case 4 -> {
                     userFactory = new ShipperFactory();
                     newUser = userFactory.createUser(userDTO);
-
                 }
                 default -> {
                     userFactory = new AdminFactory();
                     newUser = userFactory.createUser(userDTO);
-
                 }
+            }
+            if(newUser == null) {
+                return ResponseEntity.badRequest().body("Create user failed, user got null");
             }
             var check = userRepository.save(newUser);
             if(check.getUser_id() == null) {

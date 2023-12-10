@@ -8,6 +8,7 @@ import com.example.deliveryecommercebackend.model.*;
 import com.example.deliveryecommercebackend.model.Order;
 import com.example.deliveryecommercebackend.model.user.User;
 import com.example.deliveryecommercebackend.repository.*;
+import com.example.deliveryecommercebackend.template.OrderTemplate;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import java.util.Objects;
 
 @Service
 @Transactional
-public class OrderService {
+public class OrderService extends OrderTemplate {
 
     @Autowired
     private OrderRepository orderRepo;
@@ -40,6 +41,7 @@ public class OrderService {
     @Autowired
     private UserService userService;
 
+    @Override
     public ResponseEntity<?> getAllOrderByAction(String actionCode, String userID, GetOrderListParams params) {
         try {
             ///find user
@@ -77,7 +79,7 @@ public class OrderService {
             return ResponseEntity.badRequest().body(Collections.emptyList());
         }
     }
-
+    @Override
     public ResponseEntity<?> getOrderByCode(String orderCode) {
         //find order
         Order order = orderRepo.findOrderByCode(orderCode);
@@ -119,9 +121,7 @@ public class OrderService {
 
         }
     }
-
-
-
+    @Override
     public ResponseEntity<?> getOrderByCustomer(String userId) {
         //find user
         User user = userRepo.findUserById(userId);
@@ -168,7 +168,7 @@ public class OrderService {
 
         }
     }
-
+    @Override
     public ResponseEntity<?> createOrder(OrderCreateDTO orderDTO) {
         try {
             //find user
@@ -207,7 +207,7 @@ public class OrderService {
         }
 
     }
-
+    @Override
     public ResponseEntity<?> setOrderAction(String orderId, String actionCode, String userID, NoteDTO note) {
         System.out.println(note);
 
@@ -255,7 +255,6 @@ public class OrderService {
             return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
         }
     }
-
     private boolean addPointsToUser(String action_code, User user, double total) {
         switch(action_code) {
             case "6":
@@ -265,8 +264,7 @@ public class OrderService {
         }
         return false;
     }
-
-
+    @Override
     public List<AreaDTO> getAreaList(String cityCode) {
         try {
             City city = cityRepo.findNoneDeleteCityByCode(cityCode);
@@ -285,7 +283,7 @@ public class OrderService {
             return Collections.emptyList();
         }
     }
-
+    @Override
     public List<ShipperOrderDTO> getShippersOrder(String shipperID) {
         try {
 
@@ -303,7 +301,7 @@ public class OrderService {
             return Collections.emptyList();
         }
     }
-
+    @Override
     public ResponseEntity<?> getOrderByIdOrUser(String orderId, String userName) {
         try {
             List<Order> orders = orderRepo.findOrderLikeId(orderId);

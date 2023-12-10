@@ -75,7 +75,10 @@ public class CustomerBankService {
             }
 
             bank.set_deleted(true);
-
+            var check = customerBankRepository.save(bank);
+            if(check == null) {
+                return ResponseEntity.ok().body("Delete bank to customer failed");
+            }
             return ResponseEntity.ok().body("Delete bank to customer successfully");
         }catch (Exception ex) {
             System.out.println("Error from customer bank service - Error: " + ex.getMessage());

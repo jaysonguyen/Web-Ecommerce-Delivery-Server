@@ -41,17 +41,6 @@ public class BankService {
                 .orElseThrow(() -> new ResourceNotfoundException("Bank not exist with code:" + code));
         return ResponseEntity.ok(bank);
     }
-//    public ResponseEntity<Bank> updateBank(String code, BankDTO bankDetails) {
-//        Bank updateBank = bankRepository.findById(code)
-//                .orElseThrow(() -> new ResourceNotfoundException("Bank not exist with id: " + code));
-//
-//        updateBank.setName(bankDetails.getName());
-////        updateBank.setState(bankDetails.get());
-//
-//        bankRepository.save(updateBank);
-//
-//        return ResponseEntity.ok(updateBank);
-//    }
     public Bank createBank(Bank bankDetails) {
         return bankRepository.save(bankDetails);
     }
