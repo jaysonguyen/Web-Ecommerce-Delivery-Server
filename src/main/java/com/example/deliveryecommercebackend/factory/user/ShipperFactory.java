@@ -1,6 +1,7 @@
 package com.example.deliveryecommercebackend.factory.user;
 
 import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
+import com.example.deliveryecommercebackend.model.Branch;
 import com.example.deliveryecommercebackend.model.user.Shipper;
 import com.example.deliveryecommercebackend.model.user.User;
 
@@ -11,4 +12,5 @@ public class ShipperFactory implements UserFactory {
         newShipper.setDataCreate(userCreateDTO);
         return newShipper;
     }
+
 }

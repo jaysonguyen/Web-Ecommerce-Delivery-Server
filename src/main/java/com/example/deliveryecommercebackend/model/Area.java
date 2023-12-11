@@ -1,5 +1,6 @@
 package com.example.deliveryecommercebackend.model;
 
+import com.example.deliveryecommercebackend.DTO.AreaCreatedDTO;
 import com.example.deliveryecommercebackend.model.ShippingAssignment;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -9,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -46,4 +48,13 @@ public class Area {
     @JsonBackReference
     private ShippingAssignment shippingAssignment;
 
+    public void setDataCreate(AreaCreatedDTO areaCreatedDTO, City city) {
+        this.code = areaCreatedDTO.getCode();
+        this.name = areaCreatedDTO.getName();
+        this.created = Date.valueOf(LocalDate.now());
+        this.updated = Date.valueOf(LocalDate.now());
+        this.des = areaCreatedDTO.getDes();
+        this.is_delete = false;
+        this.city = city;
+    }
 }

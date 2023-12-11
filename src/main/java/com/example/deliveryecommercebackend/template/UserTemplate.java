@@ -19,6 +19,5 @@ public abstract class UserTemplate {
     protected abstract ResponseEntity<?> getUserByCode(String code);
     protected abstract ResponseEntity<?> create_customer(UserCreateDTO userDTO);
     protected abstract ResponseEntity<?> create_staff(UserCreateDTO userDTO);
-    protected abstract User create_shipper(UserCreateDTO userDTO);
     protected abstract User create_admin(UserCreateDTO userDTO);
 }

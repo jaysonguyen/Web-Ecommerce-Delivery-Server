@@ -135,19 +135,18 @@ public class UserService extends UserTemplate {
         }
         //attach branch to userDTO
         userDTO.setBranch(branch);
-        UserFactory userFactory = new StaffFactory();
+        UserFactory userFactory;
+        if(userDTO.getRole_id() == 3) {
+            userFactory = new StaffFactory();
+        } else {
+            userFactory = new ShipperFactory();
+        }
         User newUser = userFactory.createUser(userDTO);
         var check = userRepository.save(newUser);
         if(check.getUser_id() == null) {
             return ResponseEntity.badRequest().body("Create user failed");
         }
         return ResponseEntity.ok().body("Created successfully");
-    }
-    @Override
-    protected User create_shipper(UserCreateDTO userDTO) {
-        UserFactory userFactory = new ShipperFactory();
-        User newUser = userFactory.createUser(userDTO);
-        return newUser;
     }
     @Override
     protected User create_admin(UserCreateDTO userDTO) {
@@ -179,7 +178,7 @@ public class UserService extends UserTemplate {
                 }
                 case 4 -> {
                     System.out.println("create shipper");
-                    newUser = create_shipper(userDTO);
+                    return create_staff(userDTO);
                 }
                 default -> {
                     System.out.println("create admin");
@@ -368,8 +367,17 @@ public class UserService extends UserTemplate {
     public ResponseEntity<?> setAssignmentShipment(String area_code, String  branch_code, String user_code) {
         try {
             var branch = branchRepo.findBranchByCode(branch_code);
+            if(branch == null) {
+                return ResponseEntity.badRequest().body("Branch not found");
+            }
             var area = areaRepo.findByCode(area_code);
+            if(area == null) {
+                return ResponseEntity.badRequest().body("Area not found");
+            }
             var user = userRepository.findUsersByCode(user_code);
+            if(user == null) {
+                return ResponseEntity.badRequest().body("User not found");
+            }
             var assignment = shipRepo.findShippingAssignmentByAreaAndAndBranch(branch, area);
 
             assignment.setUser(user);

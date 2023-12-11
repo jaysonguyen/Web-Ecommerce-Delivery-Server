@@ -80,9 +80,7 @@ public class AreaController {
     @PostMapping
     public ResponseEntity<?> createArea(@RequestBody AreaCreatedDTO area) {
         try {
-            var checkCreate = areaService.createArea(area);
-//            return areaService.createArea(area);
-            return checkCreate;
+            return areaService.createAreaAndAssignment(area);
         } catch (Exception ex) {
             System.out.println("Error from controller");
             return ResponseEntity.status(400).body("Server error");

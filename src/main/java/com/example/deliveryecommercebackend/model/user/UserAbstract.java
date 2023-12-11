@@ -5,7 +5,9 @@ import com.example.deliveryecommercebackend.DTO.UserCreateDTO;
 import com.example.deliveryecommercebackend.model.Branch;
 import com.example.deliveryecommercebackend.model.Order;
 import com.example.deliveryecommercebackend.model.Role;
+import com.example.deliveryecommercebackend.model.ShippingAssignment;
 import com.example.deliveryecommercebackend.model.user.Store;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -70,6 +72,10 @@ public abstract class UserAbstract {
     @JsonManagedReference
     private List<Order> orders;
 
+    @OneToOne(mappedBy = "user")
+    @JsonBackReference
+    private ShippingAssignment shippingAssignment;
+
     public void setDataCreate(UserCreateDTO userDTO){
         this.created = Date.valueOf(LocalDate.now());
         this.updated = Date.valueOf(LocalDate.now());
@@ -85,6 +91,7 @@ public abstract class UserAbstract {
         this.cod = 0;
         this.point = 0;
         this.role = userDTO.getRole();
+        this.branch = userDTO.getBranch() != null ? userDTO.getBranch() : null;
 
 //      this.major = userDTO.getMajor();
 //      this.scale = userDTO.getScale();

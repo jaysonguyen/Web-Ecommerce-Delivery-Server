@@ -2,6 +2,7 @@ package com.example.deliveryecommercebackend.repository;
 
 
 import com.example.deliveryecommercebackend.model.Branch;
+import com.example.deliveryecommercebackend.model.City;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,5 +21,6 @@ public interface BranchRepository extends JpaRepository<Branch, String> {
 
     @Query( "SELECT u FROM Branch u WHERE u.is_delete = false  ")
     List<Branch> findAllActiveBranchesDropdown();
-
+    @Query( "SELECT u FROM Branch u WHERE u.city = :city  ")
+    Branch findBranchByCity(@Param("city") City city);
 }
