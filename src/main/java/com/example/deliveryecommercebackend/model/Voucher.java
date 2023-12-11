@@ -23,6 +23,8 @@ public class Voucher {
     @Column(name = "voucher_id")
     private String voucher_id;
 
+    @Column(name = "code", unique = true, nullable = false)
+    private String code;
     @Column(name = "name")
     private String name;
     //percent
@@ -44,6 +46,7 @@ public class Voucher {
 
     public Voucher(VoucherDTO vourcherDTO) {
         this.voucher_id = vourcherDTO.getVoucherId();
+        this.code = vourcherDTO.getCode();
         this.name = vourcherDTO.getName();
         this.cost = vourcherDTO.getCost();
         this.created = Date.valueOf(LocalDate.now());

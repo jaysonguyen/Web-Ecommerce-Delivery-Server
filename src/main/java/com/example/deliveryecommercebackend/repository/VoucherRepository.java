@@ -18,4 +18,6 @@ public interface VoucherRepository extends JpaRepository<Voucher, String> {
 
     @Query("SELECT u FROM Voucher u WHERE u.is_deleted = false AND u.status = :status ")
     List<Voucher> findNoneDeleteVoucherByStatus(@Param("status") String status);
+    @Query("SELECT u FROM Voucher u WHERE u.is_deleted = false AND u.code = :code ")
+    Voucher findNoneDeleteVoucherByCode(@Param("code") String code);
 }

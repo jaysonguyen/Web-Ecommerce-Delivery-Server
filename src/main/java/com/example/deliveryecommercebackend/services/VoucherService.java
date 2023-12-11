@@ -5,11 +5,14 @@ import com.example.deliveryecommercebackend.DTO.VoucherDisplayDTO;
 import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
 import com.example.deliveryecommercebackend.model.Voucher;
 import com.example.deliveryecommercebackend.repository.VoucherRepository;
+import com.example.deliveryecommercebackend.services.utils.ExcelUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -85,6 +88,40 @@ public class VoucherService {
             return ResponseEntity.badRequest().body("Error from service");
         }
     }
+
+    public ResponseEntity<?> saveVouchersToDatabase(MultipartFile file){
+        if(ExcelUploadService.isValidExcelFile(file)){
+            try {
+                List<VoucherDTO> vouchers = ExcelUploadService.getVoucherFromExcel(file.getInputStream());
+
+                //check exists
+                List<Voucher> vouchersToSave = new ArrayList<>();
+                for(var i = 0; i < vouchers.size(); i++){
+                    Voucher checkExists = voucherRepository.findNoneDeleteVoucherByCode(vouchers.get(i).getCode());
+                    if(checkExists != null) {
+                        checkExists.set_deleted(false);
+                        this.voucherRepository.save(checkExists);
+                    } else {
+                        vouchersToSave.add(new Voucher(vouchers.get(i)));
+                    }
+                }
+
+                if(vouchersToSave.isEmpty()) {
+                    return ResponseEntity.ok().body("Save data successfully");
+                }
+
+                var check = this.voucherRepository.saveAll(vouchersToSave);
+                if(check.isEmpty()) {
+                    return ResponseEntity.badRequest().body("Cannot save voucher data");
+                }
+                return ResponseEntity.ok().body("Save data successfully");
+            } catch (IOException e) {
+                throw new IllegalArgumentException("The file is not a valid excel file");
+            }
+        }
+        return ResponseEntity.badRequest().body("Error: Illegal file");
+    }
+
 
     public ResponseEntity<?> updateVoucher(VoucherDTO voucherDTO) {
         try {

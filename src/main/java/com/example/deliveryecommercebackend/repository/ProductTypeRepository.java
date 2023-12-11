@@ -15,8 +15,8 @@ public interface ProductTypeRepository extends JpaRepository<ProductType, String
     @Query("SELECT u FROM ProductType u WHERE u.code = :code AND u.state = false")
 
     ProductType findNoneDeleteProductTypeByCode(@Param("code") String code);
-    @Query("SELECT u FROM ProductType u WHERE u.code = :code AND u.state = true")
+    @Query("SELECT u FROM ProductType u WHERE u.code = :code")
 
-    ProductType findDeleteProductTypeByCode(@Param("code") String code);
+    ProductType findProductTypeByCode(@Param("code") String code);
 
 }

@@ -1,5 +1,6 @@
 package com.example.deliveryecommercebackend.services.utils;
 
+import com.example.deliveryecommercebackend.DTO.VoucherDTO;
 import com.example.deliveryecommercebackend.DTO.order.ProductTypeDTO;
 import com.example.deliveryecommercebackend.model.ProductType;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,5 +55,41 @@ public class ExcelUploadService {
             e.getStackTrace();
         }
         return productTypes;
+    }
+
+    public static List<VoucherDTO> getVoucherFromExcel(InputStream inputStream){
+        List<VoucherDTO> voucherDTOS =new ArrayList<>();
+        try{
+            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+            XSSFSheet sheet = workbook.getSheet("Sheet1");
+
+            int rowIndex =0;
+            for (Row row : sheet){
+                if (rowIndex ==0){
+                    rowIndex++;
+                    continue;
+                }
+                Iterator<Cell> cellIterator = row.iterator();
+                int cellIndex = 0;
+                VoucherDTO voucherDTO = new VoucherDTO();
+                while (cellIterator.hasNext()){
+                    Cell cell = cellIterator.next();
+                    switch (cellIndex){
+                        case 0 -> voucherDTO.setCode(cell.getStringCellValue());
+                        case 1 -> voucherDTO.setName(cell.getStringCellValue());
+                        case 2 -> voucherDTO.setCost((int)cell.getNumericCellValue());
+                        case 3 -> voucherDTO.setPeriod((int)cell.getNumericCellValue());
+                        case 4 -> voucherDTO.setPoints((int) cell.getNumericCellValue());
+                        default -> {
+                        }
+                    }
+                    cellIndex++;
+                }
+                voucherDTOS.add(voucherDTO);
+            }
+        } catch(Exception e) {
+            e.getStackTrace();
+        }
+        return voucherDTOS;
     }
 }

@@ -42,7 +42,7 @@ public class ProductTypeService {
                 //check exists
                 List<ProductType> productTypesToSave = new ArrayList<>();
                 for(var i = 0; i < productTypes.size(); i++){
-                    ProductType checkExists = productTypeRepository.findDeleteProductTypeByCode(productTypes.get(i).getCode());
+                    ProductType checkExists = productTypeRepository.findProductTypeByCode(productTypes.get(i).getCode());
                     if(checkExists != null) {
                         checkExists.setState(false);
                         checkExists.setUpdated(Date.valueOf(LocalDate.now()));
@@ -51,13 +51,12 @@ public class ProductTypeService {
                         productTypesToSave.add(new ProductType(productTypes.get(i)));
                     }
                 }
-
                 if(productTypesToSave.isEmpty()) {
                     return ResponseEntity.ok().body("Save data successfully");
                 }
 
                 var check = this.productTypeRepository.saveAll(productTypesToSave);
-                if(check.isEmpty()) {
+                if(check == null) {
                     return ResponseEntity.badRequest().body("Cannot save product type data");
                 }
                 return ResponseEntity.ok().body("Save data successfully");
