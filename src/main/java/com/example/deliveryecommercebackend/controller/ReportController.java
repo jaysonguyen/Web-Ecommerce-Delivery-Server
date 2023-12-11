@@ -16,10 +16,10 @@ public class ReportController {
     @Autowired
     ReportService reportService;
 
-    @PostMapping("order")
-    public ResponseEntity<?> getOrderReport(@RequestBody DateRange dateRange){
+    @PostMapping("order/city/{cityCode}")
+    public ResponseEntity<?> getOrderReport(@PathVariable String cityCode, @RequestBody DateRange dateRange){
         try{
-            return reportService.orderReport(dateRange);
+            return reportService.orderReport(dateRange, cityCode);
         } catch(Exception ex){
             System.out.println("Error from get order report - Error: " + ex.getMessage());
             return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
