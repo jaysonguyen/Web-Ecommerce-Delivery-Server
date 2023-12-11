@@ -4,6 +4,7 @@ package com.example.deliveryecommercebackend.controller;
 import com.example.deliveryecommercebackend.DTO.LoginDTO;
 import com.example.deliveryecommercebackend.advice.LoginInterceptor;
 import com.example.deliveryecommercebackend.services.AuthenticationServices;
+import com.example.deliveryecommercebackend.services.MailSenderServices;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ public class AuthenticationController {
 
     @Autowired
     private AuthenticationServices authenticationServices;
+    @Autowired
+    private MailSenderServices mailSenderServices;
 
     public AuthenticationController(AuthenticationServices authenticationServices) {
         this.authenticationServices = authenticationServices;
@@ -32,6 +35,17 @@ public class AuthenticationController {
             return checkLogin;
         }
         catch (Exception ex) {
+            System.out.printf("Error from server" + ex);
+            return ResponseEntity.badRequest().body("Error from server");
+        }
+    }
+
+    @PostMapping("/generate/otp/{email}")
+    public ResponseEntity<?> generateOTP(@PathVariable String email) {
+        try {
+            int info = mailSenderServices.generateOTP(email);
+            return ResponseEntity.ok().body(info);
+        } catch (Exception ex) {
             System.out.printf("Error from server" + ex);
             return ResponseEntity.badRequest().body("Error from server");
         }
