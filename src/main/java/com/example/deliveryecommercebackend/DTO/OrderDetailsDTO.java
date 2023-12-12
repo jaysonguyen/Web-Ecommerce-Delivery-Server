@@ -34,24 +34,6 @@ public class OrderDetailsDTO {
     private String user_name;
     private String shipper_name;
 
-    public OrderDetailsDTO(Order order, String cityName, String productTypeName, String shipperName) {
-        this.shipper_name = shipperName;
-
-        this.order_code = order.getOrder_code();
-        this.order_id = order.getOrder_id();
-        this.user_name = order.getUser().getUser_id();
-        this.action_code = order.getAction_code();
-        this.ship_cost = order.getShip_cost();
-        this.created = order.getCreated();
-        this.updated = order.getUpdated();
-        this.collect_money = order.getCollect_money();
-        //json
-        this.address = order.getAddress();
-        this.product = order.getProduct();
-        this.receiver = order.getReceiver();
-        this.package_order = order.getPackage_order();
-    }
-
     public OrderDetailsDTO(Order order, String city_name, String area_name) {
 
         this.order_code = order.getOrder_code();

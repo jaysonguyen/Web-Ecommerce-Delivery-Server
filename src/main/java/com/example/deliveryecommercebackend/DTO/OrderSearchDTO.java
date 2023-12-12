@@ -36,5 +36,4 @@ public class OrderSearchDTO {
         this.receiver = order.getReceiver();
         this.created = order.getCreated();
     }
-
 }

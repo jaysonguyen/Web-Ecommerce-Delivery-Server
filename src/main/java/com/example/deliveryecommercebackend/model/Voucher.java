@@ -57,4 +57,17 @@ public class Voucher {
         this.is_deleted = false;
         this.status = "Valid";
     }
+
+    public Voucher(Voucher vourcherDTO) {
+        this.code = vourcherDTO.getCode();
+        this.name = vourcherDTO.getName();
+        this.cost = vourcherDTO.getCost();
+        this.created = Date.valueOf(LocalDate.now());
+        this.period = vourcherDTO.getPeriod();
+        this.quantity = vourcherDTO.getQuantity();
+        this.points = vourcherDTO.getPoints();
+        this.used = vourcherDTO.getUsed();
+        this.is_deleted = false;
+        this.status = "Valid";
+    }
 }
