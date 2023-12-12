@@ -1,88 +1,233 @@
 package com.example.deliveryecommercebackend.services;
 
-import com.example.deliveryecommercebackend.DTO.UserDTO;
-import com.example.deliveryecommercebackend.model.Role;
-import com.example.deliveryecommercebackend.model.User;
-import com.example.deliveryecommercebackend.repository.RoleRepository;
-import com.example.deliveryecommercebackend.repository.UserRepository;
+import com.example.deliveryecommercebackend.DTO.*;
+import com.example.deliveryecommercebackend.factory.user.*;
+import com.example.deliveryecommercebackend.model.*;
+import com.example.deliveryecommercebackend.model.user.Admin;
+import com.example.deliveryecommercebackend.model.user.Shipper;
+import com.example.deliveryecommercebackend.model.user.Store;
+import com.example.deliveryecommercebackend.model.user.User;
+import com.example.deliveryecommercebackend.repository.*;
+import com.example.deliveryecommercebackend.template.UserTemplate;
 import jakarta.transaction.Transactional;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Service
-public class UserService {
+//@Transactional
+public class UserService extends UserTemplate {
 
     @Autowired
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    @Autowired
+    private StoreRepository storeRepository;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    private BranchRepository branchRepo;
+
+    @Autowired
+    private AreaRepository areaRepo;
+
+    @Autowired
+    private ShippingAssignmentRepository shipRepo;
+
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BranchRepository branchRepo, ShippingAssignmentRepository shipRepo, AreaRepository areaRepo) {
         this.userRepository = userRepository;
+        this.branchRepo = branchRepo;
+        this.shipRepo = shipRepo;
+        this.areaRepo = areaRepo;
         this.roleRepository = roleRepository;
     }
-
-    public List<User> getAllUsers() {
+    @Override
+    public List<getUserListDTO> getAllUsers() {
         try {
-            List<User> users = userRepository.findNoneDeleteUser();
-            return users;
+            var staffList = userRepository.findNoneDeleteUser();
+            List<getUserListDTO> res = new ArrayList<getUserListDTO>();
+            for(User user : staffList){
+                getUserListDTO temp = new getUserListDTO();
+                temp.setData(user);
+                res.add(temp);
+            }
+
+            return res;
         } catch(Exception ex) {
             System.out.printf("Get user failed - Error: " + ex);
             return Collections.emptyList();
         }
     }
-
-    public HttpStatus createUser(UserDTO user) {
-        Role role = roleRepository.findRoleByRoleId(user.getRole());
-        if(role == null) {
-            role = roleRepository.findRoleByRoleId(1);
+    @Override
+    public ResponseEntity<?> getUserByCode(String code) {
+        try {
+            User user = userRepository.findUserByCode(code);
+            return ResponseEntity.ok().body(new UserDTO(user));
+        } catch(Exception ex) {
+            System.out.printf("Get user failed - Error: " + ex);
+            return ResponseEntity.badRequest().body("Error from services: " + ex.getMessage());
         }
-        var checkValidAccount = userRepository.findUserByAccount(user.getAccount());
-        var checkValidEmail = userRepository.findUsersByEmail(user.getEmail());
+    }
+    @Override
+    public ResponseEntity<?> getUserByID(String id) {
+        try {
+            User user = userRepository.findUserById(id);
+            return ResponseEntity.ok().body(new UserDTO(user));
+        } catch(Exception ex) {
+            System.out.printf("Get user failed - Error: " + ex.getMessage());
+            return ResponseEntity.badRequest().body("Error from services");
+        }
+    }
+    public ResponseEntity<?> getStoreByUser(String userId) {
+        try {
+            //find user
+            User user = userRepository.findUserById(userId);
+            if(user.getUser_id() == null) {
+                return ResponseEntity.badRequest().body("User not found");
+            }
+
+            var storeList = storeRepository.findStoreByUser(user);
+            List<StoreDisplayDTO> storeDisplayDTOS = new ArrayList<>();
+            for(var item : storeList){
+                StoreDisplayDTO temp = new StoreDisplayDTO(item);
+                storeDisplayDTOS.add(temp);
+            }
+
+            return ResponseEntity.ok().body(storeDisplayDTOS);
+        } catch (Exception ex) {
+            System.out.printf("Error from services: " + ex.getMessage());
+            return ResponseEntity.status(500).body("Error from server");
+        }
+
+    }
+    @Override
+    protected ResponseEntity<?> create_customer(UserCreateDTO userDTO){
+        UserFactory userFactory = new CustomerFactory();
+        User newUser = userFactory.createUser(userDTO);
+        //create user first
+        var check = userRepository.save(newUser);
+        if(check.getUser_id() == null) {
+            return ResponseEntity.badRequest().body("Create user failed");
+        }
+
+        //create store default
+        if (newUser.getStores() != null && !newUser.getStores().isEmpty()) {
+            Store defaultStore = newUser.getStores().get(0);
+            var check_2 = storeRepository.save(defaultStore);
+            if(check_2.getStore_id() == null) {
+                return ResponseEntity.badRequest().body("Cannot create store by default");
+            }
+            return ResponseEntity.ok().body("Created successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Cannot create default store");
+        }
+    }
+    @Override
+    protected ResponseEntity<?> create_staff(UserCreateDTO userDTO){
+        //find branch
+        Branch branch = branchRepo.findBranchByCode(userDTO.getBranch_code());
+        if(branch == null) {
+            return ResponseEntity.badRequest().body("Branch not found");
+        }
+        //attach branch to userDTO
+        userDTO.setBranch(branch);
+        UserFactory userFactory;
+        if(userDTO.getRole_id() == 3) {
+            userFactory = new StaffFactory();
+        } else {
+            userFactory = new ShipperFactory();
+        }
+        User newUser = userFactory.createUser(userDTO);
+        var check = userRepository.save(newUser);
+        if(check.getUser_id() == null) {
+            return ResponseEntity.badRequest().body("Create user failed");
+        }
+        return ResponseEntity.ok().body("Created successfully");
+    }
+    @Override
+    protected User create_admin(UserCreateDTO userDTO) {
+        UserFactory userFactory = new AdminFactory();
+        User newUser = userFactory.createUser(userDTO);
+        return newUser;
+    }
+
+    public ResponseEntity<?> createUser_v2(UserCreateDTO userDTO) {
+        try {
+            UserFactory userFactory;
+            User newUser = null;
+
+            //find role object
+            Role role = roleRepository.findById(userDTO.getRole_id()).get();
+            if(role == null){
+                return ResponseEntity.badRequest().body("Role not found");
+            }
+
+            userDTO.setRole(role);
+            switch(userDTO.getRole_id()){
+                case 2 -> {
+                    System.out.println("Create customer");
+                    return create_customer(userDTO);
+                }
+                case 3 -> {
+                    System.out.println("create staff");
+                    return create_staff(userDTO);
+                }
+                case 4 -> {
+                    System.out.println("create shipper");
+                    return create_staff(userDTO);
+                }
+                default -> {
+                    System.out.println("create admin");
+                    newUser = create_admin(userDTO);
+                }
+            }
+            var check = userRepository.save(newUser);
+            if(check.getUser_id() == null) {
+                return ResponseEntity.badRequest().body("Create user failed");
+            }
+            return ResponseEntity.ok().body("Created successfully");
+        } catch(Exception ex) {
+            System.out.printf("Create user failed - Error" + ex);
+            return ResponseEntity.status(500).body("Server error: " + ex.getMessage());
+        }
+    }
+    public ResponseEntity<?> createUser(UserCreateDTO userDTO) {
+        Role role = roleRepository.findById(userDTO.getRole_id()).get();
+        System.out.println(role.toString());
+
+        var checkValidAccount = userRepository.findUserByAccount(userDTO.getAccount());
+        var checkValidEmail = userRepository.findUsersByEmail(userDTO.getEmail());
+
+        // existing user
         if(checkValidEmail != null) {
-            return HttpStatus.FOUND;
+            return ResponseEntity.badRequest().body("Email is not valid");
         }
         if(checkValidAccount != null) {
-            return HttpStatus.FOUND;
+            return ResponseEntity.badRequest().body("Account is not valid");
         }
-        User newUser = new User();
-        newUser.setCreated(Date.valueOf(LocalDate.now()));
-        newUser.setUpdated(Date.valueOf(LocalDate.now()));
-        newUser.setAccount(user.getAccount());
-        newUser.setEmail(user.getEmail());
-        newUser.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
-        newUser.setPhone(user.getPhone());
-        newUser.setDes(user.getDes());
-        newUser.setFullName(user.getFullName());
-        newUser.setPurpose(user.getPurpose());
-        newUser.setRole(role);
+        //remember change it later
+        User newUser = new Admin();
+        newUser.setDataCreate(userDTO);
 
         try {
             User checkSave = userRepository.save(newUser);
-            if(checkSave != null) {
-                return HttpStatus.OK;
+            if(checkSave.getUser_id() != null) {
+                return ResponseEntity.ok().body("Insert account successfully");
+            } else {
+                return ResponseEntity.badRequest().body("Insert account failed");
             }
         } catch(Exception ex) {
-            System.out.printf("Create uesr failed - Error" + ex);
+            System.out.printf("Create user failed - Error" + ex);
+            return ResponseEntity.status(500).body("Server error: " + ex.getMessage());
         }
-        return HttpStatus.NOT_ACCEPTABLE;
     }
-
-    public HttpStatus updateUserAdmin(UserDTO userDto) {
-        var user = userRepository.findUserByAccount(userDto.getAccount());
-        user.setFullName(userDto.getFullName());
-        user.setPurpose(userDto.getPurpose());
-        user.setPhone(userDto.getPhone());
-        user.set_delete(userDto.isDelete());
-        user.setDes(userDto.getDes());
-
+    public HttpStatus updateUserAdmin(UserCreateDTO userDto) {
+        User user = userRepository.findUserByAccount(userDto.getAccount());
+        user.setDataUpdated(userDto);
         try {
             var checkSave = userRepository.save(user);
             if (checkSave != null)
@@ -92,9 +237,8 @@ public class UserService {
         }
         return HttpStatus.BAD_REQUEST;
     }
-
     public HttpStatus deleteUser(String account) {
-        var user = userRepository.findUserByAccount(account);
+        User user = userRepository.findUserById(account);
         user.set_delete(true);
         try {
             var checkUpdate = userRepository.save(user);
@@ -110,4 +254,181 @@ public class UserService {
     }
 
 
+//    STAFF
+    public ResponseEntity<?> getStaff() {
+        try {
+            var roleStaff = roleRepository.findRoleByName("staff");
+
+            if(roleStaff == null) {
+                return ResponseEntity.badRequest().body("Not found role");
+            }
+
+            var staffList = userRepository.findUsersByRole(roleStaff);
+            List<getUserListDTO> res = new ArrayList<getUserListDTO>();
+            for(User user : staffList){
+                getUserListDTO temp = new getUserListDTO();
+                temp.setData(user);
+                res.add(temp);
+            }
+
+
+            return ResponseEntity.ok().body(res);
+
+        } catch (Exception ex) {
+            System.out.println("Error from services" + ex);
+            return ResponseEntity.badRequest().body("Error: " + ex);
+        }
+    }
+    public ResponseEntity<?> getCustomer() {
+        try {
+            var roleStaff = roleRepository.findRoleByName("customer");
+
+            if(roleStaff == null) {
+                return ResponseEntity.badRequest().body("Not found role");
+            }
+
+            var staffList = userRepository.findUsersByRole(roleStaff);
+            List<getUserListDTO> res = new ArrayList<getUserListDTO>();
+            for(User user : staffList){
+                getUserListDTO temp = new getUserListDTO();
+                temp.setData(user);
+                res.add(temp);
+            }
+
+            return ResponseEntity.ok().body(res);
+
+        } catch (Exception ex) {
+            System.out.println("Error from services" + ex);
+            return ResponseEntity.badRequest().body("Error: " + ex);
+        }
+    }
+    public ResponseEntity<?> getShipper() {
+        try {
+            var roleStaff = roleRepository.findRoleByName("shipper");
+
+            if(roleStaff == null) {
+                return ResponseEntity.badRequest().body("Not found role");
+            }
+
+            var staffList = userRepository.findUsersByRole(roleStaff);
+            List<getUserListDTO> res = new ArrayList<getUserListDTO>();
+            for(User user : staffList){
+                getUserListDTO temp = new getUserListDTO();
+                temp.setData(user);
+                res.add(temp);
+            }
+
+            return ResponseEntity.ok().body(res);
+
+        } catch (Exception ex) {
+            System.out.println("Error from services" + ex);
+            return ResponseEntity.badRequest().body("Error: " + ex);
+        }
+    }
+    public ResponseEntity<?> getAssignmentShipperInfo(String branchID) {
+        try {
+            var branch = branchRepo.findById(branchID).get();
+            var assignList = shipRepo.findShippingAssignmentByBranch(branch);
+
+            return ResponseEntity.ok().body(assignList);
+        }
+        catch (Exception exception) {
+            System.out.println("Error: " + exception.getMessage());
+            return ResponseEntity.badRequest().body("Error from server");
+        }
+    }
+    public ResponseEntity<?> getShipperByBranch(String branchID) {
+        try {
+
+            var roleStaff = roleRepository.findRoleByName("shipper");
+
+            if(roleStaff == null) {
+                return ResponseEntity.badRequest().body("Not found role");
+            }
+
+            var branch = branchRepo.findById(branchID).get();
+            var shipperList = userRepository.findShipperByBranch(branch, roleStaff);
+            System.out.println(roleStaff.getName());
+
+            List<getUserListDTO> res = new ArrayList<>();
+            for(User user : shipperList){
+                getUserListDTO temp = new getUserListDTO();
+                temp.setData(user);
+                res.add(temp);
+            }
+
+            return ResponseEntity.ok().body(res);
+
+        }catch (Exception ex) {
+            System.out.println("Error from services: " + ex);
+            return ResponseEntity.badRequest().body("Error from services" + ex);
+        }
+    }
+    public ResponseEntity<?> setAssignmentShipment(String area_code, String  branch_code, String user_code) {
+        try {
+            var branch = branchRepo.findBranchByCode(branch_code);
+            if(branch == null) {
+                return ResponseEntity.badRequest().body("Branch not found");
+            }
+            var area = areaRepo.findByCode(area_code);
+            if(area == null) {
+                return ResponseEntity.badRequest().body("Area not found");
+            }
+            var user = userRepository.findUsersByCode(user_code);
+            if(user == null) {
+                return ResponseEntity.badRequest().body("User not found");
+            }
+            var assignment = shipRepo.findShippingAssignmentByAreaAndAndBranch(branch, area);
+
+            assignment.setUser(user);
+            assignment.setStatus(true);
+
+            var checkSave = shipRepo.save(assignment);
+            if(checkSave != null) {
+                return ResponseEntity.ok().body("Insert success");
+            }
+            return ResponseEntity.badRequest().body("Insert failed");
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from services, " + ex.getMessage());
+        }
+    }
+    public ResponseEntity<?> deleteShipment(String area_code, String  branch_code) {
+        try {
+            var branch = branchRepo.findBranchByCode(branch_code);
+            var area = areaRepo.findByCode(area_code);
+            var assignment = shipRepo.findShippingAssignmentByAreaAndAndBranch(branch, area);
+
+            assignment.setUser(null);
+            assignment.setStatus(false);
+
+            var checkSave = shipRepo.save(assignment);
+            if(checkSave != null) {
+                return ResponseEntity.ok().body("Delete success");
+            }
+            return ResponseEntity.badRequest().body("Insert failed");
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from services, " + ex.getMessage());
+        }
+    }
+    public ResponseEntity<?> getPointAndAmountShipper(String shipperID) {
+        try {
+            Shipper findUserById = userRepository.findShipperById(shipperID);
+            if(findUserById != null)
+            {
+                int point = findUserById.getPoint();
+                double amount = findUserById.getShipment_salary();
+
+                Object[] array = new Object[2];
+                array[0] = point;
+                array[1] = amount;
+
+                return  ResponseEntity.ok().body(array);
+            }
+            return ResponseEntity.badRequest().body("Cannot found shipper");
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("");
+        }
+    }
 }

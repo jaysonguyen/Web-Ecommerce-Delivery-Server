@@ -1,8 +1,5 @@
 package com.example.deliveryecommercebackend.DTO;
 
-import com.example.deliveryecommercebackend.model.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoreDTO {
-
-    private String storeId;
+    private String store_code;
+    private String store_id;
     private String name;
     private LocalDateTime created;
     private LocalDateTime updated;
@@ -26,6 +23,6 @@ public class StoreDTO {
     private int state;
     private boolean isDefault;
     private String phone;
-    private User user;
+    private String user_id;
 
 }

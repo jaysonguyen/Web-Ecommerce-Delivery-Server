@@ -2,31 +2,34 @@ package com.example.deliveryecommercebackend.controller;
 
 
 import com.example.deliveryecommercebackend.DTO.LoginDTO;
+import com.example.deliveryecommercebackend.advice.LoginInterceptor;
 import com.example.deliveryecommercebackend.services.AuthenticationServices;
+import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("*")
+
 @RestController
-@RequestMapping("/api/authenticaion")
+@RequestMapping("/api/authentication")
 public class AuthenticationController {
 
     @Autowired
-    private AuthenticationServices authenticationServeces;
+    private AuthenticationServices authenticationServices;
 
-    public AuthenticationController(AuthenticationServices authenticationServeces) {
-        this.authenticationServeces = authenticationServeces;
+    public AuthenticationController(AuthenticationServices authenticationServices) {
+        this.authenticationServices = authenticationServices;
     }
 
     @PostMapping
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginObject) {
         try {
-            var checkLogin = authenticationServeces.loginUser(loginObject);
-            if(checkLogin == false) {
-                return ResponseEntity.status(404).body("Not found user");
-            }
-            return ResponseEntity.ok("Login success");
+            ProxyFactory factory = new ProxyFactory(authenticationServices);
+            //factory.addAdvice(loginInterceptor);
+
+            AuthenticationServices myService = (AuthenticationServices) factory.getProxy();
+            var checkLogin = myService.loginUser(loginObject);
+            return checkLogin;
         }
         catch (Exception ex) {
             System.out.printf("Error from server" + ex);

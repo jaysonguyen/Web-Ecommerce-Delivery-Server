@@ -11,9 +11,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ActionDTO {
 
-    private String actionId;
+    private String code;
     private String name;
     private String des;
     private String type;
+
+
 
 }

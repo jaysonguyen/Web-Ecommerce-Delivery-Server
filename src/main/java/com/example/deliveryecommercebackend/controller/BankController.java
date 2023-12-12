@@ -1,9 +1,7 @@
 package com.example.deliveryecommercebackend.controller;
 
-import com.example.deliveryecommercebackend.DTO.BankDTO;
-import com.example.deliveryecommercebackend.exception.ResourceNotfoundException;
+import com.example.deliveryecommercebackend.DTO.order.BankDTO;
 import com.example.deliveryecommercebackend.model.Bank;
-import com.example.deliveryecommercebackend.repository.BankRepository;
 import com.example.deliveryecommercebackend.services.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +18,7 @@ public class BankController {
     private BankService bankService;
 
     @GetMapping
-    public List<Bank> getBankList(){
+    public ResponseEntity<?> getBankList(){
         return bankService.getAllBanks();
     }
 
@@ -29,10 +27,10 @@ public class BankController {
         return bankService.getBankById(code);
     }
 
-    @PutMapping("{code}")
-    public ResponseEntity<Bank> updateBank(@PathVariable String code,@RequestBody BankDTO bankDetails) {
-        return bankService.updateBank(code, bankDetails);
-    }
+//    @PutMapping("{code}")
+//    public ResponseEntity<Bank> updateBank(@PathVariable String code,@RequestBody BankDTO bankDetails) {
+//        return bankService.updateBank(code, bankDetails);
+//    }
 
     @PostMapping
     public Bank createBank(@RequestBody Bank bankDetails) {
