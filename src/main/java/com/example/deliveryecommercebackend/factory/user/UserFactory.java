@@ -5,7 +5,6 @@ import com.example.deliveryecommercebackend.model.Branch;
 import com.example.deliveryecommercebackend.model.user.User;
 
 public interface UserFactory {
-
     User createUser(UserCreateDTO userCreateDTO);
 }
 

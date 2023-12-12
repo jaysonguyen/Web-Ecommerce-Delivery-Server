@@ -25,4 +25,13 @@ public class ReportController {
             return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
         }
     }
+    @PostMapping("product_type")
+    public ResponseEntity<?> getProductTypeReport(@RequestBody DateRange dateRange){
+        try{
+            return reportService.productTypeReport(dateRange);
+        } catch(Exception ex){
+            System.out.println("Error from get order report - Error: " + ex.getMessage());
+            return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
+        }
+    }
 }

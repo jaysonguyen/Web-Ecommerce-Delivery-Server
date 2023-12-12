@@ -8,7 +8,6 @@ public class StaffFactory implements UserFactory {
     @Override
     public User createUser(UserCreateDTO userCreateDTO) {
         Staff newStaff = new Staff();
-
         newStaff.setDataCreate(userCreateDTO);
 
         return newStaff;

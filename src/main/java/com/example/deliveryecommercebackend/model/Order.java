@@ -1,5 +1,7 @@
 package com.example.deliveryecommercebackend.model;
 import com.example.deliveryecommercebackend.DTO.OrderCreateDTO;
+import com.example.deliveryecommercebackend.model.product.OrderProduct;
+import com.example.deliveryecommercebackend.model.product.ProductComponent;
 import com.example.deliveryecommercebackend.model.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -66,7 +68,6 @@ public class Order {
 
     //user code
     private String shipper_id;
-
 
     public void setDataCreate(OrderCreateDTO orderDTO, User user) {
         this.user = user;

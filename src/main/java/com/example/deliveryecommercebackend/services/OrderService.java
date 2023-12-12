@@ -6,6 +6,7 @@ import com.example.deliveryecommercebackend.DTO.order.GetOrderListParams;
 import com.example.deliveryecommercebackend.DTO.order.NoteDTO;
 import com.example.deliveryecommercebackend.model.*;
 import com.example.deliveryecommercebackend.model.Order;
+import com.example.deliveryecommercebackend.model.product.ProductComponent;
 import com.example.deliveryecommercebackend.model.user.User;
 import com.example.deliveryecommercebackend.repository.*;
 import com.example.deliveryecommercebackend.template.OrderTemplate;
@@ -326,5 +327,17 @@ public class OrderService extends OrderTemplate {
             return ResponseEntity.badRequest().body("Error");
         }
 
+    }
+
+    //demo
+    private ProductComponent deliveryPackage;
+
+    public ResponseEntity<?> addProductToOrder(ProductComponent orderProduct) {
+        this.deliveryPackage = orderProduct;
+        return ResponseEntity.ok().body("");
+    }
+
+    public void deliverPackage() {
+        deliveryPackage.deliver();
     }
 }

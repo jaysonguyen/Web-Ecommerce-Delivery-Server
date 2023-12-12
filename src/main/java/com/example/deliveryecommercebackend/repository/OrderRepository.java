@@ -1,6 +1,7 @@
 package com.example.deliveryecommercebackend.repository;
 
 import com.example.deliveryecommercebackend.DTO.chart.DataQuery;
+import com.example.deliveryecommercebackend.DTO.report.ProductGetList;
 import com.example.deliveryecommercebackend.model.Order;
 import com.example.deliveryecommercebackend.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public interface OrderRepository extends JpaRepository<Order, String> {
 
@@ -58,4 +60,10 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 
     @Query("SELECT u FROM Order u WHERE u.shipper_id= :shipperID")
     List<Order> findOrderByShipperAssigned(@Param("shipperID") String shipperID);
+    @Query("SELECT new com.example.deliveryecommercebackend.DTO.report.ProductGetList(u.created, u.product) FROM Order u " +
+            "WHERE function('date_format', u.created,'%m-%d-%Y') BETWEEN function('date_format', :start,'%m-%d-%Y') AND " +
+            "function('date_format', :end,'%m-%d-%Y') " +
+            "ORDER BY u.created")
+    List<ProductGetList> getProductListOfallOrder(@Param("start") Date dateStart,
+                                                  @Param("end") Date dateEnd);
 }

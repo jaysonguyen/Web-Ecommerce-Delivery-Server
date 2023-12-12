@@ -12,5 +12,4 @@ public class ShipperFactory implements UserFactory {
         newShipper.setDataCreate(userCreateDTO);
         return newShipper;
     }
-
 }
