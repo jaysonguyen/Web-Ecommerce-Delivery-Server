@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -22,7 +23,6 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "shipping_assigment")
-
 public class ShippingAssignment {
 
     @Id
@@ -47,4 +47,11 @@ public class ShippingAssignment {
     @JsonManagedReference
     private Branch branch;
 
+    public ShippingAssignment(User user, Area area, Branch branch) {
+        this.user = user;
+        this.area = area;
+        this.status = true;
+        this.data_date = Date.valueOf(LocalDate.now());
+        this.branch = branch;
+    }
 }

@@ -18,8 +18,9 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 
     @Query("SELECT new com.example.deliveryecommercebackend.DTO.chart.DataQuery(count(u), u.created, u.action_code) FROM Order u " +
             "WHERE function('date_format', u.created,'%m-%d-%Y') BETWEEN function('date_format', :start, '%m-%d-%Y') AND function('date_format', :end, '%m-%d-%Y') " +
+            "AND u.city_code = :cityCode " +
             "GROUP BY u.created, u.action_code")
-    ArrayList<DataQuery> getSumOrderByDateAndAction(@Param("start") Date start, @Param("end") Date end);
+    ArrayList<DataQuery> getSumOrderByDateAndAction(@Param("start") Date start, @Param("end") Date end, @Param("cityCode") String cityCode);
 
     @Query("SELECT u FROM Order u WHERE u.order_id = :id")
     Order findOrderById(@Param("id") String orderId);

@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/productType")
@@ -23,6 +26,10 @@ public class ProductTypeController {
             System.out.printf("Error from controller" + ex.getMessage());
             return ResponseEntity.status(400).body("Error from controller: " + ex.getMessage());
         }
+    }
+    @PostMapping("/upload-file")
+    public ResponseEntity<?> uploadCustomersData(@RequestParam("file") MultipartFile file){
+        return this.productTypeService.saveProductypesToDatabase(file);
     }
     @GetMapping("/dropdown")
     public ResponseEntity<?> getProductTypeDropdownList(){

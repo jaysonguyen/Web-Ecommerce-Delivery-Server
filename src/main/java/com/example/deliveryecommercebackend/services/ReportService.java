@@ -30,7 +30,7 @@ public class ReportService {
     OrderRepository orderRepository;
     @Autowired
     ActionRepository actionRepository;
-    public ResponseEntity<?> orderReport(DateRange dateRange) {
+    public ResponseEntity<?> orderReport(DateRange dateRange, String cityCode) {
         try {
             ChartDTO res = new ChartDTO();
 
@@ -47,7 +47,7 @@ public class ReportService {
             res.setLabels(labels);
 
             //get order list
-            List<DataQuery> temp = orderRepository.getSumOrderByDateAndAction(dateRange.getStart(), dateRange.getEnd());
+            List<DataQuery> temp = orderRepository.getSumOrderByDateAndAction(dateRange.getStart(), dateRange.getEnd(), cityCode);
             // sort list by action_code
             temp = temp.stream()
                     .sorted(Comparator.comparing(DataQuery::getGroup))

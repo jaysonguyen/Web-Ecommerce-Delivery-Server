@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CustomerBankRepository extends JpaRepository<CustomerBank, String> {
-    @Query("SELECT u FROM CustomerBank u WHERE u.user_id = :userId ORDER BY u.date_time ASC ")
+    @Query("SELECT u FROM CustomerBank u WHERE u.user_id = :userId AND u.is_deleted = false ORDER BY u.date_time ASC ")
     List<CustomerBank> findBankListByUserId(@Param("userId") String userId);
     @Query("SELECT u FROM CustomerBank u WHERE u.user_id = :userId " +
             "AND u.bank_name = :bankName " +

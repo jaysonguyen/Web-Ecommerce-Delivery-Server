@@ -1,24 +1,20 @@
-//package com.example.deliveryecommercebackend.Data;
-//
-//import com.example.deliveryecommercebackend.repository.AreaRepository;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class AreaSingleton {
-//
-//    public static AreaSingleton Instance;
-//    public List<AreaSingleton> listArea;
-//    private AreaSingleton() {}
-//
-//    public void Init(AreaRepository areaRepo, String area_id) {
-//        if(listArea.stream().count() == 0) {
-//            var listArea = areaRepo.findNoneDeleteAreaById(area_id);
-//            for (var item: listArea
-//                 ) {
-//                listArea.add(item);
-//
-//            }
-//        }
-//    }
-//}
+package com.example.deliveryecommercebackend.Data;
+
+import com.example.deliveryecommercebackend.model.Area;
+import com.example.deliveryecommercebackend.services.AreaService;
+
+import java.util.LinkedList;
+import java.util.List;
+
+public class AreaSingleton {
+    private static AreaService instance;
+    private List<Area> listArea = new LinkedList<>();
+    private AreaSingleton() {
+    }
+    public static synchronized AreaService getInstance() {
+        if (instance == null) {
+            instance = new AreaService();
+        }
+        return instance;
+    }
+}

@@ -30,8 +30,8 @@ public class UserDTO {
     private String roleName;
     private String major;
     private String scale;
-    private String shipment_salary;
-    private int shipmentPoint;
+    private double shipment_salary;
+    private int shipment_point;
 
     public UserDTO(User user) {
         this.id = user.getUser_id();
@@ -48,6 +48,7 @@ public class UserDTO {
         this.roleName = user.getRole().getName();
         this.major = user.getMajor();
         this.scale = user.getScale();
+        this.shipment_salary = user.getShipment_salary();
     }
 
     public void setData(User user){

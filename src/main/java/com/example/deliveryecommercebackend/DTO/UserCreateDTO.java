@@ -24,6 +24,7 @@ public class  UserCreateDTO {
     private String purpose;
     private int role_id;
     private String branch_code;
+
 //    private String major;
 //    private String scale;
 

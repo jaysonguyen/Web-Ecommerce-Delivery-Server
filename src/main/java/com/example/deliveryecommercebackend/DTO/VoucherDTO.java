@@ -15,6 +15,7 @@ import java.sql.Date;
 public class VoucherDTO {
 
     private String voucherId;
+    private String code;
     private String name;
     private boolean isDeleted;
     //percent
@@ -29,6 +30,7 @@ public class VoucherDTO {
 
     public VoucherDTO(Voucher voucher) {
         this.voucherId = voucher.getVoucher_id();
+        this.code = voucher.getCode();
         this.name = voucher.getName();
         this.isDeleted = voucher.is_deleted();
         this.cost = voucher.getCost();
@@ -41,6 +43,7 @@ public class VoucherDTO {
 
     public void setData(Voucher voucher){
         voucherId = voucher.getVoucher_id();
+        code = voucher.getCode();
         name = voucher.getName();
         isDeleted = voucher.is_deleted();
         cost = voucher.getCost();

@@ -4,12 +4,15 @@ import com.example.deliveryecommercebackend.DTO.ProductTypeDropdownDTO;
 import com.example.deliveryecommercebackend.DTO.order.ProductTypeDTO;
 import com.example.deliveryecommercebackend.model.ProductType;
 import com.example.deliveryecommercebackend.repository.ProductTypeRepository;
+import com.example.deliveryecommercebackend.services.utils.ExcelUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,7 +21,6 @@ import java.util.List;
 
 @Service
 public class ProductTypeService {
-
 
     @Autowired
     ProductTypeRepository productTypeRepository;
@@ -30,6 +32,39 @@ public class ProductTypeService {
             System.out.printf("Get productType failed - Error: " + ex);
             return Collections.emptyList();
         }
+    }
+
+    public ResponseEntity<?> saveProductypesToDatabase(MultipartFile file){
+        if(ExcelUploadService.isValidExcelFile(file)){
+            try {
+                List<ProductTypeDTO> productTypes = ExcelUploadService.getProductTypeFromExcel(file.getInputStream());
+
+                //check exists
+                List<ProductType> productTypesToSave = new ArrayList<>();
+                for(var i = 0; i < productTypes.size(); i++){
+                    ProductType checkExists = productTypeRepository.findProductTypeByCode(productTypes.get(i).getCode());
+                    if(checkExists != null) {
+                        checkExists.setState(false);
+                        checkExists.setUpdated(Date.valueOf(LocalDate.now()));
+                        this.productTypeRepository.save(checkExists);
+                    } else {
+                        productTypesToSave.add(new ProductType(productTypes.get(i)));
+                    }
+                }
+                if(productTypesToSave.isEmpty()) {
+                    return ResponseEntity.ok().body("Save data successfully");
+                }
+
+                var check = this.productTypeRepository.saveAll(productTypesToSave);
+                if(check == null) {
+                    return ResponseEntity.badRequest().body("Cannot save product type data");
+                }
+                return ResponseEntity.ok().body("Save data successfully");
+            } catch (IOException e) {
+                throw new IllegalArgumentException("The file is not a valid excel file");
+            }
+        }
+        return ResponseEntity.badRequest().body("Error: Illegal file");
     }
 
     public ResponseEntity<?> getProductTypeDropdown() {
@@ -78,16 +113,16 @@ public class ProductTypeService {
         }
     }
     public HttpStatus createProductType(ProductTypeDTO productType) {
-        ProductType newProductType = new ProductType();
-
-        newProductType.setName(productType.getName());
-        newProductType.setDes(productType.getDes());
-        newProductType.setState(false);
-        newProductType.setUpdated(Date.valueOf(LocalDate.now()));
-        newProductType.setCreated(Date.valueOf(LocalDate.now()));
-
+        ProductType newProductType = new ProductType(productType);
 
         try {
+            //check if exists
+            ProductType checkExists = productTypeRepository.findNoneDeleteProductTypeByCode(productType.getCode());
+            if(checkExists != null){
+                checkExists.setState(false);
+                return HttpStatus.OK;
+            }
+
             ProductType checkSave = productTypeRepository.save(newProductType);
             if(checkSave != null) {
                 return HttpStatus.OK;

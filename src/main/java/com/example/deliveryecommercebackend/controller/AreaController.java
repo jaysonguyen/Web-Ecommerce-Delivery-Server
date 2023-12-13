@@ -19,7 +19,7 @@ public class AreaController {
     @GetMapping("{cityId}")
     public ResponseEntity<?> getAreaList(@PathVariable String cityId){
         try {
-            var listArea = areaService.getAllAreas(cityId);
+            var listArea = areaService.getInstance().getAllAreas(cityId);
             return listArea;
         } catch (Exception ex) {
             System.out.printf("Error from controller" + ex.getMessage());
@@ -29,7 +29,7 @@ public class AreaController {
     @GetMapping("dropdown/{cityCode}")
     public ResponseEntity<?> getAreaDropdownList(@PathVariable String cityCode){
         try {
-            var listArea = areaService.getAreasDropdownByCityCode(cityCode);
+            var listArea = areaService.getInstance().getAreasDropdownByCityCode(cityCode);
             return listArea;
         } catch (Exception ex) {
             System.out.printf("Error from controller" + ex.getMessage());
@@ -67,7 +67,7 @@ public class AreaController {
     @PutMapping
     public ResponseEntity<?> updateArea(@RequestBody AreaCreatedDTO area) {
         try {
-            HttpStatus check = areaService.updateArea(area);
+            HttpStatus check = areaService.getInstance().updateArea(area);
             if(check != HttpStatus.OK)
                 return ResponseEntity.status(check).body("Update data failed");
             return ResponseEntity.status(check).body("Update data successfully");
@@ -80,9 +80,7 @@ public class AreaController {
     @PostMapping
     public ResponseEntity<?> createArea(@RequestBody AreaCreatedDTO area) {
         try {
-            var checkCreate = areaService.createArea(area);
-//            return areaService.createArea(area);
-            return checkCreate;
+            return areaService.getInstance().createAreaAndAssignment(area);
         } catch (Exception ex) {
             System.out.println("Error from controller");
             return ResponseEntity.status(400).body("Server error");
@@ -92,7 +90,7 @@ public class AreaController {
     @PutMapping("{id}")
     public ResponseEntity<?> deleteArea(@PathVariable String id){
         try {
-            HttpStatus check = areaService.deleteArea(id);
+            HttpStatus check = areaService.getInstance().deleteArea(id);
             if (check == HttpStatus.OK) {
                 return ResponseEntity.status(check).body("Delete area success");
             }

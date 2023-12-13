@@ -3,10 +3,16 @@ package com.example.deliveryecommercebackend.services;
 import com.example.deliveryecommercebackend.DTO.AreaCreatedDTO;
 import com.example.deliveryecommercebackend.DTO.AreaDTO;
 import com.example.deliveryecommercebackend.DTO.AreaDetailDTO;
+import com.example.deliveryecommercebackend.Data.AreaSingleton;
 import com.example.deliveryecommercebackend.model.Area;
+import com.example.deliveryecommercebackend.model.Branch;
 import com.example.deliveryecommercebackend.model.City;
+import com.example.deliveryecommercebackend.model.ShippingAssignment;
 import com.example.deliveryecommercebackend.repository.AreaRepository;
+import com.example.deliveryecommercebackend.repository.BranchRepository;
 import com.example.deliveryecommercebackend.repository.CityRepository;
+import com.example.deliveryecommercebackend.repository.ShippingAssignmentRepository;
+import com.example.deliveryecommercebackend.template.AreaTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +25,28 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class AreaService {
+public class AreaService extends AreaTemplate {
 
     @Autowired
     AreaRepository areaRepository;
     @Autowired
     CityRepository cityRepository;
+    @Autowired
+    private ShippingAssignmentRepository shipRepo;
+    @Autowired
+    private BranchRepository branchRepository;
+
+    public AreaService() {}
+    public static synchronized AreaService getInstance() {
+        return AreaSingleton.getInstance();
+    }
+
+    public AreaService(AreaRepository areaRepo, CityRepository cityRepo, ShippingAssignmentRepository shipRepo, BranchRepository branchRepo) {
+        this.areaRepository = areaRepo;
+        this.cityRepository = cityRepo;
+        this.shipRepo = shipRepo;
+        this.branchRepository = branchRepo;
+    }
 
     public ResponseEntity<?> getAllAreas(String cityId) {
         try {
@@ -121,31 +143,49 @@ public class AreaService {
             return HttpStatus.BAD_REQUEST;
         }
     }
-    public ResponseEntity<?> createArea(AreaCreatedDTO area) {
+    @Override
+    public Area createArea(AreaCreatedDTO area) {
         //check exists city
 //        City city = cityRepository.findNoneDeleteCityById(area.getCity());
         City city = cityRepository.findNoneDeleteCityById(area.getCity());
-        if(city == null)
-            return ResponseEntity.badRequest().body("City not found!!");
+        if(city == null) {
+            System.out.println("Create city in create area failed");
+            return null;
+        }
         Area newArea = new Area();
 
-        newArea.setCode(area.getCode());
-        newArea.setName(area.getName());
-        newArea.setDes(area.getDes());
-        newArea.setCity(city);
-        newArea.set_delete(false);
-        newArea.setUpdated(Date.valueOf(LocalDate.now()));
-        newArea.setCreated(Date.valueOf(LocalDate.now()));
+        newArea.setDataCreate(area, city);
 
         try {
             Area checkSave = areaRepository.save(newArea);
             if(checkSave != null) {
-                return ResponseEntity.ok().body("Create area successfully!!");
+                return checkSave;
             }
-            return ResponseEntity.badRequest().body("Create area failed!!");
+            return null;
         } catch(Exception ex) {
             System.out.printf("Create area failed - Error" + ex.getMessage());
-            return ResponseEntity.badRequest().body("error: " + ex.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    protected ShippingAssignment createAssignment(Area area) {
+        try{
+            Branch branch = branchRepository.findBranchByCity(area.getCity());
+            if(branch == null){
+                System.out.println("Branch not found in city");
+                return null;
+            }
+
+            ShippingAssignment newAssign = new ShippingAssignment();
+            newAssign.setArea(area);
+            newAssign.setData_date(Date.valueOf(LocalDate.now()));
+            newAssign.setStatus(true);
+
+            return shipRepo.save(newAssign);
+        }catch(Exception exception) {
+            System.out.println("Error in create shipping assigment");
+            return null;
         }
     }
 

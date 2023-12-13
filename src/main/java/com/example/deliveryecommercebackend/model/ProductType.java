@@ -1,6 +1,7 @@
 package com.example.deliveryecommercebackend.model;
 
 
+import com.example.deliveryecommercebackend.DTO.order.ProductTypeDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -32,6 +34,16 @@ public class ProductType {
     @LastModifiedDate
     private Date updated;
     @JsonIgnore
+    //is deleted
     private boolean state;
 
+    public ProductType(ProductTypeDTO productTypeDTO) {
+        this.id = productTypeDTO.getId();
+        this.code = productTypeDTO.getCode();
+        this.name = productTypeDTO.getName();
+        this.des = productTypeDTO.getDes();
+        this.created = Date.valueOf(LocalDate.now());
+        this.updated = Date.valueOf(LocalDate.now());
+        this.state = false;
+    }
 }
