@@ -74,6 +74,40 @@ public class VoucherService_v2 extends EntityTemplate<Voucher> {
         }
     }
 
+    public boolean duplicate_old(String id) {
+        try {
+            Voucher voucher = voucherRepository.findById(id).get();
+            if(voucher.getVoucher_id() == null) {
+                System.out.println("Error at voucher service ver2: Voucher not found");
+                return false;
+            }
+            Voucher newVoucher = new Voucher(voucher);
+
+            voucherRepository.save(newVoucher);
+            return true;
+        } catch(Exception ex) {
+            System.out.printf("Error at voucher service - Error" + ex.getMessage());
+            return false;
+        }
+    }
+
+    public boolean duplicate(String id) {
+        try {
+            Voucher voucher = voucherRepository.findById(id).get();
+            if(voucher.getVoucher_id() == null) {
+                System.out.println("Error at voucher service ver2: Voucher not found");
+                return false;
+            }
+            Voucher newVoucher = (Voucher) voucher.Clone();
+
+            voucherRepository.save(newVoucher);
+            return true;
+        } catch(Exception ex) {
+            System.out.printf("Error at voucher service - Error" + ex.getMessage());
+            return false;
+        }
+    }
+
     @Override
     public List<?> getAll() {
         try {

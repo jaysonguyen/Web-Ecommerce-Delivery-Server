@@ -58,11 +58,11 @@ public abstract class UserAbstract {
     @ToString.Exclude
     private Role role;
 
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "branch_id")
-    @ToString.Exclude
-    private Branch branch;
+//
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "branch_id")
+//    @ToString.Exclude
+//    private Branch branch;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
@@ -91,7 +91,7 @@ public abstract class UserAbstract {
         this.cod = 0;
         this.point = 0;
         this.role = userDTO.getRole();
-        this.branch = userDTO.getBranch() != null ? userDTO.getBranch() : null;
+//        this.branch = userDTO.getBranch() != null ? userDTO.getBranch() : null;
 
 //      this.major = userDTO.getMajor();
 //      this.scale = userDTO.getScale();

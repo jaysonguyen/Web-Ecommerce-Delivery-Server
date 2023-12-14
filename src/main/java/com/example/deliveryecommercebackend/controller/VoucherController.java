@@ -2,6 +2,9 @@ package com.example.deliveryecommercebackend.controller;
 
 
 import com.example.deliveryecommercebackend.DTO.VoucherDTO;
+import com.example.deliveryecommercebackend.DTO.VoucherDisplayDTO;
+import com.example.deliveryecommercebackend.model.Voucher;
+import com.example.deliveryecommercebackend.repository.VoucherRepository;
 import com.example.deliveryecommercebackend.services.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,12 +12,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/voucher")
 public class VoucherController {
 
     @Autowired
     private VoucherService voucherService;
+
+    public VoucherRepository voucherRepository_2;
 
     @GetMapping
     @ResponseBody
@@ -24,6 +32,25 @@ public class VoucherController {
             return listVoucher;
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error from server");
+        }
+    }
+    @GetMapping("old")
+    @ResponseBody
+    public ResponseEntity<?> getAllVoucher_old() {
+        try {
+            List<Voucher> vouchers = voucherRepository_2.findNoneDeleteVoucher();
+
+            List<VoucherDisplayDTO> res = new ArrayList<VoucherDisplayDTO>();
+            for(Voucher voucher : vouchers){
+                VoucherDisplayDTO temp = new VoucherDisplayDTO();
+                temp.setData(voucher);
+                res.add(temp);
+            }
+
+            return ResponseEntity.ok().body(res);
+        } catch(Exception ex) {
+            System.out.printf("Get voucher failed - Error: " + ex.getMessage());
+            return ResponseEntity.badRequest().body("Error from services");
         }
     }
     @GetMapping("valid")

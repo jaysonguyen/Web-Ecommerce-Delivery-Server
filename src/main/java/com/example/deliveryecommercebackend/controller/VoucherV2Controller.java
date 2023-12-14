@@ -40,6 +40,16 @@ public class VoucherV2Controller {
         }
     }
 
+    @PostMapping("duplicate/{id}")
+    public ResponseEntity<?> duplicateVoucher(@PathVariable String id) {
+        try {
+            var check = voucherService.duplicate(id);
+            return ResponseEntity.ok().body(check);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error from controller");
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> createVoucher(@RequestBody Voucher voucher) {
         try {

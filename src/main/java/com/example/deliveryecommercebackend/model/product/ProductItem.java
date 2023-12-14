@@ -18,7 +18,7 @@ public class ProductItem implements ProductComponent {
     private String product_type;
 
     @Override
-    public void deliver() {
-        System.out.println("delivery product: " + name);
+    public void display() {
+        System.out.println("Product name: " + name);
     }
 }

@@ -2,6 +2,7 @@ package com.example.deliveryecommercebackend.model;
 
 
 import com.example.deliveryecommercebackend.DTO.VoucherDTO;
+import com.example.deliveryecommercebackend.utils.Prototype;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name="voucher")
-public class Voucher {
+public class Voucher implements Prototype {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "voucher_id")
@@ -69,5 +70,23 @@ public class Voucher {
         this.used = vourcherDTO.getUsed();
         this.is_deleted = false;
         this.status = "Valid";
+    }
+
+    @Override
+    public Prototype Clone() {
+        Voucher newVoucher = new Voucher();
+
+        newVoucher.setCode(this.code + this.voucher_id);
+        newVoucher.setName(this.name);
+        newVoucher.setCost(this.cost);
+        newVoucher.setCreated(this.created);
+        newVoucher.setPeriod(this.period);
+        newVoucher.setQuantity(this.quantity);
+        newVoucher.setPoints(this.points);
+        newVoucher.setUsed(this.used);
+        newVoucher.set_deleted(this.is_deleted);
+        newVoucher.setStatus(this.status);
+
+        return newVoucher;
     }
 }

@@ -127,6 +127,12 @@ public class UserService extends UserTemplate {
         }
     }
     @Override
+    protected User create_admin(UserCreateDTO userDTO) {
+        UserFactory userFactory = new AdminFactory();
+        User newUser = userFactory.createUser(userDTO);
+        return newUser;
+    }
+    @Override
     protected ResponseEntity<?> create_staff(UserCreateDTO userDTO){
         //find branch
         Branch branch = branchRepo.findBranchByCode(userDTO.getBranch_code());
@@ -148,12 +154,7 @@ public class UserService extends UserTemplate {
         }
         return ResponseEntity.ok().body("Created successfully");
     }
-    @Override
-    protected User create_admin(UserCreateDTO userDTO) {
-        UserFactory userFactory = new AdminFactory();
-        User newUser = userFactory.createUser(userDTO);
-        return newUser;
-    }
+
 
     public ResponseEntity<?> createUser_v2(UserCreateDTO userDTO) {
         try {

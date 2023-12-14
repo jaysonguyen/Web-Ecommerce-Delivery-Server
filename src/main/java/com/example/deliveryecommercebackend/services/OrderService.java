@@ -42,6 +42,40 @@ public class OrderService extends OrderTemplate {
     @Autowired
     private UserService userService;
 
+    public ResponseEntity<?> getAllOrderByAction_old(String actionCode, String userID, GetOrderListParams params) {
+        try {
+            ///find user
+            User user = userRepo.findUserById(userID);
+            if(user == null) {
+                return ResponseEntity.badRequest().body("User not found");
+            }
+
+            // find action match
+            Action action = actionRepo.findActionByCode(actionCode);
+            if(action == null) {
+                return ResponseEntity.badRequest().body("Action not found");
+            }
+
+            //check orders exists
+            List<Order> orders = new ArrayList<>();
+            if(Objects.equals(user.getRole().getName(), "admin") || Objects.equals(user.getRole().getName(), "staff")) {
+                System.out.println("admin + staff");
+                orders = orderRepo.findOrderByAction(actionCode, params.getStart(), params.getEnd(), params.getCity_code(), params.getArea_code());
+            } else {
+                System.out.println("customer");
+                orders = orderRepo.findOrderByActionAndUser(actionCode, user, params.getStart(), params.getEnd(), params.getCity_code(), params.getArea_code());
+            }
+            if(orders == null) {
+                return ResponseEntity.badRequest().body("Order not found");
+            }
+            System.out.println(orders);
+            return ResponseEntity.ok().body(orders);
+        } catch(Exception ex) {
+            System.out.printf("Get order list failed - Error: " + ex.getMessage());
+            return ResponseEntity.badRequest().body(Collections.emptyList());
+        }
+    }
+
     @Override
     public ResponseEntity<?> getAllOrderByAction(String actionCode, String userID, GetOrderListParams params) {
         try {
@@ -337,7 +371,7 @@ public class OrderService extends OrderTemplate {
         return ResponseEntity.ok().body("");
     }
 
-    public void deliverPackage() {
-        deliveryPackage.deliver();
+    public void displayPackaga() {
+        deliveryPackage.display();
     }
 }

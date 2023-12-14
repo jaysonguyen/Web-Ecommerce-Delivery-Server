@@ -1,6 +1,7 @@
 package com.example.deliveryecommercebackend.model;
 
 
+import com.example.deliveryecommercebackend.model.user.Staff;
 import com.example.deliveryecommercebackend.model.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,7 +33,9 @@ public class HistoryOrder {
 
     public HistoryOrder(Order order, User user, String shipper_name, String action_code, String note) {
         this.order_id = order.getOrder_id();
-        this.branch_id = user.getBranch().getBranch_id();
+        if(user instanceof Staff) {
+            this.branch_id = ((Staff) user).getBranch().getBranch_id();
+        }
         this.shipper_name = shipper_name;
         this.date_time = new Date();
         this.input_by = user.getFullName();

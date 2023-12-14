@@ -15,8 +15,12 @@ public class OrderProduct implements ProductComponent{
     public void addAllItem(List<? extends ProductComponent> components) {
         productItemList.addAll(components);
     }
-    @Override
-    public void deliver() {
 
+    @Override
+    public void display() {
+        System.out.println("List item:");
+        for (var item : productItemList){
+            item.display();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.deliveryecommercebackend.DTO;
 
 import com.example.deliveryecommercebackend.model.Order;
+import com.example.deliveryecommercebackend.model.user.Staff;
 import com.example.deliveryecommercebackend.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +25,9 @@ public class HistoryOrderDTO {
 
     public HistoryOrderDTO(Order order, User user, String shipper_name, String action_code) {
         this.order_id = order.getOrder_id();
-        this.branch_id = user.getBranch().getBranch_id();
+        if(user instanceof Staff){
+            this.branch_id = ((Staff) user).getBranch().getBranch_id();
+        }
         this.shipper_name = shipper_name;
         this.data_time = new Date();
         this.input_by = user.getFullName();

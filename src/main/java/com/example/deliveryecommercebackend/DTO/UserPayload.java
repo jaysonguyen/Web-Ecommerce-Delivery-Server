@@ -1,6 +1,7 @@
 package com.example.deliveryecommercebackend.DTO;
 
 
+import com.example.deliveryecommercebackend.model.user.Staff;
 import com.example.deliveryecommercebackend.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,8 +27,8 @@ public class UserPayload {
         this.point = user.getPoint();
         this.cod = user.getCod();
         this.role = user.getRole().getName();
-        if(user.getBranch() != null) {
-            this.branch = new BranchPayloadDTO(user.getBranch());
+        if( user instanceof Staff && ((Staff) user).getBranch() != null) {
+            this.branch = new BranchPayloadDTO(((Staff) user).getBranch());
         }
     }
 
