@@ -2,6 +2,7 @@ package com.example.deliveryecommercebackend.controller;
 
 import com.example.deliveryecommercebackend.DTO.AreaCreatedDTO;
 import com.example.deliveryecommercebackend.DTO.AreaDTO;
+import com.example.deliveryecommercebackend.Data.AreaSingleton;
 import com.example.deliveryecommercebackend.model.Area;
 import com.example.deliveryecommercebackend.services.AreaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/area")
 public class AreaController {
 
-    @Autowired
-    private AreaService areaService;
-
     @GetMapping("{cityId}")
     public ResponseEntity<?> getAreaList(@PathVariable String cityId){
         try {
-            var listArea = areaService.getInstance().getAllAreas(cityId);
+            var listArea = AreaService.getInstance().getAllAreas(cityId);
             return listArea;
         } catch (Exception ex) {
             System.out.printf("Error from controller" + ex.getMessage());
@@ -29,7 +27,7 @@ public class AreaController {
     @GetMapping("dropdown/{cityCode}")
     public ResponseEntity<?> getAreaDropdownList(@PathVariable String cityCode){
         try {
-            var listArea = areaService.getInstance().getAreasDropdownByCityCode(cityCode);
+            var listArea = AreaService.getInstance().getAreasDropdownByCityCode(cityCode);
             return listArea;
         } catch (Exception ex) {
             System.out.printf("Error from controller" + ex.getMessage());
@@ -67,7 +65,7 @@ public class AreaController {
     @PutMapping
     public ResponseEntity<?> updateArea(@RequestBody AreaCreatedDTO area) {
         try {
-            HttpStatus check = areaService.getInstance().updateArea(area);
+            HttpStatus check = AreaService.getInstance().updateArea(area);
             if(check != HttpStatus.OK)
                 return ResponseEntity.status(check).body("Update data failed");
             return ResponseEntity.status(check).body("Update data successfully");
@@ -80,7 +78,7 @@ public class AreaController {
     @PostMapping
     public ResponseEntity<?> createArea(@RequestBody AreaCreatedDTO area) {
         try {
-            return areaService.getInstance().createAreaAndAssignment(area);
+            return AreaService.getInstance().createAreaAndAssignment(area);
         } catch (Exception ex) {
             System.out.println("Error from controller");
             return ResponseEntity.status(400).body("Server error");
@@ -90,7 +88,7 @@ public class AreaController {
     @PutMapping("{id}")
     public ResponseEntity<?> deleteArea(@PathVariable String id){
         try {
-            HttpStatus check = areaService.getInstance().deleteArea(id);
+            HttpStatus check = AreaService.getInstance().deleteArea(id);
             if (check == HttpStatus.OK) {
                 return ResponseEntity.status(check).body("Delete area success");
             }

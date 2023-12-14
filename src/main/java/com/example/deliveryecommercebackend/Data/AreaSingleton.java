@@ -8,7 +8,6 @@ import java.util.List;
 
 public class AreaSingleton {
     private static AreaService instance;
-    private List<Area> listArea = new LinkedList<>();
     private AreaSingleton() {
     }
     public static synchronized AreaService getInstance() {

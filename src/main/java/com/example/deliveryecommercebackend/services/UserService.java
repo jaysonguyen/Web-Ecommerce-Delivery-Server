@@ -38,6 +38,9 @@ public class UserService extends UserTemplate {
     @Autowired
     private ShippingAssignmentRepository shipRepo;
 
+
+    public UserService() {}
+
     public UserService(UserRepository userRepository, RoleRepository roleRepository, BranchRepository branchRepo, ShippingAssignmentRepository shipRepo, AreaRepository areaRepo) {
         this.userRepository = userRepository;
         this.branchRepo = branchRepo;
